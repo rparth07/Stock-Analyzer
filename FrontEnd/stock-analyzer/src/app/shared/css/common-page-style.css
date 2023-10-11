@@ -35,7 +35,7 @@ table tr td a {
 }
 
 .breadcrumb_head {
-    background: url("../../assets/images/banner-tradeinfo.jpg") no-repeat center center;
+    background: url("../../../assets/images/banner-tradeinfo.jpg") no-repeat center center;
     background-size: cover;
     min-height: 100px;
     font-family: "Montserrat";

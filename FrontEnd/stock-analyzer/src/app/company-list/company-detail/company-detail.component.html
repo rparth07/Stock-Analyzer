@@ -208,48 +208,48 @@
                                         </td>
                                         <td>
                                             <span class="p-column-title">Open Price</span>
-                                            {{ bhavInfo.openPrice }}
+                                            {{ bhavInfo.openPrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">High Price</span>
-                                            {{ bhavInfo.highPrice }}
+                                            {{ bhavInfo.highPrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Low Price</span>
-                                            {{ bhavInfo.lowPrice }}
+                                            {{ bhavInfo.lowPrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Last Price</span>
-                                            {{ bhavInfo.lastPrice }}
+                                            {{ bhavInfo.lastPrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Close Price</span>
-                                            {{ bhavInfo.closePrice }}
+                                            {{ bhavInfo.closePrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Avg Price</span>
-                                            {{ bhavInfo.avgPrice }}
+                                            {{ bhavInfo.avgPrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Total Traded
                                                 Quantity</span>
-                                            {{ bhavInfo.ttlTrdQnty }}
+                                            {{ bhavInfo.ttlTrdQnty | number }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Turnover(Lacs)</span>
-                                            {{ bhavInfo.turnOverLacs }}
+                                            {{ bhavInfo.turnOverLacs | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">No of Trades</span>
-                                            {{ bhavInfo.noOfTrades }}
+                                            {{ bhavInfo.noOfTrades | number }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Deliverable Qty</span>
-                                            {{ bhavInfo.deliveryQty }}
+                                            {{ bhavInfo.deliveryQty | number }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Delivery Percentage</span>
-                                            {{ bhavInfo.deliveryPercentage }}
+                                            {{ bhavInfo.deliveryPercentage | percent }}
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -377,11 +377,11 @@
                                         </td>
                                         <td>
                                             <span class="p-column-title">Quantity</span>
-                                            {{ bulkDeal.quantity }}
+                                            {{ bulkDeal.quantity | number }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">TradePrice</span>
-                                            {{ bulkDeal.tradePrice }}
+                                            {{ bulkDeal.tradePrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td>
                                             <span class="p-column-title">Remarks</span>

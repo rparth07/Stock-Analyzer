@@ -233,27 +233,33 @@
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Open Price</span>
-                                                                {{ company.bhavCopyInfos[0]?.openPrice }}
+                                                                {{ company.bhavCopyInfos[0]?.openPrice | currency:
+                                                                'INR':'symbol' }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">High Price</span>
-                                                                {{ company.bhavCopyInfos[0]?.highPrice }}
+                                                                {{ company.bhavCopyInfos[0]?.highPrice | currency:
+                                                                'INR':'symbol' }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Low Price</span>
-                                                                {{ company.bhavCopyInfos[0]?.lowPrice }}
+                                                                {{ company.bhavCopyInfos[0]?.lowPrice | currency:
+                                                                'INR':'symbol' }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Last Price</span>
-                                                                {{ company.bhavCopyInfos[0]?.lastPrice }}
+                                                                {{ company.bhavCopyInfos[0]?.lastPrice | currency:
+                                                                'INR':'symbol' }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Close Price</span>
-                                                                {{ company.bhavCopyInfos[0]?.closePrice }}
+                                                                {{ company.bhavCopyInfos[0]?.closePrice | currency:
+                                                                'INR':'symbol' }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Avg Price</span>
-                                                                {{ company.bhavCopyInfos[0]?.avgPrice }}
+                                                                {{ company.bhavCopyInfos[0]?.avgPrice | currency:
+                                                                'INR':'symbol' }}
                                                             </td>
                                                         </tr>
                                                     </ng-template>

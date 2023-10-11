@@ -1,0 +1,28 @@
+.form-control:focus {
+    box-shadow: none;
+    border-color: var(--button-color);
+}
+
+.profile-button {
+    background: var(--button-color);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: var(--button-color);
+}
+
+.profile-button:focus {
+    background: var(--button-color);
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: var(--button-color);
+    box-shadow: none
+}
+
+.labels {
+    font-size: 11px
+}

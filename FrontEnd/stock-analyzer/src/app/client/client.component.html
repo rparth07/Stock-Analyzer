@@ -158,7 +158,7 @@
                                                         <tr class="p-selectable-row">
                                                             <td>
                                                                 <span class="p-column-title">Client Name</span>
-                                                                {{ client.name}}
+                                                                {{ client.name }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Recent Deal Date</span>
@@ -179,11 +179,12 @@
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Quantity</span>
-                                                                {{ client.deals[0]?.quantity }}
+                                                                {{ client.deals[0]?.quantity | number }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">TradePrice</span>
-                                                                {{ client.deals[0]?.tradePrice }}
+                                                                {{ client.deals[0]?.tradePrice | currency:
+                                                                'INR':'symbol' }}
                                                             </td>
                                                         </tr>
                                                     </ng-template>

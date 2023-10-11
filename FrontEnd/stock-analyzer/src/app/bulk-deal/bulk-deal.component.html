@@ -185,11 +185,11 @@
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Quantity</span>
-                                                                {{ bulkDeal.quantity }}
+                                                                {{ bulkDeal.quantity | number }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">TradePrice</span>
-                                                                {{ bulkDeal.tradePrice }}
+                                                                {{ bulkDeal.tradePrice | currency: 'INR':'symbol' }}
                                                             </td>
                                                             <td>
                                                                 <span class="p-column-title">Remarks</span>
