@@ -1,0 +1,323 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700|Roboto:300,400,500,700");
+
+body {
+    font-family: "Roboto";
+    font-size: 16px;
+    font-size: 0.875rem
+}
+
+ul {
+    list-style: none !important;
+    list-style-type: none !important;
+    margin: 0;
+    padding: 0
+}
+
+li {
+    list-style: none !important;
+    list-style-type: none !important
+}
+
+a {
+    color: #2C76D3
+}
+
+hr {
+    border-color: #e3e3e3
+}
+
+.border {
+    border-color: #e3e3e3 !important
+}
+
+table tr td a {
+    color: #295C89
+}
+
+.breadcrumb_head {
+    background: url("../../assets/images/banner-tradeinfo.jpg") no-repeat center center;
+    background-size: cover;
+    min-height: 100px;
+    font-family: "Montserrat";
+    display: flex;
+    align-items: flex-end;
+}
+
+.breadcrumb_head .page-title {
+    font-size: 1.5rem;
+    color: var(--text-light-color);
+    padding: 5px 0 20px 0;
+    margin: 0
+}
+
+@media (max-width: 767px) {
+    .breadcrumb_head .page-title {
+        font-size: 1.125rem
+    }
+}
+
+.mid_body {
+    padding: 20px 0
+}
+
+.input-group .input-group-prepend {
+    font-family: "Montserrat";
+    margin-bottom: 0
+}
+
+body.hi .input-group .input-group-prepend {
+    line-height: 40px;
+    padding: 0px 10px;
+    display: inline-flex
+}
+
+.input-group ::-webkit-input-placeholder {
+    color: #212529
+}
+
+.input-group ::-moz-placeholder {
+    color: #212529
+}
+
+.input-group :-ms-input-placeholder {
+    color: #212529
+}
+
+.input-group :-moz-placeholder {
+    color: #212529
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 0 !important;
+}
+
+mat-form-field.mat-form-field-wrapper {
+    margin-bottom: -1.25em;
+}
+
+.table-wrap {
+    overflow-x: auto
+}
+
+.table-wrap thead {
+    position: relative;
+    z-index: 2
+}
+
+.table-wrap tbody {
+    overflow: inherit !important;
+    max-height: inherit !important
+}
+
+.borderSet {
+    border: solid 1px #e3e3e3
+}
+
+.borderSet table tbody tr:last-child td {
+    border-bottom: none
+}
+
+.customTable-widthCorp {
+    min-width: 825px
+}
+
+.customTable-widthCorp table td,
+.customTable-widthCorp table th {
+    padding: 0.2rem 0.4rem !important
+}
+
+.scrollWrap .tableScroll>thead {
+    z-index: 9
+}
+
+.scrollWrap {
+    overflow-x: auto
+}
+
+.common_table {
+    border: solid 1px #e3e3e3
+}
+
+.plainTemplate .common_table.fixHeader {
+    overflow-y: inherit !important
+}
+
+.block-deals-container .common_table tbody tr td {
+    padding: 6px 7px;
+    font-size: 0.685rem;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    color: #4a4a4a;
+    border-bottom: solid 1px #e3e3e3;
+    vertical-align: top
+}
+
+.block-deals-container .common_table {
+    border: solid 1px #e3e3e3
+}
+
+.common_table {
+    overflow-x: hidden
+}
+
+.home-hero-slider .slick-slide .banner_text .container .banner_content h1 {
+    font-size: 30px
+}
+
+.tableWidth-1195 {
+    min-width: 1195px !important
+}
+
+.columnheader-uppercase {
+    display: block !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important
+}
+
+.common_table thead th {
+    background-color: var(--theme-color);
+    color: var(--text-light-color);
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    padding: 4px 4px;
+    text-transform: uppercase;
+    backface-visibility: hidden
+}
+
+.common_table thead th span {
+    font-size: 0.625rem;
+    text-transform: none;
+    display: block
+}
+
+.common_table thead th span:first-child {
+    color: var(--text-light-color);
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    text-transform: uppercase;
+    backface-visibility: hidden
+}
+
+.common_table thead th span:nth-child(2) {
+    font-size: 0.625rem;
+    text-transform: none;
+    display: block
+}
+
+.common_table thead th a {
+    color: var(--text-light-color)
+}
+
+.common_table thead th.heading {
+    font-size: 1rem
+}
+
+.common_table thead .head-tr2 th {
+    border-top: solid 1px var(--text-light-color)
+}
+
+.common_table tbody tr th {
+    padding: 6px 4px
+}
+
+.common_table tbody tr th.thead {
+    background-color: var(--theme-color);
+    color: var(--text-light-color)
+}
+
+.common_table tbody tr td {
+    padding: 6px 4px;
+    font-size: 0.75rem;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    color: #4a4a4a;
+    border-bottom: solid 1px #e3e3e3
+}
+
+.common_table tbody tr td a img {
+    margin-top: 5px
+}
+
+.common_table tbody tr td a {
+    text-decoration: underline
+}
+
+.common_table tbody tr:nth-child(even) td .chng {
+    color: #007a00
+}
+
+.common_table tbody tr:nth-child(even) td .per_chng {
+    color: #007a00
+}
+
+.common_table tbody tr.freezed-row td {
+    background-color: #e9e9e9
+}
+
+.common_table tbody tr.total_row td {
+    background-color: #e9e9e9
+}
+
+.common_table .br-1 {
+    border-right: solid 1px #e3e3e3
+}
+
+.common_table .a {
+    color: #2C76D3
+}
+
+.common_table.alt_row tbody tr:nth-child(even) td {
+    background-color: #f8f8f8
+}
+
+.common_table .withborder th {
+    border: solid 1px #ccc;
+    border-bottom: none;
+    vertical-align: top
+}
+
+.common_table.peach_head thead th {
+    background-color: #e97e62
+}
+
+.common_table .graph_icon_tbl {
+    max-height: 17px;
+    min-width: 38px
+}
+
+.go-button {
+    background-color: var(--button-color);
+    color: var(--text-light-color);
+}
+
+button:focus {
+    box-shadow: none;
+}
+
+::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon,
+::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover .p-sortable-column-icon {
+    color: var(--text-light-color) !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead>tr>th,
+::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover {
+    background-color: var(--table-color) !important;
+    color: var(--text-light-color) !important;
+    padding: 0.5rem 0.5rem !important;
+}
+
+::ng-deep .p-datatable .p-sortable-column:focus {
+    /* background-color: #1976d2d1; */
+    box-shadow: none;
+    outline: 0 none;
+}
+
+::ng-deep .table-col {
+    height: 100px;
+}

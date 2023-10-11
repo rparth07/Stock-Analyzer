@@ -1,0 +1,56 @@
+<nav class="home-header nav navbar d-flex sticky-top" [ngClass]="enableHeader ? 'sticky-home-header' : ''">
+    <div class="d-flex align-items-center ms-3">
+        <div class="logo-container">
+            <a class="home-link navbar-brand d-flex align-items-center text-decoration-none" routerLink="home">
+                <img width="38px" src="../../assets/images/stock-analyzer-icon.png" alt="stock-analyzer-logo" />
+                <h1 class="logo-title">
+                    Stock Analyzer</h1>
+            </a>
+        </div>
+        <div class="menu-container">
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item">
+                    <a class="nav-link pb-1" routerLink="bhavinfo" routerLinkActive="active">
+                        <span>
+                            Bhav-Info</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pb-1" routerLink="bulkdeal" routerLinkActive="active">
+                        <span>
+                            Bulk Deal</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pb-1" routerLink="company-list" routerLinkActive="active">
+                        <span>
+                            Company</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pb-1" routerLink="client" routerLinkActive="active">
+                        <span>
+                            Client</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="right profile-container me-3">
+        <button type="button" mat-button [matMenuTriggerFor]="belowMenu" class="text-white">
+            <mat-icon>
+                account_circle</mat-icon>
+            User Name
+        </button>
+        <mat-menu #belowMenu="matMenu" yPosition="below">
+            <button type="button" mat-menu-item>
+                <a class="dropdown-item" routerLink="profile">
+                    Profile</a>
+            </button>
+            <button type="button" mat-menu-item>
+                <a class="dropdown-item">
+                    Logout</a>
+            </button>
+        </mat-menu>
+    </div>
+</nav>

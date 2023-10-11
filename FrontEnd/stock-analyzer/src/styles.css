@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+    /* --theme-color:  #3a57e8; */
+    /* --theme-color: #1976d2; */
+    --theme-color: #053B50;
+
+    --table-color: #176B87;
+
+    --footer-color: #EEEEEE;
+    --footer-light-color: #64CCC5;
+
+    --text-light-color: #fff;
+
+    --button-color: #053B50;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.p-inputtext:enabled:focus {
+    box-shadow: none !important;
+}
+
+::ng-table .p-datatable .p-datatable-thead>tr>th {
+    height: 100px;
+}

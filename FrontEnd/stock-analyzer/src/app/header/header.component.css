@@ -1,0 +1,142 @@
+.nav-item>a {
+    border-bottom: transparent 3px solid;
+}
+
+.nav-item>a:hover,
+.nav-item>a:active,
+.navbar-nav .nav-link.active {
+    /* background-color: var(--text-light-color);
+    color: var(--theme-color); */
+    background: rgba(255, 255, 255, .15);
+    color: var(--text-light-color);
+}
+
+.home-link {}
+
+.home-link img {
+    position: relative;
+    top: -5px;
+}
+
+.logo-container:focus-visible {
+    outline: none;
+}
+
+.logo-title {
+    margin: 0;
+}
+
+.nav-link {
+    text-transform: capitalize;
+    padding: 0.625rem;
+    padding-left: 1rem;
+}
+
+nav ul.navbar-nav li a {
+    border-radius: 4px;
+    font-size: 1rem;
+    font-size: clamp(16px, 1rem, 16px);
+    padding: 8px 16px;
+    padding: 8px clamp(5px, .7vw, 16px);
+}
+
+.sticky-home-header {
+    box-shadow: 0 0 8px 2px rgb(0 0 0 / 20%);
+}
+
+.home-header {
+    background: var(--theme-color);
+    color: var(--text-light-color);
+}
+
+ul li a:focus {
+    color: var(--text-light-color);
+}
+
+/* .home-header nav>ul>li>a {
+    color: var(--text-light-color);
+}
+
+.home-header nav>ul ul>li:first-child {
+    border-radius: 10px 10px 0 0;
+}
+
+.home-header nav>ul ul>li:last-child {
+    border-radius: 0 0 10px 10px;
+} */
+
+.home-header nav>ul.sf-js-enabled ul:after {
+    bottom: 100%;
+    left: 50px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0);
+    border-bottom-color: var(--text-light-color);
+    border-width: 5px;
+    margin-left: -5px;
+}
+
+.home-header nav>ul>li.menu-item-has-children:hover {
+    box-shadow: 0px 0px 0px 0px var(--text-light-color);
+}
+
+.navbar-nav li {
+    padding-left: 1rem;
+    align-items: center;
+}
+
+.navbar-nav .dropdown-menu {
+    position: absolute;
+}
+
+.dropdown-menu li {
+    padding-right: 1rem;
+}
+
+.dropdown-item:active {
+    border-radius: 5px;
+}
+
+li {
+    list-style-type: none;
+}
+
+a,
+a:visited,
+a:hover,
+a:active,
+a:focus-visible {
+    color: inherit !important;
+    text-decoration: none !important;
+    outline: none !important;
+}
+
+::placeholder {
+    margin-left: 3px;
+}
+
+button {
+    font-size: clamp(16px, 1rem, 16px);
+}
+
+@media (max-width: 1199.98px) {
+    .navbar .navbar-brand {
+        transform: translateX(1.8rem);
+    }
+}
+
+@media (min-width: 1200px) {
+    .main-content .nav .navbar-brand {
+        display: none;
+    }
+}
+
+@media (max-width: 426px) {
+    nav.navbar {
+        width: max-content;
+    }
+}

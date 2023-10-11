@@ -1,0 +1,207 @@
+<section class="breadcrumb_head trade_info_head">
+    <div class="container">
+        <!-- <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+            <li property="itemListElement" typeof="ListItem">
+                <a property="item" typeof="WebPage" href="/">Home</a>
+                <meta property="position" content="1">
+            </li>
+            <li property="itemListElement" typeof="ListItem">
+                Report Detail
+                <meta property="position" content="2">
+            </li>
+        </ul> -->
+        <h1 class="page-title text-uppercase">
+            Clients
+        </h1>
+    </div>
+</section>
+
+<div class="mid_body getquote_contianer">
+    <section class="common-tabs">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 w-100">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" role="tabpanel">
+                            <div class="container py-3">
+                                <!-- <div class="border p-3">
+                                    <div class="col-md-1 pl-3">Filter By :</div>
+                                    <form class="row align-items-center" (ngSubmit)="analyzeClientsOfDate(form)"
+                                        #form="ngForm">
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <h2 class="m-0">Analyze Clients</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <mat-form-field class="mat-form-field-wrapper">
+                                                    <mat-label>Choose a date</mat-label>
+                                                    <input matInput [matDatepicker]="picker" disabled>
+                                                    <mat-datepicker-toggle matIconSuffix
+                                                        [for]="picker"></mat-datepicker-toggle>
+                                                    <mat-datepicker #picker disabled="false"></mat-datepicker>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="input-group">
+                                                <button type="submit" class="btn button-width-85 go-button"
+                                                    [disabled]="!form.valid">
+                                                    <span>Go</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div> -->
+                                <div class="row mt-5">
+                                    <div class="table-wrap borderSet customTable-widthCorp tableScroll scrollWrap p-0">
+                                        <div class="customTable-widthCorp tableScroll">
+                                            <div class="card">
+                                                <p-table #dt [value]="clients" [(selection)]="selectedClients"
+                                                    [customSort]="true" (sortFunction)="customSort($event)" dataKey="id"
+                                                    [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
+                                                    [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+                                                    [paginator]="true"
+                                                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                                                    [filterDelay]="0"
+                                                    [globalFilterFields]="['clientName', 'series', 'date', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
+                                                    <ng-template pTemplate="caption">
+                                                        <div class="flex">
+                                                            <button pButton label="Clear" class="p-button-outlined"
+                                                                icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+                                                            <span class="p-input-icon-left ml-auto">
+                                                                <i class="pi pi-search"></i>
+                                                                <input pInputText type="text" id="search-value" value=""
+                                                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                                                    placeholder="Search keyword" />
+                                                            </span>
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="header"
+                                                        class="common_table w-100 tableWidth-1195">
+                                                        <tr>
+                                                            <th class="table-col" pSortableColumn="name">
+                                                                <div
+                                                                    class="flex justify-content-between align-items-center">
+                                                                    Name
+                                                                    <p-sortIcon field="name"></p-sortIcon>
+                                                                    <!-- <p-columnFilter type="text" field="name"
+                                                                        display="menu" class="ml-auto"></p-columnFilter> -->
+                                                                </div>
+                                                            </th>
+                                                            <th class="table-col" pSortableColumn="deals.dealDate">
+                                                                <div
+                                                                    class="flex justify-content-between align-items-center">
+                                                                    Deal Date
+                                                                    <p-sortIcon field="deals.dealDate"></p-sortIcon>
+                                                                    <!-- <p-columnFilter type="date" field="deals.dealDate"
+                                                                        display="menu" class="ml-auto"></p-columnFilter> -->
+                                                                </div>
+                                                            </th>
+                                                            <th class="table-col" pSortableColumn="deals.companySymbol">
+                                                                <div
+                                                                    class="flex justify-content-between align-items-center">
+                                                                    Company Symbol
+                                                                    <p-sortIcon
+                                                                        field="deals.companySymbol"></p-sortIcon>
+                                                                    <!-- <p-columnFilter type="numeric" field="deals.companySymbol"
+                                                                        display="menu" class="ml-auto"></p-columnFilter> -->
+                                                                </div>
+                                                            </th>
+                                                            <th class="table-col"
+                                                                pSortableColumn="deals.companyFullName">
+                                                                <div
+                                                                    class="flex justify-content-between align-items-center">
+                                                                    Company FullName
+                                                                    <p-sortIcon
+                                                                        field="deals.companyFullName"></p-sortIcon>
+                                                                    <!-- <p-columnFilter type="numeric" field="deals.companyFullName"
+                                                                        display="menu" currency="USD"
+                                                                    class="ml-auto"></p-columnFilter> -->
+                                                                </div>
+                                                            </th>
+                                                            <th class="table-col" pSortableColumn="deals.stockAction">
+                                                                <div
+                                                                    class="flex justify-content-between align-items-center">
+                                                                    Stock Action
+                                                                    <p-sortIcon field="deals.stockAction"></p-sortIcon>
+                                                                    <!-- <p-columnFilter type="numeric" field="deals.stockAction"
+                                                                        display="menu" currency="USD"
+                                                                    class="ml-auto"></p-columnFilter> -->
+                                                                </div>
+                                                            </th>
+                                                            <th class="table-col" pSortableColumn="deals.quantity">
+                                                                <div
+                                                                    class="flex justify-content-between align-items-center">
+                                                                    Quantity
+                                                                    <p-sortIcon field="deals.quantity"></p-sortIcon>
+                                                                    <!-- <p-columnFilter type="numeric" field="quantity"
+                                                                        display="menu" currency="USD"
+                                                                    class="ml-auto"></p-columnFilter> -->
+                                                                </div>
+                                                            </th>
+                                                            <th class="table-col" pSortableColumn="deals.tradePrice">
+                                                                <div
+                                                                    class="flex justify-content-between align-items-center">
+                                                                    Trade Price
+                                                                    <p-sortIcon field="deals.tradePrice"></p-sortIcon>
+                                                                    <!-- <p-columnFilter type="text" field="deals.tradePrice"
+                                                                        display="menu" class="ml-auto"></p-columnFilter> -->
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-client>
+                                                        <tr class="p-selectable-row">
+                                                            <td>
+                                                                <span class="p-column-title">Client Name</span>
+                                                                {{ client.name}}
+                                                            </td>
+                                                            <td>
+                                                                <span class="p-column-title">Recent Deal Date</span>
+                                                                {{ client.deals[0]?.dealDate | date: 'MM/dd/yyyy'
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="p-column-title">Company Symbol</span>
+                                                                {{ client.deals[0]?.companySymbol}}
+                                                            </td>
+                                                            <td>
+                                                                <span class="p-column-title">Company FullName</span>
+                                                                {{ client.deals[0]?.companyFullName }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="p-column-title">Stock Action</span>
+                                                                {{ getStockAction(client.deals[0]?.stockAction) }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="p-column-title">Quantity</span>
+                                                                {{ client.deals[0]?.quantity }}
+                                                            </td>
+                                                            <td>
+                                                                <span class="p-column-title">TradePrice</span>
+                                                                {{ client.deals[0]?.tradePrice }}
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="emptymessage">
+                                                        <tr>
+                                                            <td colspan="8">No Clients found.</td>
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

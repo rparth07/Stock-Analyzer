@@ -1,0 +1,6 @@
+1. Need to return appropiate result when no data found, to insert.
+2. Only return success response, when data found and inserted successfully.
+3. AnalyzeBhavDataFileOfDate in this method - check if we can simplify the date format.
+4. Need to reduce time to fetch the data and the processing the data, as with time data will be larger
+5. Keep in mind the fetching/processing time while creating the APIs for get, and analysis
+6. Return data already process response, when api called with same data.
