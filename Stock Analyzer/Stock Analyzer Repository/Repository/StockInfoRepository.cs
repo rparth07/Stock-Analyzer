@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
@@ -154,7 +154,7 @@ namespace Stock_Analyzer_Repository.Repository
 
         public List<BulkDeal> GetAllBulkDeals()
         {
-            var bulkDeals = _context.BulkDeal
+            var bulkDeals = _context.BulkDeal 
                 .Include("Company")
                 .Include("Client")
                 .AsNoTracking()
