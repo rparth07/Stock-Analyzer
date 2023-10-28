@@ -12,12 +12,12 @@ export class BulkDealService {
   analyzeBulkDeals(dateToProcess: Date) {
     //2018-06-22T08:00:19Z
     let response;
-    this.http.post<string>(DomainConstants.URL + 'analyze-bulk-deals?date=' + dateToProcess.toISOString(), null)
+    this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bulk-deals?date=' + dateToProcess.toISOString(), null)
       .subscribe(res => response = res);
     return response;
   }
 
   fetchBulkDeals() {
-    return this.http.get<BulkDeal[]>(DomainConstants.URL + 'all-bulk-deals/');
+    return this.http.get<BulkDeal[]>(DomainConstants.StockAnalyzer_URL + 'all-bulk-deals/');
   }
 }

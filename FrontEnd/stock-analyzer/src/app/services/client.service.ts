@@ -11,6 +11,6 @@ export class ClientService {
   constructor(private http: HttpClient) { }
 
   fetchAllClients() {
-    return this.http.get<Client[]>(DomainConstants.URL + 'all-clients/');
+    return this.http.get<Client[]>(DomainConstants.StockAnalyzer_URL + 'all-clients/');
   }
 }

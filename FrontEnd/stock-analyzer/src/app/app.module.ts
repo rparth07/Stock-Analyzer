@@ -114,6 +114,7 @@ import { ClientComponent } from './client/client.component';
 import { ProfileComponent } from './profile/profile.component';
 import { BulkDealComponent } from './bulk-deal/bulk-deal.component';
 import { CompanyDetailComponent } from './company-list/company-detail/company-detail.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -126,6 +127,7 @@ import { CompanyDetailComponent } from './company-list/company-detail/company-de
     ClientComponent,
     ProfileComponent,
     CompanyDetailComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

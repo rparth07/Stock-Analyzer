@@ -14,12 +14,12 @@ export class BhavInfoService {
   analyzeBhavInfos(dateToProcess: Date) {
     //2018-06-22T08:00:19Z
     let response;
-    this.http.post<string>(DomainConstants.URL + 'analyze-bhav-data?date=' + dateToProcess.toISOString(), null)
+    this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bhav-data?date=' + dateToProcess.toISOString(), null)
       .subscribe(res => response = res);
     return response;
   }
 
   fetchBhavInfos() {
-    return this.http.get<BhavInfo[]>(DomainConstants.URL + 'bhav-infos-of-all-companies/');
+    return this.http.get<BhavInfo[]>(DomainConstants.StockAnalyzer_URL + 'bhav-infos-of-all-companies/');
   }
 }

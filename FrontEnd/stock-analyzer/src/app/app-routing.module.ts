@@ -6,8 +6,13 @@ import { BulkDealComponent } from './bulk-deal/bulk-deal.component';
 import { ClientComponent } from './client/client.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CompanyDetailComponent } from './company-list/company-detail/company-detail.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
+  {
+    path: 'dashboard',
+    component: DashboardComponent
+  },
   {
     path: 'bhavinfo',
     component: BhavInfoComponent
@@ -34,7 +39,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'bhavinfo',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   }
 ];

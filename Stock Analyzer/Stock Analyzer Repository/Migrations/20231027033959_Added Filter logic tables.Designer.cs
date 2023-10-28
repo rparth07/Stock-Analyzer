@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stock_Analyzer_Repository;
 
@@ -11,9 +12,11 @@ using Stock_Analyzer_Repository;
 namespace Stock_Analyzer_Repository.Migrations
 {
     [DbContext(typeof(StockAnalyzerContext))]
-    partial class StockAnalyzerContextModelSnapshot : ModelSnapshot
+    [Migration("20231027033959_Added Filter logic tables")]
+    partial class AddedFilterlogictables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

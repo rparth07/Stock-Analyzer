@@ -10,11 +10,11 @@ export class CompanyService {
   constructor(private http: HttpClient) { }
 
   fetchAllCompanies() {
-    return this.http.get<Company[]>(DomainConstants.URL + 'all-info-of-companies/');
+    return this.http.get<Company[]>(DomainConstants.StockAnalyzer_URL + 'all-info-of-companies/');
   }
 
   fetchCompany(company: string | null) {
     // if (company === null) return;
-    return this.http.get<Company>(DomainConstants.URL + 'company-detail?symbol=' + company);
+    return this.http.get<Company>(DomainConstants.StockAnalyzer_URL + 'company-detail?symbol=' + company);
   }
 }

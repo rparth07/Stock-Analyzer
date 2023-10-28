@@ -1,4 +1,5 @@
-﻿using System;
+using Stock_Analyzer_Repository.DataModels.Filter;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,6 +21,7 @@ namespace Stock_Analyzer_Repository.DataModels
         public ICollection<BhavCopyInfoDataModel> BhavCopyInfos { get; set; } = new List<BhavCopyInfoDataModel>();
 
         public ICollection<BulkDealDataModel> BulkDeals { get; set; } = new List<BulkDealDataModel>();
+        public ICollection<FilterResultDataModel> FilterResults { get; set; } = new List<FilterResultDataModel>();
 
     }
 }

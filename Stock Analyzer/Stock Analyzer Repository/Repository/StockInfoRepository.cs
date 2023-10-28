@@ -3,11 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Repository.DataModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Stock_Analyzer_Repository.Repository
 {
-    public class StockInfoRepository : IStockInfoRepository, IDisposable
+  public class StockInfoRepository : IStockInfoRepository, IDisposable
     {
         private readonly StockAnalyzerContext _context;
         private readonly IMapper _mapper;

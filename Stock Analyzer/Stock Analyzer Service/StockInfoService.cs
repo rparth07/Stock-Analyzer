@@ -1,4 +1,4 @@
-﻿using Stock_Analyzer_Domain.Iterface;
+using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Service.Interface;
 using System.Linq;
@@ -8,9 +8,11 @@ namespace Stock_Analyzer_Service
     public class StockInfoService : IStockInfoService
     {
         private readonly IStockInfoRepository _stockInfoRepository;
-        public StockInfoService(IStockInfoRepository stockInfoRepository)
+        private readonly IFilterRepository _filterRepository;
+        public StockInfoService(IStockInfoRepository stockInfoRepository, IFilterRepository filterRepository)
         {
             _stockInfoRepository = stockInfoRepository ?? throw new ArgumentNullException(nameof(stockInfoRepository));
+            _filterRepository = filterRepository ?? throw new ArgumentNullException(nameof(filterRepository));
         }
 
         public void AddCompanies(List<Company> companies)
@@ -45,12 +47,13 @@ namespace Stock_Analyzer_Service
         {
             if (bhavInfos != null && bhavInfos.Count > 0)
             {
-                DateTime date = bhavInfos.First().Date;
-                List<BhavCopyInfo> bhavInfoFromServer = GetAllBhavInfosWithCompany(date);
+                DateTime calculationDate = bhavInfos.First().Date;
+                List<BhavCopyInfo> bhavInfoFromServer = GetAllBhavInfosWithCompany(calculationDate);
                 var bhavInfosToInsert = GetBhavInfosToInsert(bhavInfos, bhavInfoFromServer);
                 if(bhavInfosToInsert.Count > 0)
                 {
                     _stockInfoRepository.AddBhavInfos(bhavInfosToInsert);
+                    _filterRepository.StoreFilterResultForAllCriterias(calculationDate);
                 }
             }
         }

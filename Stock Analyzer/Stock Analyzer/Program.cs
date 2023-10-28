@@ -16,7 +16,11 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IStockInfoRepository, StockInfoRepository>();
+builder.Services.AddScoped<IFilterRepository, FilterRepository>();
+
+
 builder.Services.AddScoped<IStockInfoService, StockInfoService>();
+builder.Services.AddScoped<IFilterService, FilterService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,11 +30,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularOrigins",
     builder =>
     {
-        builder.WithOrigins(
-                            "http://localhost:4200"
-                            )
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
+      builder.WithOrigins("http://localhost:4200").AllowAnyHeader();
+      builder.WithOrigins("http://localhost:4200").AllowAnyMethod();
     });
 });
 

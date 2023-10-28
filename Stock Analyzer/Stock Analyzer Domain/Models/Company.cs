@@ -1,4 +1,5 @@
-﻿using System;
+using Stock_Analyzer_Domain.Models.Filter;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace Stock_Analyzer_Domain.Models
         public ICollection<BhavCopyInfo> BhavCopyInfos { get; set; } = new List<BhavCopyInfo>();
 
         public ICollection<BulkDeal> BulkDeals { get; set; } = new List<BulkDeal>();
+
+        public List<FilterResult> FilterResults { get; set; } = new List<FilterResult>();
+
         public Company()
         {}
 
