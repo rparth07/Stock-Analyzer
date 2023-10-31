@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentDateTime" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Stock Analyzer Domain\Stock Analyzer Domain.csproj" />
   </ItemGroup>
 

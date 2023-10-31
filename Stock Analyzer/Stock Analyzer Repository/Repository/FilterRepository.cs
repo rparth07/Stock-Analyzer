@@ -6,6 +6,8 @@ using Stock_Analyzer_Repository.DataModels;
 using Stock_Analyzer_Repository.DataModels.Filter;
 using Microsoft.EntityFrameworkCore;
 using PeriodTypeModel = Stock_Analyzer_Repository.DataModels.Filter.PeriodType;
+using FluentDateTime;
+using System.Text.RegularExpressions;
 
 namespace Stock_Analyzer_Repository.Repository
 {
@@ -52,8 +54,6 @@ namespace Stock_Analyzer_Repository.Repository
     {
       var filter = _context.Filter
         .Include("Criterias")
-        .Include("Criterias.FilterResults")
-        .Include("Criterias.FilterResults.CompanyDataModel")
         .AsNoTracking()
         .First(_ => _.FilterName.Equals(filterName));
 
@@ -64,16 +64,38 @@ namespace Stock_Analyzer_Repository.Repository
     {
       var filterCriteria = _context.FilterCriteria
         .Include("FilterResults")
-        .Include("FilterResults.CompanyDataModel")
+        .Include("FilterResults.Company")
         .AsNoTracking()
-        .Where(_ => _.FilterDataModel.Id.Equals(filter.Id));
+        .Where(_ => _.Filter.Id.Equals(filter.Id))
+        .ToList();
 
       return _mapper.Map<List<FilterCriteria>>(filterCriteria);
     }
 
+    public List<FilterResult> GetFilterResults(FilterCriteria filterCriteria, DateTime fromDate, DateTime toDate)
+    {
+      var filterResults = _context.FilterResult
+        .AsNoTracking()
+        .Where(_ => _.CalculationDate > fromDate
+          && _.CalculationDate <= toDate)
+        .Select(fr => new FilterResultDataModel
+        {
+          Id = fr.Id,
+          FilterCriteria = fr.FilterCriteria,
+          Company = fr.Company,
+          CalculationDate = fr.CalculationDate,
+          Value = fr.Value,
+        })
+        .ToList();
+
+      return _mapper.Map<List<FilterResult>>(filterResults);
+    }
+
     public void StoreFilterResultForAllCriterias(DateTime calculationDate)
     {
-      var filterCriterias = _context.FilterCriteria.ToList();
+      var filterCriterias = _context.FilterCriteria
+        .Include("Filter")
+        .ToList();
       var companies = _context.Company.ToList();
 
       List<FilterResultDataModel> filterResults = new List<FilterResultDataModel>();
@@ -81,14 +103,20 @@ namespace Stock_Analyzer_Repository.Repository
       foreach(var criteria in filterCriterias)
       {
         var fieldName = criteria.FieldName;
+        var series = criteria.Filter.Series;
         var periodValue = ConvertToDays(criteria.PeriodType, criteria.PeriodValue);
 
         foreach(var company in companies)
         {
-          var fieldValue = GetDataOfField(fieldName, periodValue, calculationDate, company.Symbol);
+          if(Regex.Matches(company.Symbol, "\\d{3}GS\\d{4}").Count > 0)
+          {
+            continue;
+          }
+          var fieldValue = GetDataOfField(fieldName, periodValue, calculationDate, company.Symbol, series);
           var filterResult = CreateFilterResult(criteria, company, fieldValue, calculationDate);
 
-          filterResults.Add(filterResult);
+          if(fieldValue != 0)
+            filterResults.Add(filterResult);
         }
       }
 
@@ -108,9 +136,9 @@ namespace Stock_Analyzer_Repository.Repository
     {
       return new FilterResultDataModel()
       {
-        FilterCriteriaDataModel = criteria,
+        FilterCriteria = criteria,
         CalculationDate = calculationDate,
-        CompanyDataModel = company,
+        Company = company,
         Value = fieldValue
       };
     }
@@ -135,23 +163,29 @@ namespace Stock_Analyzer_Repository.Repository
     private double GetDataOfField(string fieldName,
                                   int periodValue,
                                   DateTime calculationDate,
-                                  string companyName)
+                                  string companyName,
+                                  string series)
     {
       /*_context.BhavCopyInfo
         .Where(_ => _.Date <= calculationDate && _.Date >= calculationDate.AddDays(periodValue))
         .Average(_ => _.ClosePrice);*/
+      EnsureAllFieldsPresents(fieldName, periodValue, calculationDate, companyName, series);
 
-      var property = typeof(BhavCopyInfo).GetProperty(fieldName);
+      var property = typeof(BhavCopyInfoDataModel).GetProperty(fieldName);
 
       if (property != null && property.PropertyType == typeof(double))
       {
-        var fromDate = calculationDate.AddDays(-periodValue);
+        var fromDate = calculationDate.AddBusinessDays(-periodValue);
 
-        var average = _context.BhavCopyInfo
-            .Where(bc => bc.Date >= fromDate && bc.Date <= calculationDate
-              && (bc.Series == "EQ" || bc.Series == "BE")
+        var bhavInfos = _context.BhavCopyInfo
+            .Where(bc => bc.Date > fromDate && bc.Date <= calculationDate
+              && (bc.Series.ToLower() == series.ToLower())
               && bc.Company.Symbol == companyName)
-            .Average(bc => (double)property.GetValue(bc));
+            .ToList();
+
+        var average = bhavInfos.Count() == 0 ? 0.0
+          : bhavInfos
+              .Average(bc =>  (double)property.GetValue(bc));
 
         return average;
       }
@@ -159,6 +193,16 @@ namespace Stock_Analyzer_Repository.Repository
       {
         // Handle the case where the fieldName doesn't exist or isn't a double property
         throw new Exception("Invalid Field to filter"); // You can return an appropriate default value or handle the error as needed
+      }
+    }
+
+    private void EnsureAllFieldsPresents(string fieldName, int periodValue, DateTime calculationDate, string companyName, string series)
+    {
+      if (fieldName == null || periodValue == null
+        || calculationDate == null || companyName == null
+        || series == null)
+      {
+        throw new Exception("Invalid Filter, Please Enter data correctly!");
       }
     }
   }

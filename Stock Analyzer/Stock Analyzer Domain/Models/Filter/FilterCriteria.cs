@@ -2,6 +2,8 @@ namespace Stock_Analyzer_Domain.Models.Filter
 {
   public class FilterCriteria
   {
+    public Guid Id { get; set; }
+
     public Filter FilterDataModel { get; set; }
 
     public int Sequence { get; set; }

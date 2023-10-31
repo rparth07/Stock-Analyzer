@@ -25,7 +25,7 @@ select {
 }
 
 /* Style for the "New" button */
-button {
+.new-filter-button {
     width: 30%;
     padding: 5px;
     background-color: #007bff;
@@ -96,11 +96,12 @@ form button {
     border-radius: 5px;
 }
 
-.filter-header {
-    margin: 10px 0px 0px 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.filter-name,
+.filter-series {
+    margin: 10px 0px 0px 10px !important;
+    padding: 10px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 5px !important;
 }
 
 /* Style for the "Add" button */
@@ -119,4 +120,6 @@ button[disabled] {
     cursor: not-allowed;
 }
 
-/* Additional responsive styling can be added based on your preferences. */
+.w-30 {
+    width: 30rem;
+}

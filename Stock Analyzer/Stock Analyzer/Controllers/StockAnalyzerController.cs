@@ -39,18 +39,26 @@ namespace Stock_Analyzer.Controllers
       startDate = startDate.ToLocalTime();
       endDate = endDate.ToLocalTime();
       List<Company> companies = _stockInfoService.GetAllCompanies();
-      List<StockInfoDto> stockInfoDtos = new List<StockInfoDto>();
-      foreach (var company in companies)
+      try
       {
-        List<ParsedStockInfo> parsedStocknfos = await GetParsedBhavInfoCSVDataBetween(startDate, endDate, company.Symbol);
-        stockInfoDtos = _mapper.Map<List<StockInfoDto>>(parsedStocknfos);
+        foreach (var company in companies)
+        {
+          List<StockInfoDto> stockInfoDtos = new List<StockInfoDto>();
+          List<ParsedStockInfo> parsedStocknfos = await GetParsedBhavInfoCSVDataBetween(startDate, endDate, company.Symbol);
+          stockInfoDtos = _mapper.Map<List<StockInfoDto>>(parsedStocknfos);
+
+
+          List<Company> companiesToAdd = _mapper.Map<List<Company>>(stockInfoDtos);
+          _stockInfoService.AddCompanies(companiesToAdd);
+
+          List<BhavCopyInfo> bhavInfos = _mapper.Map<List<BhavCopyInfo>>(stockInfoDtos);
+          _stockInfoService.AddBhavInfos(bhavInfos);
+        }
+      } catch(Exception ex)
+      {
+        Console.WriteLine(ex.Message.ToString());
+        throw new Exception(ex.Message.ToString());
       }
-
-      List<Company> companiesToAdd = _mapper.Map<List<Company>>(stockInfoDtos);
-      _stockInfoService.AddCompanies(companiesToAdd);
-
-      List<BhavCopyInfo> bhavInfos = _mapper.Map<List<BhavCopyInfo>>(stockInfoDtos);
-      _stockInfoService.AddBhavInfos(bhavInfos);
       //Need to handle this ok scenarios
       return Ok("Analysis completed successfully!");
     }

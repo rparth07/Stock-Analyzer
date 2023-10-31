@@ -1,3 +1,4 @@
+using FluentDateTime;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Domain.Models.Filter;
@@ -35,10 +36,10 @@ namespace Stock_Analyzer_Service
 
     public List<FilterResult> ExecuteFilter(Filter filter, DateTime filterDate)
     {
-      var criterias = _filterRepository.GetFilterCriterias(filter);
-        /*filter.Criterias
-          .OrderBy(_ => _.Sequence)
-          .ToList();*/
+      /*_filterRepository.StoreFilterResultForAllCriterias(filterDate);
+      return null;*/
+
+      /*var criterias = _filterRepository.GetFilterCriterias(filter);
 
       DateTime? lastEntryDateOfFilterResult = filter.Criterias
         .FirstOrDefault()?.FilterResults
@@ -48,10 +49,10 @@ namespace Stock_Analyzer_Service
       if(lastEntryDateOfFilterResult == null || lastEntryDateOfFilterResult < filterDate)
       {
         throw new InvalidFilterDateException($"Please Enter latest data of {filterDate}");
-      }
+      }*/
 
-      criterias.ForEach(crt => FilterResultInCriteria(crt, filterDate));
-      var filterdValues = GetValuesBasedOnAllCriterias(criterias);
+      filter.Criterias.ForEach(crt => FilterResultInCriteria(crt, filterDate));
+      var filterdValues = GetValuesBasedOnAllCriterias(filter.Criterias);
 
       return filterdValues;
     }
@@ -72,22 +73,22 @@ namespace Stock_Analyzer_Service
         }
         else
         {
-          filteredValues.Concat(criterias[i].FilterResults);
+          filteredValues.AddRange(criterias[i].FilterResults);
         }
       }
       return filteredValues;
     }
 
-    private static void FilterResultInCriteria(FilterCriteria criteria, DateTime filterDate)
+    private void FilterResultInCriteria(FilterCriteria criteria, DateTime filterDate)
     {
-      DateTime fromDate = filterDate.AddDays(-2);
+      DateTime fromDate = filterDate.AddBusinessDays(-2);
 
-      var filterResultsGroupByCompany = from filterResult in criteria.FilterResults
-                                        where filterResult.CalculationDate >= fromDate
-                                          && filterResult.CalculationDate <= filterDate
+      var filterResults = _filterRepository.GetFilterResults(criteria, fromDate, filterDate);
+
+      var filterResultsGroupByCompany = from filterResult in filterResults
                                         group filterResult by filterResult.Company.Id into eGroup
                                         orderby eGroup.Key descending
-                                        where eGroup.Count() > 2
+                                        where eGroup.Count() >= 2
                                         select new
                                         {
                                           Key = eGroup.Key,

@@ -11,7 +11,7 @@ namespace Stock_Analyzer_Repository.DataModels.Filter
     [Required]
     [ForeignKey("filterId")]
     [InverseProperty("Criterias")]
-    public virtual FilterDataModel FilterDataModel { get; set; }
+    public virtual FilterDataModel Filter { get; set; }
 
     [Required]
     public int Sequence { get; set; }

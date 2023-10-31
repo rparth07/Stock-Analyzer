@@ -1,6 +1,8 @@
 using AutoMapper;
+using FluentDateTime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Stock_Analyzer.Dto.Filter;
 using Stock_Analyzer_Domain.Models.Filter;
@@ -45,12 +47,38 @@ namespace Stock_Analyzer.Controllers
     }
 
     [HttpGet("execute-filter")]
-    public IActionResult ExecuteFilter([FromQuery]string filterName, DateTime filterDate)
+    public IActionResult ExecuteFilter(string filterName, DateTime filterDate)
     {
+      if(filterName.IsNullOrEmpty() || filterDate == null)
+      {
+        return Ok();
+      }
+      filterDate = filterDate.ToLocalTime();
       var filterToExecute = _filterService.GetFilterByName(filterName);
       var filterResult = _filterService.ExecuteFilter(filterToExecute, filterDate);
 
-      return Ok(filterResult);
+      var result = _mapper.Map<List<FilterResultDto>>(filterResult);
+      return Ok(result);
+    }
+
+    [HttpGet("execute-all-filters")]
+    public IActionResult ExecuteAllFilters()
+    {
+      var filtersToExecute = _filterService.GetFilters();
+      // Here, need to handle scenario where compute avg price and filter criteria execution
+      // should consider only the 5 days a week, like if for criteria is executed on monday,
+      //then the previous day should be friday, similiar for calculation of avg price.
+
+      /*var fromDate = DateTime.Parse("2023-10-15T07:22:16.0000000Z");
+      var toDate = DateTime.Parse("2023-10-28T07:22:16.0000000Z");
+
+      while(fromDate < toDate)
+      {
+        var filterResult = _filterService.ExecuteFilter(null, fromDate);
+        fromDate = fromDate.AddBusinessDays(1);
+      }
+*/
+      return Ok();
     }
   }
 }

@@ -16,7 +16,7 @@ namespace Stock_Analyzer_Repository.DataModels.Filter
     [Required]
     [ForeignKey("FilterCriteriaId")]
     [InverseProperty("FilterResults")]
-    public virtual FilterCriteriaDataModel FilterCriteriaDataModel { get; set; }
+    public virtual FilterCriteriaDataModel FilterCriteria { get; set; }
 
     [Required]
     public DateTime CalculationDate { get; set; }
@@ -24,7 +24,7 @@ namespace Stock_Analyzer_Repository.DataModels.Filter
     [Required]
     [ForeignKey("CompanyId")]
     [InverseProperty("FilterResults")]
-    public virtual CompanyDataModel CompanyDataModel { get; set; }
+    public virtual CompanyDataModel Company { get; set; }
 
     [Required]
     public double Value { get; set; }

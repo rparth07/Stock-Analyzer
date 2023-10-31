@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { FilterService } from '../services/filter.service';
-import { Filter } from '../types/Filter';
-import { valueOrDefault } from 'chart.js/dist/helpers/helpers.core';
+import { ChangeType, Filter, FilterCriteria, FilterResult, PeriodType } from '../types/Filter';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css', '../shared/css/common-page-style.css']
 })
 export class DashboardComponent implements OnInit {
-  selectedOption: string = 'filter1';
+  selectedOption: string = '';
+  filterDate: string = new Date().toISOString().split('T')[0];
 
   filterOptions: Filter[] = [];
+  filterResults: FilterResult[] = [];
+  loadingFilterResults: boolean = true;
 
   filterGroup: FormGroup;
   criterias!: FormArray;
@@ -22,6 +25,21 @@ export class DashboardComponent implements OnInit {
 
   onOptionChange() {
     // Handle the selected option change here
+    this.filterService.executeFilter(this.selectedOption, new Date(this.filterDate))
+      .subscribe({
+        next: (value) => {
+          this.filterResults = value;
+          this.loadingFilterResults = false;
+          console.log('filter values = ' + value);
+          console.dir(value, { depth: null });
+        },
+        error: (err) => console.log(err),
+      });
+  }
+
+  clear(table: Table) {
+    table.clear();
+    (<HTMLInputElement>document.getElementById('search-value')).value = '';
   }
 
   openModal() {
@@ -35,6 +53,7 @@ export class DashboardComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private filterService: FilterService) {
     this.filterGroup = this.formBuilder.group({
       FilterName: ['', Validators.required],
+      Series: ['EQ', Validators.required],
       criterias: this.formBuilder.array([this.createInputRow()])
     });
   }
@@ -49,6 +68,8 @@ export class DashboardComponent implements OnInit {
           this.filterOptions = value;
           //console.log('value = ' + value);
           console.dir(value, { depth: null });
+          this.selectedOption = this.filterOptions[0].filterName;
+          this.onOptionChange();
         },
         error: (err) => console.log(err),
       });
@@ -69,7 +90,7 @@ export class DashboardComponent implements OnInit {
   createInputRow(): FormGroup {
     return this.formBuilder.group({
       sequence: this.sequence,
-      fieldName: ['closePrice', Validators.required],
+      fieldName: ['ClosePrice', Validators.required],
       periodValue: [1, Validators.required],
       periodType: ['Days', Validators.required],
       changeType: ['Increase', Validators.required],
@@ -83,7 +104,33 @@ export class DashboardComponent implements OnInit {
       this.filterService
         .addFilter(this.filterGroup.value as Filter);
       this.closeModal();
+      this.filterGroup.reset();
     }
   }
 
+  getFieldName(filterCriteria: FilterCriteria) {
+    //Avg fieldName(periodValue'D/W/M/Y') ^;
+    return `AVG ${filterCriteria.fieldName}
+    (${filterCriteria.periodValue}${this.getPeriodType(filterCriteria.PeriodType.toString())}${this.getChangeTypeSymbol(filterCriteria.changeType)})`
+  }
+
+  getPeriodType(type: string): string {
+    if (type == PeriodType.Days.toString()) {
+      return 'D';
+    } else if (type == PeriodType.Weeks.toString()) {
+      return 'W';
+    } else if (type == PeriodType.Months.toString()) {
+      return 'M';
+    } else if (type == PeriodType.Years.toString()) {
+      return 'Y';
+    }
+    return 'Y';
+  }
+
+  getChangeTypeSymbol(type: ChangeType) {
+    if (type === ChangeType.Increase) {
+      return '↑';
+    }
+    return '↓';
+  }
 }

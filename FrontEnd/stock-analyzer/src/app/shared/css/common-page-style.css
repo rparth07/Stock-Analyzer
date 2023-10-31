@@ -319,5 +319,5 @@ button:focus {
 }
 
 ::ng-deep .table-col {
-    height: 100px;
+    /* height: 100px; */
 }

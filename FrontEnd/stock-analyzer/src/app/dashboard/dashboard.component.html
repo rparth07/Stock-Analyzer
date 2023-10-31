@@ -5,6 +5,7 @@
             <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
                 <option *ngFor="let filter of filterOptions" (value)="filter.filterName">{{filter.filterName}}</option>
             </select>
+            <input [(ngModel)]="filterDate" type="date" class="filter-date me-3 ms-3 p-1 w-50">
             <button class="new-filter-button" (click)="openModal()">New</button>
         </div>
         <div *ngIf="modalOpen" class="modal-container">
@@ -12,8 +13,25 @@
                 <div class="row mb-3">
                     <div class="col-6">
                         <label for="FilterName">Filter Name</label>
-                        <input class="filter-header" type="text" formControlName="FilterName"
+                        <input class="filter-name" type="text" formControlName="FilterName"
                             placeholder="Enter a filter name">
+                    </div>
+                    <div class="col-6">
+                        <label for="Series">Series</label>
+                        <select class="filter-series w-50 d-inline-block" formControlName="Series">
+                            <option value="EQ">EQ</option>
+                            <option value="BE">BE</option>
+                            <option value="GS">GS</option>
+                            <option value="SM">SM</option>
+                            <option value="BZ">BZ</option>
+                            <option value="ST">ST</option>
+                            <option value="NF">NF</option>
+                            <option value="NO">NO</option>
+                            <option value="NS">NS</option>
+                            <option value="NH">NH</option>
+                            <option value="NV">NV</option>
+                            <option value="NX">NX</option>
+                        </select>
                     </div>
                 </div>
                 <hr class="mt-0" />
@@ -22,18 +40,18 @@
                         <div class="col-3">
                             <label for="fieldName">Field</label>
                             <select formControlName="fieldName">
-                                <option value="previousClose">Previous Close</option>
-                                <option value="openPrice">Open Price</option>
-                                <option value="highPrice">High Price</option>
-                                <option value="lowPrice">Low Price</option>
-                                <option value="lastPrice">Last Price</option>
-                                <option value="closePrice">Close Price</option>
-                                <option value="avgPrice">Avg Price</option>
-                                <option value="ttlTrdQnty">Total Trading Qnty</option>
-                                <option value="turnOverLacs">Turn Over Lacs</option>
-                                <option value="noOfTrades">No. Of Trades</option>
-                                <option value="deliveryQty">Delivery Qty</option>
-                                <option value="deliveryPercentage">Delivery Percentage</option>
+                                <option value="PreviousClose">Previous Close</option>
+                                <option value="OpenPrice">Open Price</option>
+                                <option value="HighPrice">High Price</option>
+                                <option value="LowPrice">Low Price</option>
+                                <option value="LastPrice">Last Price</option>
+                                <option value="ClosePrice">Close Price</option>
+                                <option value="AvgPrice">Avg Price</option>
+                                <option value="TtlTrdQnty">Total Trading Qnty</option>
+                                <option value="TurnOverLacs">Turn Over Lacs</option>
+                                <option value="NoOfTrades">No. Of Trades</option>
+                                <option value="DeliveryQty">Delivery Qty</option>
+                                <option value="DeliveryPercentage">Delivery Percentage</option>
                             </select>
                         </div>
 
@@ -90,6 +108,91 @@
                 <button type="submit">Submit</button>
                 <button type="button" (click)="closeModal()">Cancel</button>
             </form>
+        </div>
+    </div>
+
+    <div class="container py-3">
+        <div class="row" class="w-30">
+            <div class="borderSet tableScroll p-0">
+                <div class="tableScroll">
+                    <div class="card">
+                        <p-table #dt [value]="filterResults" dataKey="id" [rowHover]="true" [rows]="5"
+                            [scrollable]="true" class="w-30" [showCurrentPageReport]="true"
+                            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [loading]="loadingFilterResults"
+                            [paginator]="true"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [filterDelay]="0"
+                            [globalFilterFields]="['calculationDate', 'value', 'symbol', 'fieldName']">
+                            <ng-template pTemplate="caption">
+                                <div class="flex">
+                                    <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                                        (click)="clear(dt)"></button>
+                                    <span class="p-input-icon-left ml-auto">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text" id="search-value" value=""
+                                            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                            placeholder="Search keyword" />
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header" class="common_table w-100 tableWidth-1195">
+                                <tr>
+                                    <th class="table-col" pSortableColumn="company.symbol">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Company Name
+                                            <p-sortIcon field="company.symbol"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th class="table-col" pSortableColumn="date">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Date
+                                            <p-sortIcon field="date"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th class="table-col" pSortableColumn="fieldName">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Field Name
+                                            <p-sortIcon field="fieldName"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th class="table-col" pSortableColumn="value">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Value
+                                            <p-sortIcon field="value"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-filterResult>
+                                <tr class="p-selectable-row">
+                                    <td>
+                                        <span class="p-column-title">Company Name</span>
+                                        {{ filterResult.company.symbol }}
+                                    </td>
+                                    <td>
+                                        <span class="p-column-title">Date</span>
+                                        {{ filterResult.calculationDate | date: 'MM/dd/yyyy'
+                                        }}
+                                    </td>
+                                    <td>
+                                        <span class="p-column-title">Field Name</span>
+                                        {{ getFieldName(filterResult.filterCriteria) }}
+                                    </td>
+                                    <td>
+                                        <span class="p-column-title">Value</span>
+                                        {{ filterResult.value | number : '1.2-2' }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="8">No Filter Results found.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

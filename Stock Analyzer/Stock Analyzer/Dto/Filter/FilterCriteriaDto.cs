@@ -4,6 +4,8 @@ namespace Stock_Analyzer.Dto.Filter
 {
   public class FilterCriteriaDto
   {
+    public Guid Id { get; set; }
+
     public int Sequence { get; set; }
 
     public string FieldName { get; set; }
