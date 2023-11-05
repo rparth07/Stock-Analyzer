@@ -1,0 +1,99 @@
+<div class="modal-container">
+    <form [formGroup]="filterGroup" (ngSubmit)="submitForm()">
+        <div class="row mb-3">
+            <div class="col-6">
+                <label for="FilterName">Filter Name</label>
+                <input class="filter-name" type="text" formControlName="FilterName" placeholder="Enter a filter name">
+            </div>
+            <div class="col-6">
+                <label for="Series">Series</label>
+                <select class="filter-series w-50 d-inline-block" formControlName="Series">
+                    <option value="EQ">EQ</option>
+                    <option value="BE">BE</option>
+                    <option value="GS">GS</option>
+                    <option value="SM">SM</option>
+                    <option value="BZ">BZ</option>
+                    <option value="ST">ST</option>
+                    <option value="NF">NF</option>
+                    <option value="NO">NO</option>
+                    <option value="NS">NS</option>
+                    <option value="NH">NH</option>
+                    <option value="NV">NV</option>
+                    <option value="NX">NX</option>
+                </select>
+            </div>
+        </div>
+        <hr class="mt-0" />
+        <div formArrayName="criterias" *ngFor="let input of criterias.controls let i = index;">
+            <div class="row" [formGroupName]="i">
+                <div class="col-3">
+                    <label for="fieldName">Field</label>
+                    <select formControlName="fieldName">
+                        <option value="PreviousClose">Previous Close</option>
+                        <option value="OpenPrice">Open Price</option>
+                        <option value="HighPrice">High Price</option>
+                        <option value="LowPrice">Low Price</option>
+                        <option value="LastPrice">Last Price</option>
+                        <option value="ClosePrice">Close Price</option>
+                        <option value="AvgPrice">Avg Price</option>
+                        <option value="TtlTrdQnty">Total Trading Qnty</option>
+                        <option value="TurnOverLacs">Turn Over Lacs</option>
+                        <option value="NoOfTrades">No. Of Trades</option>
+                        <option value="DeliveryQty">Delivery Qty</option>
+                        <option value="DeliveryPercentage">Delivery Percentage</option>
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col-5 pe-0">
+                            <label for="periodValue">No. of</label>
+                            <input type="number" formControlName="periodValue" placeholder="No. of Period" min="1">
+                        </div>
+                        <div class="col-7 ps-0">
+                            <label for="periodType">Period</label>
+                            <select formControlName="periodType">
+                                <option selected value="Days">Days</option>
+                                <option value="Weeks">Weeks</option>
+                                <option value="Months">Months</option>
+                                <option value="Years">Years</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <label for="changeType">Increase/Decrease</label>
+                    <select formControlName="changeType">
+                        <option selected value="Increase">Increase</option>
+                        <option value="Decrease">Decrease</option>
+                    </select>
+                </div>
+
+                <div class="col-2">
+                    <label for="logicalOperator">And/Or</label>
+                    <select formControlName="logicalOperator">
+                        <option selected value="And">And</option>
+                        <option value="Or">Or</option>
+                    </select>
+                </div>
+
+                <div class="col-2">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="remove">Remove</label>
+                            <button type="button" [disabled]="criterias.controls.length <= 1"
+                                (click)="removeRow(i)">-</button>
+                        </div>
+                        <div class="col-6">
+                            <label for="add">Add</label>
+                            <button type="button" (click)="addRow()">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit">Submit</button>
+        <button type="button" (click)="closeModal()">Cancel</button>
+    </form>
+</div>

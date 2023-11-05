@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Repository;
@@ -27,17 +28,24 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularOrigins",
-    builder =>
-    {
-      builder.WithOrigins("http://localhost:4200").AllowAnyHeader();
-      builder.WithOrigins("http://localhost:4200").AllowAnyMethod();
-    });
+  options.AddPolicy("AllowAngularOrigins",
+  builder =>
+  {
+    builder.WithOrigins("http://localhost:4200").AllowAnyHeader();
+    builder.WithOrigins("http://localhost:4200").AllowAnyMethod();
+
+    builder.WithOrigins("http://localhost:5052").AllowAnyHeader();
+    builder.WithOrigins("http://localhost:5052").AllowAnyMethod();
+
+    builder.WithOrigins("http://192.168.1.4:5052").AllowAnyHeader();
+    builder.WithOrigins("http://192.168.1.4:5052").AllowAnyMethod();
+  });
 });
 
-builder.Services.AddDbContext<StockAnalyzerContext>(options => {
-    options.UseSqlServer(
-        @"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = StockAnalyzer");
+builder.Services.AddDbContext<StockAnalyzerContext>(options =>
+{
+  options.UseSqlServer(
+        @"Server=LAPTOP-6RMK97C7\SQLEXPRESS; Database=StockAnalyzer; User Id=sa; password=12345; Trusted_Connection=False; TrustServerCertificate=true; MultipleActiveResultSets=true;");
 });
 
 var app = builder.Build();
@@ -45,8 +53,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

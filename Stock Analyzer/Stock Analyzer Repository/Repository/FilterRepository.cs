@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using PeriodTypeModel = Stock_Analyzer_Repository.DataModels.Filter.PeriodType;
 using FluentDateTime;
 using System.Text.RegularExpressions;
+using ChangeType = Stock_Analyzer_Repository.DataModels.Filter.ChangeType;
+using LogicalOperator = Stock_Analyzer_Repository.DataModels.Filter.LogicalOperator;
 
 namespace Stock_Analyzer_Repository.Repository
 {
@@ -72,12 +74,28 @@ namespace Stock_Analyzer_Repository.Repository
       return _mapper.Map<List<FilterCriteria>>(filterCriteria);
     }
 
-    public List<FilterResult> GetFilterResults(FilterCriteria filterCriteria, DateTime fromDate, DateTime toDate)
+    public List<FilterResult> GetFilterResults(Filter filter, DateTime filterDate)
     {
-      var filterResults = _context.FilterResult
+      /*var filterResults = _context.FilterResult
         .AsNoTracking()
         .Where(_ => _.CalculationDate > fromDate
           && _.CalculationDate <= toDate)
+        .Select(fr => new FilterResultDataModel
+        {
+          Id = fr.Id,
+          FilterCriteria = fr.FilterCriteria,
+          Company = fr.Company,
+          CalculationDate = fr.CalculationDate,
+          Value = fr.Value,
+        })
+        .ToList();*/
+
+      var filterCriteriaIds = filter.Criterias.Select(_ => _.Id).ToList();
+
+      var filterResults = _context.FilterResult
+        .AsNoTracking()
+        .Where(_ => filterCriteriaIds.Contains(_.FilterCriteria.Id)
+          && _.CalculationDate.Date == filterDate.Date)
         .Select(fr => new FilterResultDataModel
         {
           Id = fr.Id,
@@ -91,40 +109,95 @@ namespace Stock_Analyzer_Repository.Repository
       return _mapper.Map<List<FilterResult>>(filterResults);
     }
 
-    public void StoreFilterResultForAllCriterias(DateTime calculationDate)
+    public void StoreFilterResultsByFilterFor(DateTime calculationDate)
     {
-      var filterCriterias = _context.FilterCriteria
-        .Include("Filter")
+      var filters = _context.Filter
+        .Include("Criterias")
         .ToList();
+
       var companies = _context.Company.ToList();
 
-      List<FilterResultDataModel> filterResults = new List<FilterResultDataModel>();
+      List<FilterResultDataModel> filterResultsToInsert = new List<FilterResultDataModel>();
 
-      foreach(var criteria in filterCriterias)
+      filters.ForEach(filter =>
       {
-        var fieldName = criteria.FieldName;
-        var series = criteria.Filter.Series;
-        var periodValue = ConvertToDays(criteria.PeriodType, criteria.PeriodValue);
+        var filterResults = ExecuteFilter(filter, calculationDate, companies);
+        filterResultsToInsert.AddRange(filterResults);
+      });
 
-        foreach(var company in companies)
+      InsertFilterResult(filterResultsToInsert);
+    }
+
+    private List<FilterResultDataModel> ExecuteFilter(FilterDataModel filter, DateTime calculationDate, List<CompanyDataModel> companies)
+    {
+      var filterCriterias = filter.Criterias;
+
+      var filterResults = new List<FilterResultDataModel>();
+
+      for (int i = 0; i < filterCriterias.Count(); i++)
+      {
+        var filterCriteriaResults = ExecuteFilterCriteria(filterCriterias[i], calculationDate, companies);
+
+        if (i > 0 && filterCriterias[i - 1].LogicalOperator == LogicalOperator.And)
         {
-          if(Regex.Matches(company.Symbol, "\\d{3}GS\\d{4}").Count > 0)
-          {
-            continue;
-          }
-          var fieldValue = GetDataOfField(fieldName, periodValue, calculationDate, company.Symbol, series);
-          var filterResult = CreateFilterResult(criteria, company, fieldValue, calculationDate);
-
-          if(fieldValue != 0)
-            filterResults.Add(filterResult);
+          filterResults = filterResults
+              .Join(filterCriteriaResults,
+                obj1 => obj1.Company.Id, obj2 => obj2.Company.Id,
+                (obj1, obj2) => new List<FilterResultDataModel> { obj1, obj2 })
+              .SelectMany(_ => _)
+              .ToList();
+        }
+        else
+        {
+          filterResults.AddRange(filterCriteriaResults);
         }
       }
 
-      InsertFilterResult(filterResults);
+      return filterResults;
+    }
+
+    private List<FilterResultDataModel> ExecuteFilterCriteria(FilterCriteriaDataModel filterCriteria, DateTime calculationDate, List<CompanyDataModel> companies)
+    {
+      var fieldName = filterCriteria.FieldName;
+      var series = filterCriteria.Filter.Series;
+      var periodValue = ConvertToDays(filterCriteria.PeriodType, filterCriteria.PeriodValue);
+
+      var filterCriteriaResults = new List<FilterResultDataModel>();
+
+      foreach (var company in companies)
+      {
+        if (Regex.Matches(company.Symbol, "\\d{3}GS\\d{4}").Count > 0)
+        {
+          continue;
+        }
+
+        var valueOnCalculationDate = GetDataOfField(fieldName, periodValue, calculationDate, company.Symbol, series);
+        var valueOnPreviousDate = GetDataOfField(fieldName, periodValue, calculationDate.AddBusinessDays(-1), company.Symbol, series);
+
+        var matchCriteria = DoesMatchCriteria(filterCriteria, valueOnPreviousDate, valueOnCalculationDate);
+
+        if (matchCriteria)
+          filterCriteriaResults.Add(CreateFilterResult(filterCriteria, company, valueOnCalculationDate, calculationDate));
+      }
+
+      return filterCriteriaResults;
+    }
+
+    private bool DoesMatchCriteria(FilterCriteriaDataModel criteria, double valueOnPreviousDate, double valueOnCalculationDate)
+    {
+      if(valueOnPreviousDate == 0 || valueOnCalculationDate == 0)
+      {
+        return false;
+      }
+
+      return criteria.ChangeType == ChangeType.Increase
+        ? valueOnPreviousDate < valueOnCalculationDate
+        : valueOnPreviousDate > valueOnCalculationDate;
     }
 
     private void InsertFilterResult(List<FilterResultDataModel> filterResults)
     {
+
       _context.FilterResult.AddRange(filterResults);
       _context.SaveChanges();
     }

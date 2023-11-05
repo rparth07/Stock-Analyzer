@@ -1,14 +1,14 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Stock_Analyzer.Dto;
 using Stock_Analyzer_Domain.Models;
 
 namespace Stock_Analyzer.Profiles
 {
-    public class CompanyProfile: Profile
+  public class CompanyProfile : Profile
+  {
+    public CompanyProfile()
     {
-        public CompanyProfile() 
-        {
-            CreateMap<Company, CompanyDto>();
-        }
+      CreateMap<Company, CompanyDto>();
     }
+  }
 }

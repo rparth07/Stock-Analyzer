@@ -40,7 +40,7 @@ namespace Stock_Analyzer_Service
       if (bhavInfosToInsert.Count > 0)
       {
         _stockInfoRepository.AddBhavInfos(bhavInfosToInsert);
-        _filterRepository.StoreFilterResultForAllCriterias(calculationDate);
+        _filterRepository.StoreFilterResultsByFilterFor(calculationDate);
       }
     }
 

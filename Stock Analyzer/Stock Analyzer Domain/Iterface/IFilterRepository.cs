@@ -14,8 +14,8 @@ namespace Stock_Analyzer_Domain.Iterface
     public List<Filter> GetFilters();
     public Filter GetFilterByName(string filterName);
 
-    public void StoreFilterResultForAllCriterias(DateTime calculationDate);
+    public void StoreFilterResultsByFilterFor(DateTime calculationDate);
     public List<FilterCriteria> GetFilterCriterias(Filter filter);
-    public List<FilterResult> GetFilterResults(FilterCriteria criteria, DateTime fromDate, DateTime filterDate);
+    public List<FilterResult> GetFilterResults(Filter filter, DateTime filterDate);
   }
 }

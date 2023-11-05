@@ -115,6 +115,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { BulkDealComponent } from './bulk-deal/bulk-deal.component';
 import { CompanyDetailComponent } from './company-list/company-detail/company-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { FilterFormContainerComponent } from './dashboard/filter-form-container/filter-form-container.component';
 
 @NgModule({
   declarations: [
@@ -128,6 +129,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ProfileComponent,
     CompanyDetailComponent,
     DashboardComponent,
+    FilterFormContainerComponent,
   ],
   imports: [
     BrowserModule,

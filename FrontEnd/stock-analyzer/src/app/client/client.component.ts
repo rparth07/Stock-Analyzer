@@ -26,13 +26,14 @@ export class ClientComponent implements OnInit {
   }
 
   customSort(event: SortEvent) {
+    console.dir(event, { depth: null });
     event.data!.sort((data1, data2) => {
       let value1 = null;
       let value2 = null;
       if (event.field!.startsWith('deals')) {
         let field = event.field!.split('.')[1];
-        value1 = data1.deals.length !== 0 ? data1.deals[0][field] : null;
-        value2 = data2.deals.length !== 0 ? data2.deals[0][field] : null;
+        value1 = data1.deals.length > 0 ? data1.deals[0][field] : null;
+        value2 = data2.deals.length > 0 ? data2.deals[0][field] : null;
       } else {
         value1 = data1[event.field!];
         value2 = data2[event.field!];
@@ -69,77 +70,5 @@ export class ClientComponent implements OnInit {
 
   getAllClients() {
     return this.clientService.fetchAllClients();
-    // return Promise.resolve([
-    //   {
-    //     id: 1,
-    //     name: 'Jainam',
-    //     deals: [{
-    //       clientName: 'Jainam',
-    //       dealDate: new Date(),
-    //       companySymbol: 'ACC',
-    //       companyFullName: 'ACC',
-    //       stockAction: StockAction.Buy,
-    //       quantity: 100,
-    //       tradePrice: 10,
-    //       remarks: null
-    //     }]
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'Parth',
-    //     deals: [{
-    //       clientName: 'Parth',
-    //       dealDate: new Date(),
-    //       companySymbol: '5Paisa',
-    //       companyFullName: '5Paisa',
-    //       stockAction: StockAction.Buy,
-    //       quantity: 1000,
-    //       tradePrice: 20,
-    //       remarks: null
-    //     }]
-    //   },
-    //   {
-    //     id: 3,
-    //     name: 'Jainam',
-    //     deals: [{
-    //       clientName: 'Jainam',
-    //       dealDate: new Date(),
-    //       companySymbol: 'ACC',
-    //       companyFullName: 'ACC',
-    //       stockAction: StockAction.Buy,
-    //       quantity: 100,
-    //       tradePrice: 10,
-    //       remarks: null
-    //     }]
-    //   },
-    //   {
-    //     id: 4,
-    //     name: 'Jainam',
-    //     deals: [{
-    //       clientName: 'Jainam',
-    //       dealDate: new Date(),
-    //       companySymbol: 'ACC',
-    //       companyFullName: 'ACC',
-    //       stockAction: StockAction.Buy,
-    //       quantity: 100,
-    //       tradePrice: 10,
-    //       remarks: null
-    //     }]
-    //   },
-    //   {
-    //     id: 5,
-    //     name: 'Jainam',
-    //     deals: [{
-    //       clientName: 'Jainam',
-    //       dealDate: new Date(),
-    //       companySymbol: 'ACC',
-    //       companyFullName: 'ACC',
-    //       stockAction: StockAction.Buy,
-    //       quantity: 100,
-    //       tradePrice: 10,
-    //       remarks: null
-    //     }]
-    //   }
-    // ]);
   }
 }

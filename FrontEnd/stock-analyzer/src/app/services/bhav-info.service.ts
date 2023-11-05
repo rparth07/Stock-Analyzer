@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomainConstants } from '../shared/domain.constants';
 import { BhavInfo } from '../types/BhavInfo';
-import { NONE_TYPE } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'

@@ -49,11 +49,12 @@
                                 [globalFilterFields]="['companySymbol', 'series', 'date', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'totalTradedQuantity', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
                                 <ng-template pTemplate="caption">
                                     <div class="flex">
-                                        <button pButton label="Clear" class="p-button-outlined"
+                                        <button pButton label="Clear" class="p-button-outlined border-radius-right"
                                             icon="pi pi-filter-slash" (click)="clear(dt)"></button>
                                         <span class="p-input-icon-left ml-auto">
                                             <i class="pi pi-search"></i>
-                                            <input pInputText type="text" id="search-value" value=""
+                                            <input class="border-radius-left" pInputText type="text" id="search-value"
+                                                value=""
                                                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                                                 placeholder="Search keyword" />
                                         </span>
@@ -61,195 +62,206 @@
                                 </ng-template>
                                 <ng-template pTemplate="header" class="common_table w-100 tableWidth-1195">
                                     <tr>
-                                        <th class="table-col" pSortableColumn="companySymbol">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="companySymbol">
                                             <div class="flex justify-content-between align-items-center">
                                                 Symbol
                                                 <p-sortIcon field="companySymbol"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="companySymbol"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="series">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="series">
                                             <div class="flex justify-content-between align-items-center">
                                                 Series
                                                 <p-sortIcon field="series"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="series"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="date">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="date">
                                             <div class="flex justify-content-between align-items-center">
                                                 Date
                                                 <p-sortIcon field="date"></p-sortIcon>
-                                                <!-- <p-columnFilter type="date" field="date"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="previousClose">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="previousClose">
                                             <div class="flex justify-content-between align-items-center">
                                                 Prev Close
                                                 <p-sortIcon field="previousClose"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="previousClose"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
 
-                                        <th class="table-col" pSortableColumn="openPrice">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="openPrice">
                                             <div class="flex justify-content-between align-items-center">
                                                 Open Price
                                                 <p-sortIcon field="openPrice"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="openPrice"
-                                                display="menu" currency="USD"
-                                            class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="highPrice">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="highPrice">
                                             <div class="flex justify-content-between align-items-center">
                                                 High Price
                                                 <p-sortIcon field="highPrice"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="highPrice"
-                                                display="menu" currency="USD"
-                                            class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="lowPrice">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="lowPrice">
                                             <div class="flex justify-content-between align-items-center">
                                                 Low Price
                                                 <p-sortIcon field="lowPrice"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="lowPrice"
-                                                display="menu" currency="USD"
-                                            class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="lastPrice">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="lastPrice">
                                             <div class="flex justify-content-between align-items-center">
                                                 Last Price
                                                 <p-sortIcon field="lastPrice"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="lastPrice"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="closePrice">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="closePrice">
                                             <div class="flex justify-content-between align-items-center">
                                                 Close Price
                                                 <p-sortIcon field="closePrice"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="closePrice"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="avgPrice">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="avgPrice">
                                             <div class="flex justify-content-between align-items-center">
                                                 Avg Price
                                                 <p-sortIcon field="avgPrice"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="avgPrice"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="ttlTrdQnty">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="ttlTrdQnty">
                                             <div class="flex justify-content-between align-items-center">
                                                 Total Traded Quantity
                                                 <p-sortIcon field="ttlTrdQnty"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text"
-                                                field="ttlTrdQnty" display="menu"
-                                            class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="turnOverLacs">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="turnOverLacs">
                                             <div class="flex justify-content-between align-items-center">
                                                 Turnover (Lacs)
                                                 <p-sortIcon field="turnOverLacs"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="turnOverLacs"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="noOfTrades">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="noOfTrades">
                                             <div class="flex justify-content-between align-items-center">
                                                 No of Trades
                                                 <p-sortIcon field="noOfTrades"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="noOfTrades"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="deliveryQty">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="deliveryQty">
                                             <div class="flex justify-content-between align-items-center">
                                                 Deliverable Qty
                                                 <p-sortIcon field="deliveryQty"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="deliveryQty"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="deliveryPercentage">
+                                        <th style="min-width:5rem" class="table-col"
+                                            pSortableColumn="deliveryPercentage">
                                             <div class="flex justify-content-between align-items-center">
                                                 % Dly Qt to Traded Qty
                                                 <p-sortIcon field="deliveryPercentage"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="deliveryPercentage"
-                                                display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="p-0"><p-columnFilter type="text" field="companySymbol" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="text" field="series" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="date" field="date" display="menu"
+                                                class="ml-auto"></p-columnFilter></th>
+                                        <th class="p-0"><p-columnFilter type="numeric" field="previousClose"
+                                                display="menu" class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="numeric" field="openPrice" display="menu"
+                                                currency="USD" class="ml-auto"></p-columnFilter></th>
+                                        <th class="p-0"><p-columnFilter type="numeric" field="highPrice" display="menu"
+                                                currency="USD" class="ml-auto"></p-columnFilter></th>
+                                        <th class="p-0"><p-columnFilter type="numeric" field="lowPrice" display="menu"
+                                                currency="USD" class="ml-auto"></p-columnFilter></th>
+                                        <th class="p-0"><p-columnFilter type="text" field="lastPrice" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="text" field="closePrice" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="text" field="avgPrice" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="text" field="ttlTrdQnty" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="text" field="turnOverLacs" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="text" field="noOfTrades" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+                                        <th class="p-0"><p-columnFilter type="text" field="deliveryQty" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </th>
+
+                                        <th class="p-0"><p-columnFilter type="text" field="deliveryPercentage"
+                                                display="menu" class="ml-auto"></p-columnFilter>
                                         </th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-bhavInfo>
-                                    <tr class="p-selectable-row">
-                                        <td>
+                                    <tr class="p-selectable-row border border-1">
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Symbol</span>
                                             {{ bhavInfo.companySymbol }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Series</span>
                                             {{ bhavInfo.series }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Date</span>
-                                            {{ bhavInfo.date | date: 'MM/dd/yyyy' }}
+                                            {{ bhavInfo.date | date: 'dd/MM/yyyy' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Prev Close</span>
                                             {{ bhavInfo.previousClose | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Open Price</span>
                                             {{ bhavInfo.openPrice | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">High Price</span>
                                             {{ bhavInfo.highPrice | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Low Price</span>
                                             {{ bhavInfo.lowPrice | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Last Price</span>
                                             {{ bhavInfo.lastPrice | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Close Price</span>
                                             {{ bhavInfo.closePrice | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Avg Price</span>
                                             {{ bhavInfo.avgPrice | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Total Traded
                                                 Quantity</span>
                                             {{ bhavInfo.ttlTrdQnty | number }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Turnover(Lacs)</span>
                                             {{ bhavInfo.turnOverLacs | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">No of Trades</span>
                                             {{ bhavInfo.noOfTrades | number }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Deliverable Qty</span>
                                             {{ bhavInfo.deliveryQty | number }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Delivery Percentage</span>
-                                            {{ bhavInfo.deliveryPercentage | percent }}
+                                            {{ bhavInfo.deliveryPercentage/100 | percent: '1.2' }}
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -271,11 +283,12 @@
                                 [globalFilterFields]="['clientName', 'series', 'date', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
                                 <ng-template pTemplate="caption">
                                     <div class="flex">
-                                        <button pButton label="Clear" class="p-button-outlined"
+                                        <button pButton label="Clear" class="p-button-outlined border-radius-right"
                                             icon="pi pi-filter-slash" (click)="clear(dt)"></button>
                                         <span class="p-input-icon-left ml-auto">
                                             <i class="pi pi-search"></i>
-                                            <input pInputText type="text" id="search-value" value=""
+                                            <input class="border-radius-left" pInputText type="text" id="search-value"
+                                                value=""
                                                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                                                 placeholder="Search keyword" />
                                         </span>
@@ -283,107 +296,111 @@
                                 </ng-template>
                                 <ng-template pTemplate="header" class="common_table w-100 tableWidth-1195">
                                     <tr>
-                                        <th class="table-col" pSortableColumn="clientName">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="clientName">
                                             <div class="flex justify-content-between align-items-center">
                                                 Client Name
                                                 <p-sortIcon field="clientName"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="clientName"
-                                            display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="dealDate">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="dealDate">
                                             <div class="flex justify-content-between align-items-center">
                                                 Deal Date
                                                 <p-sortIcon field="dealDate"></p-sortIcon>
-                                                <!-- <p-columnFilter type="date" field="dealDate"
-                                                    display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="companySymbol">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="companySymbol">
                                             <div class="flex justify-content-between align-items-center">
                                                 Company Symbol
                                                 <p-sortIcon field="companySymbol"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="companySymbol"
-                                            display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
 
-                                        <th class="table-col" pSortableColumn="companyFullName">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="companyFullName">
                                             <div class="flex justify-content-between align-items-center">
                                                 Company FullName
                                                 <p-sortIcon field="companyFullName"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="companyFullName"
-                                            display="menu" currency="USD"
-                                        class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="stockAction">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="stockAction">
                                             <div class="flex justify-content-between align-items-center">
                                                 Stock Action
                                                 <p-sortIcon field="stockAction"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="stockAction"
-                                            display="menu" currency="USD"
-                                        class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="quantity">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="quantity">
                                             <div class="flex justify-content-between align-items-center">
                                                 Quantity
                                                 <p-sortIcon field="quantity"></p-sortIcon>
-                                                <!-- <p-columnFilter type="numeric" field="quantity"
-                                            display="menu" currency="USD"
-                                        class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="tradePrice">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="tradePrice">
                                             <div class="flex justify-content-between align-items-center">
                                                 Trade Price
                                                 <p-sortIcon field="tradePrice"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="tradePrice"
-                                            display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
-                                        <th class="table-col" pSortableColumn="remarks">
+                                        <th style="min-width:5rem" class="table-col" pSortableColumn="remarks">
                                             <div class="flex justify-content-between align-items-center">
                                                 Remarks
                                                 <p-sortIcon field="remarks"></p-sortIcon>
-                                                <!-- <p-columnFilter type="text" field="remarks"
-                                            display="menu" class="ml-auto"></p-columnFilter> -->
                                             </div>
                                         </th>
                                     </tr>
+                                    <tr>
+                                        <td class="p-0"><p-columnFilter type="text" field="clientName" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </td>
+                                        <td class="p-0"><p-columnFilter type="date" field="dealDate" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </td>
+                                        <td class="p-0"><p-columnFilter type="numeric" field="companySymbol"
+                                                display="menu" class="ml-auto"></p-columnFilter>
+                                        </td>
+                                        <td class="p-0"><p-columnFilter type="numeric" field="companyFullName"
+                                                display="menu" currency="USD" class="ml-auto"></p-columnFilter></td>
+                                        <td class="p-0"><p-columnFilter type="numeric" field="stockAction"
+                                                display="menu" currency="USD" class="ml-auto"></p-columnFilter></td>
+                                        <td class="p-0"><p-columnFilter type="numeric" field="quantity" display="menu"
+                                                currency="USD" class="ml-auto"></p-columnFilter></td>
+                                        <td class="p-0"><p-columnFilter type="text" field="tradePrice" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </td>
+                                        <td class="p-0"><p-columnFilter type="text" field="remarks" display="menu"
+                                                class="ml-auto"></p-columnFilter>
+                                        </td>
+                                    </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-bulkDeal>
-                                    <tr class="p-selectable-row">
-                                        <td>
+                                    <tr class="p-selectable-row border border-1">
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">ClientName</span>
                                             {{ bulkDeal.clientName }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Deal Date</span>
-                                            {{ bulkDeal.dealDate | date: 'MM/dd/yyyy' }}
+                                            {{ bulkDeal.dealDate | date: 'dd/MM/yyyy' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Company Symbol</span>
                                             {{ bulkDeal.companySymbol}}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Company FullName</span>
                                             {{ bulkDeal.companyFullName }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Stock Action</span>
                                             {{ getStockAction(bulkDeal.stockAction) }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Quantity</span>
                                             {{ bulkDeal.quantity | number }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">TradePrice</span>
                                             {{ bulkDeal.tradePrice | currency: 'INR':'symbol' }}
                                         </td>
-                                        <td>
+                                        <td style="min-width:5rem">
                                             <span class="p-column-title">Remarks</span>
                                             {{ bulkDeal.remarks }}
                                         </td>

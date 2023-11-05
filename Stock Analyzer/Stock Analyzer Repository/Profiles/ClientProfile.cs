@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Repository.DataModels;
 using System;
@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Repository.Profiles
 {
-    public class ClientProfile : Profile
+  public class ClientProfile : Profile
+  {
+    public ClientProfile()
     {
-        public ClientProfile()
-        {
-            CreateMap<Client, ClientDataModel>();
-            CreateMap<ClientDataModel, Client>();
-        }
+      CreateMap<Client, ClientDataModel>();
+      CreateMap<ClientDataModel, Client>();
     }
+  }
 }

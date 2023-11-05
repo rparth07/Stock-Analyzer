@@ -1,192 +1,355 @@
 <div class="filter-container">
     <div class="border p-3">
-        <!-- <div class="col-md-1 pl-3">Filter By :</div> -->
         <div class="dropdown-container">
-            <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
+            <select [(ngModel)]="selectedOption" (change)="onFilterFormChange()">
                 <option *ngFor="let filter of filterOptions" (value)="filter.filterName">{{filter.filterName}}</option>
             </select>
-            <input [(ngModel)]="filterDate" type="date" class="filter-date me-3 ms-3 p-1 w-50">
+            <input [(ngModel)]="filterDate" type="date" (change)="onFilterFormChange()"
+                class="filter-date me-3 ms-3 p-1 w-50">
             <button class="new-filter-button" (click)="openModal()">New</button>
         </div>
-        <div *ngIf="modalOpen" class="modal-container">
-            <form [formGroup]="filterGroup" (ngSubmit)="submitForm()">
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <label for="FilterName">Filter Name</label>
-                        <input class="filter-name" type="text" formControlName="FilterName"
-                            placeholder="Enter a filter name">
-                    </div>
-                    <div class="col-6">
-                        <label for="Series">Series</label>
-                        <select class="filter-series w-50 d-inline-block" formControlName="Series">
-                            <option value="EQ">EQ</option>
-                            <option value="BE">BE</option>
-                            <option value="GS">GS</option>
-                            <option value="SM">SM</option>
-                            <option value="BZ">BZ</option>
-                            <option value="ST">ST</option>
-                            <option value="NF">NF</option>
-                            <option value="NO">NO</option>
-                            <option value="NS">NS</option>
-                            <option value="NH">NH</option>
-                            <option value="NV">NV</option>
-                            <option value="NX">NX</option>
-                        </select>
-                    </div>
-                </div>
-                <hr class="mt-0" />
-                <div formArrayName="criterias" *ngFor="let input of criterias.controls let i = index;">
-                    <div class="row" [formGroupName]="i">
-                        <div class="col-3">
-                            <label for="fieldName">Field</label>
-                            <select formControlName="fieldName">
-                                <option value="PreviousClose">Previous Close</option>
-                                <option value="OpenPrice">Open Price</option>
-                                <option value="HighPrice">High Price</option>
-                                <option value="LowPrice">Low Price</option>
-                                <option value="LastPrice">Last Price</option>
-                                <option value="ClosePrice">Close Price</option>
-                                <option value="AvgPrice">Avg Price</option>
-                                <option value="TtlTrdQnty">Total Trading Qnty</option>
-                                <option value="TurnOverLacs">Turn Over Lacs</option>
-                                <option value="NoOfTrades">No. Of Trades</option>
-                                <option value="DeliveryQty">Delivery Qty</option>
-                                <option value="DeliveryPercentage">Delivery Percentage</option>
-                            </select>
-                        </div>
-
-                        <div class="col-3">
-                            <div class="row">
-                                <div class="col-5 pe-0">
-                                    <label for="periodValue">No. of</label>
-                                    <input type="number" formControlName="periodValue" placeholder="No. of Period"
-                                        min="1">
-                                </div>
-                                <div class="col-7 ps-0">
-                                    <label for="periodType">Period</label>
-                                    <select formControlName="periodType">
-                                        <option selected value="Days">Days</option>
-                                        <option value="Weeks">Weeks</option>
-                                        <option value="Months">Months</option>
-                                        <option value="Years">Years</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-2">
-                            <label for="changeType">Increase/Decrease</label>
-                            <select formControlName="changeType">
-                                <option selected value="Increase">Increase</option>
-                                <option value="Decrease">Decrease</option>
-                            </select>
-                        </div>
-
-                        <div class="col-2">
-                            <label for="logicalOperator">And/Or</label>
-                            <select formControlName="logicalOperator">
-                                <option selected value="And">And</option>
-                                <option value="Or">Or</option>
-                            </select>
-                        </div>
-
-                        <div class="col-2">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="remove">Remove</label>
-                                    <button type="button" [disabled]="criterias.controls.length <= 1"
-                                        (click)="removeRow(i)">-</button>
-                                </div>
-                                <div class="col-6">
-                                    <label for="add">Add</label>
-                                    <button type="button" (click)="addRow()">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button type="submit">Submit</button>
-                <button type="button" (click)="closeModal()">Cancel</button>
-            </form>
-        </div>
+        <app-filter-form-container *ngIf="modalOpen" (closeModalEvent)="closeModal()"></app-filter-form-container>
     </div>
 
     <div class="container py-3">
-        <div class="row" class="w-30">
+        <div class="row">
             <div class="borderSet tableScroll p-0">
                 <div class="tableScroll">
                     <div class="card">
-                        <p-table #dt [value]="filterResults" dataKey="id" [rowHover]="true" [rows]="5"
-                            [scrollable]="true" class="w-30" [showCurrentPageReport]="true"
-                            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [loading]="loadingFilterResults"
-                            [paginator]="true"
+                        <p-table #filterTable [value]="filterResults" dataKey="id" [rowHover]="true" [rows]="5"
+                            [customSort]="true" (sortFunction)="customSort($event)" [scrollable]="true"
+                            [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+                            [loading]="loadingFilterResults" [paginator]="true"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                             [filterDelay]="0"
-                            [globalFilterFields]="['calculationDate', 'value', 'symbol', 'fieldName']">
+                            [globalFilterFields]="['company.symbol', 'fieldName', 'value', 'calculationDate', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
                             <ng-template pTemplate="caption">
                                 <div class="flex">
-                                    <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-                                        (click)="clear(dt)"></button>
+                                    <button pButton label="Clear" class="p-button-outlined border-radius-right"
+                                        icon="pi pi-filter-slash" (click)="clearFilterTable(filterTable)"></button>
                                     <span class="p-input-icon-left ml-auto">
                                         <i class="pi pi-search"></i>
-                                        <input pInputText type="text" id="search-value" value=""
-                                            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                        <input class="border-radius-left" pInputText type="text"
+                                            id="filter-search-value" value=""
+                                            (input)="filterTable.filterGlobal($any($event.target).value, 'contains')"
                                             placeholder="Search keyword" />
                                     </span>
                                 </div>
                             </ng-template>
                             <ng-template pTemplate="header" class="common_table w-100 tableWidth-1195">
                                 <tr>
-                                    <th class="table-col" pSortableColumn="company.symbol">
+                                    <th style="min-width:10rem" class="table-col" pSortableColumn="company.symbol">
                                         <div class="flex justify-content-between align-items-center">
                                             Company Name
                                             <p-sortIcon field="company.symbol"></p-sortIcon>
                                         </div>
                                     </th>
-                                    <th class="table-col" pSortableColumn="date">
+                                    <th style="min-width:15rem" class="table-col" pSortableColumn="fieldName">
                                         <div class="flex justify-content-between align-items-center">
-                                            Date
-                                            <p-sortIcon field="date"></p-sortIcon>
-                                        </div>
-                                    </th>
-                                    <th class="table-col" pSortableColumn="fieldName">
-                                        <div class="flex justify-content-between align-items-center">
-                                            Field Name
+                                            Field
                                             <p-sortIcon field="fieldName"></p-sortIcon>
                                         </div>
                                     </th>
-                                    <th class="table-col" pSortableColumn="value">
+                                    <th style="min-width:10rem" class="table-col" pSortableColumn="value">
                                         <div class="flex justify-content-between align-items-center">
                                             Value
                                             <p-sortIcon field="value"></p-sortIcon>
                                         </div>
                                     </th>
+                                    <th style="min-width:10rem" class="table-col" pSortableColumn="calculationDate">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Date
+                                            <p-sortIcon field="calculationDate"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.previousClose">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Prev Close
+                                            <p-sortIcon field="company.bhavCopyInfos.previousClose"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.openPrice">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Open Price
+                                            <p-sortIcon field="company.bhavCopyInfos.openPrice"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.highPrice">
+                                        <div class="flex justify-content-between align-items-center">
+                                            High Price
+                                            <p-sortIcon field="company.bhavCopyInfos.highPrice"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.lowPrice">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Low Price
+                                            <p-sortIcon field="company.bhavCopyInfos.lowPrice"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.lastPrice">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Last Price
+                                            <p-sortIcon field="company.bhavCopyInfos.lastPrice"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.closePrice">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Close Price
+                                            <p-sortIcon field="company.bhavCopyInfos.closePrice"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.avgPrice">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Avg Price
+                                            <p-sortIcon field="company.bhavCopyInfos.avgPrice"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.ttlTrdQnty">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Total Traded Quantity
+                                            <p-sortIcon field="company.bhavCopyInfos.ttlTrdQnty"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.turnOverLacs">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Turnover (Lacs)
+                                            <p-sortIcon field="company.bhavCopyInfos.turnOverLacs"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.noOfTrades">
+                                        <div class="flex justify-content-between align-items-center">
+                                            No of Trades
+                                            <p-sortIcon field="company.bhavCopyInfos.noOfTrades"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.deliveryQty">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Deliverable Qty
+                                            <p-sortIcon field="company.bhavCopyInfos.deliveryQty"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:10rem" class="table-col"
+                                        pSortableColumn="company.bhavCopyInfos.deliveryPercentage">
+                                        <div class="flex justify-content-between align-items-center">
+                                            % Dly Qt to Traded Qty
+                                            <p-sortIcon field="company.bhavCopyInfos.deliveryPercentage"></p-sortIcon>
+                                        </div>
+                                    </th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-filterResult>
-                                <tr class="p-selectable-row">
-                                    <td>
+                                <tr class="p-selectable-row border border-1"
+                                    (click)="filterBulkDeal(filterResult.company.symbol)">
+                                    <td style="min-width:10rem">
                                         <span class="p-column-title">Company Name</span>
                                         {{ filterResult.company.symbol }}
                                     </td>
-                                    <td>
-                                        <span class="p-column-title">Date</span>
-                                        {{ filterResult.calculationDate | date: 'MM/dd/yyyy'
-                                        }}
-                                    </td>
-                                    <td>
+                                    <td style="min-width:15rem">
                                         <span class="p-column-title">Field Name</span>
                                         {{ getFieldName(filterResult.filterCriteria) }}
                                     </td>
-                                    <td>
+                                    <td style="min-width:10rem">
                                         <span class="p-column-title">Value</span>
                                         {{ filterResult.value | number : '1.2-2' }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Date</span>
+                                        {{ filterResult.calculationDate | date: 'dd/MM/yyyy'
+                                        }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Prev Close</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].previousClose | currency:
+                                        'INR':'symbol' }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Open Price</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].openPrice | currency: 'INR':'symbol' }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">High Price</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].highPrice | currency: 'INR':'symbol' }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Low Price</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].lowPrice | currency: 'INR':'symbol' }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Last Price</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].lastPrice | currency: 'INR':'symbol' }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Close Price</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].closePrice | currency: 'INR':'symbol'
+                                        }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Avg Price</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].avgPrice | currency: 'INR':'symbol' }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Total Traded
+                                            Quantity</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].ttlTrdQnty | number }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Turnover(Lacs)</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].turnOverLacs | currency: 'INR':'symbol'
+                                        }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">No of Trades</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].noOfTrades | number }}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Deliverable Qty</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].deliveryQty | number}}
+                                    </td>
+                                    <td style="min-width:10rem">
+                                        <span class="p-column-title">Delivery Percentage</span>
+                                        {{ filterResult.company.bhavCopyInfos[0].deliveryPercentage/100 | percent: '1.2'
+                                        }}
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="emptymessage">
                                 <tr>
                                     <td colspan="8">No Filter Results found.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container py-3">
+        <div class="row">
+            <div class="borderSet tableScroll p-0">
+                <div class="tableScroll">
+                    <div class="card">
+                        <p-table #bulkDealTable [value]="bulkDeals" dataKey="id" [rowHover]="true" [rows]="5"
+                            [scrollable]="true" [showCurrentPageReport]="true"
+                            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [loading]="loadingFilterResults"
+                            [paginator]="true"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [filterDelay]="0"
+                            [globalFilterFields]="['clientName', 'dealDate', 'companySymbol', 'companyFullName', 'stockAction', 'quantity', 'tradePrice', 'remarks']">
+                            <ng-template pTemplate="caption">
+                                <div class="flex">
+                                    <button pButton label="Clear" class="p-button-outlined border-radius-right"
+                                        icon="pi pi-filter-slash" (click)="clearBulkDealTable(bulkDealTable)"></button>
+                                    <span class="p-input-icon-left ml-auto">
+                                        <i class="pi pi-search"></i>
+                                        <input class="border-radius-left" pInputText type="text" id="bulk-search-value"
+                                            value="" [(ngModel)]="bulkDealFilterInput"
+                                            (input)="bulkDealTable.filterGlobal($any($event.target).value, 'contains')"
+                                            placeholder="Search keyword" />
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header" class="common_table w-100 tableWidth-1195">
+                                <tr>
+                                    <th style="min-width:15rem" class="table-col" pSortableColumn="clientName">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Client Name
+                                            <p-sortIcon field="clientName"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:5rem" class="table-col" pSortableColumn="dealDate">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Deal Date
+                                            <p-sortIcon field="dealDate"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:5rem" class="table-col" pSortableColumn="companySymbol">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Company Symbol
+                                            <p-sortIcon field="companySymbol"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:15rem" class="table-col" pSortableColumn="companyFullName">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Company FullName
+                                            <p-sortIcon field="companyFullName"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:5rem" class="table-col" pSortableColumn="stockAction">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Stock Action
+                                            <p-sortIcon field="stockAction"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:5rem" class="table-col" pSortableColumn="quantity">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Quantity
+                                            <p-sortIcon field="quantity"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:5rem" class="table-col" pSortableColumn="tradePrice">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Trade Price
+                                            <p-sortIcon field="tradePrice"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                    <th style="min-width:5rem" class="table-col" pSortableColumn="remarks">
+                                        <div class="flex justify-content-between align-items-center">
+                                            Remarks
+                                            <p-sortIcon field="remarks"></p-sortIcon>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-bulkDeal>
+                                <tr class="p-selectable-row border border-1">
+                                    <td style="min-width:15rem">
+                                        <span class="p-column-title">ClientName</span>
+                                        {{ bulkDeal.clientName }}
+                                    </td>
+                                    <td style="min-width:5rem">
+                                        <span class="p-column-title">Deal Date</span>
+                                        {{ bulkDeal.dealDate | date: 'dd/MM/yyyy' }}
+                                    </td>
+                                    <td style="min-width:5rem">
+                                        <span class="p-column-title">Company Symbol</span>
+                                        {{ bulkDeal.companySymbol}}
+                                    </td>
+                                    <td style="min-width:15rem">
+                                        <span class="p-column-title">Company FullName</span>
+                                        {{ bulkDeal.companyFullName }}
+                                    </td>
+                                    <td style="min-width:5rem">
+                                        <span class="p-column-title">Stock Action</span>
+                                        {{ getStockAction(bulkDeal.stockAction) }}
+                                    </td>
+                                    <td style="min-width:5rem">
+                                        <span class="p-column-title">Quantity</span>
+                                        {{ bulkDeal.quantity | number }}
+                                    </td>
+                                    <td style="min-width:5rem">
+                                        <span class="p-column-title">TradePrice</span>
+                                        {{ bulkDeal.tradePrice | currency: 'INR':'symbol' }}
+                                    </td>
+                                    <td style="min-width:5rem">
+                                        <span class="p-column-title">Remarks</span>
+                                        {{ bulkDeal.remarks }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="8">No BulkDeals found.</td>
                                 </tr>
                             </ng-template>
                         </p-table>

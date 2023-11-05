@@ -14,9 +14,11 @@ namespace Stock_Analyzer_Service
   public class FilterService : IFilterService
   {
     private readonly IFilterRepository _filterRepository;
-    public FilterService(IFilterRepository filterRepository)
+    private readonly IStockInfoRepository _stockInfoRepository;
+    public FilterService(IFilterRepository filterRepository, IStockInfoRepository stockInfoRepository)
     {
       _filterRepository = filterRepository;
+      _stockInfoRepository = stockInfoRepository;
     }
 
     public void AddFilter(Filter filter)
@@ -51,12 +53,26 @@ namespace Stock_Analyzer_Service
         throw new InvalidFilterDateException($"Please Enter latest data of {filterDate}");
       }*/
 
-      filter.Criterias.ForEach(crt => FilterResultInCriteria(crt, filterDate));
-      var filterdValues = GetValuesBasedOnAllCriterias(filter.Criterias);
+      /*filter.Criterias.ForEach(crt => FilterResultInCriteria(crt, filterDate));
+      var filterdValues = GetValuesBasedOnAllCriterias(filter.Criterias);*/
 
-      return filterdValues;
+      var filterResults = _filterRepository.GetFilterResults(filter, filterDate);
+
+      var bhavInfosOnCalculationDate = _stockInfoRepository.GetAllBhavInfos(filterDate);
+      var bulkDealOnCalculationDate = _stockInfoRepository.GetAllBulkDeals(filterDate);
+
+      filterResults.ForEach(fr =>
+      {
+        fr.Company.BhavCopyInfos = bhavInfosOnCalculationDate
+          .Where(_ => _.Company.Id.Equals(fr.Company.Id)).ToList();
+
+        fr.Company.BulkDeals = bulkDealOnCalculationDate
+          .Where(_ => _.Company.Id.Equals(fr.Company.Id)).ToList();
+      });
+
+      return filterResults;
     }
-
+/*
     private static List<FilterResult> GetValuesBasedOnAllCriterias(List<FilterCriteria> criterias)
     {
       var filteredValues = new List<FilterResult>();
@@ -104,6 +120,6 @@ namespace Stock_Analyzer_Service
                         && _.FilterResults[0].Value < _.FilterResults[1].Value))
         .Select(_ => _.FilterResults[0])
         .ToList();
-    }
+    }*/
   }
 }

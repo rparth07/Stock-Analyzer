@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { FilterService } from '../services/filter.service';
 import { ChangeType, Filter, FilterCriteria, FilterResult, PeriodType } from '../types/Filter';
 import { Table } from 'primeng/table';
+import { BulkDeal, StockAction } from '../types/BulkDeal';
+import { SortEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,36 +12,50 @@ import { Table } from 'primeng/table';
   styleUrls: ['./dashboard.component.css', '../shared/css/common-page-style.css']
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('filterTable', { static: true }) filterTable!: Table;
+  @ViewChild('bulkDealTable', { static: true }) bulkDealTable!: Table;
+  bulkDealFilterInput: string = '';
+
   selectedOption: string = '';
   filterDate: string = new Date().toISOString().split('T')[0];
 
   filterOptions: Filter[] = [];
   filterResults: FilterResult[] = [];
+  bulkDeals: BulkDeal[] = [];
   loadingFilterResults: boolean = true;
 
-  filterGroup: FormGroup;
-  criterias!: FormArray;
-
   modalOpen: boolean = false;
-  sequence: number = 1;
 
-  onOptionChange() {
+  constructor(private formBuilder: FormBuilder, private filterService: FilterService) {
+  }
+
+  onFilterFormChange() {
+    this.loadingFilterResults = true;
     // Handle the selected option change here
     this.filterService.executeFilter(this.selectedOption, new Date(this.filterDate))
       .subscribe({
         next: (value) => {
           this.filterResults = value;
           this.loadingFilterResults = false;
-          console.log('filter values = ' + value);
-          console.dir(value, { depth: null });
+          this.bulkDeals = this.filterResults
+            .filter(_ => _.company.bulkDeals.length > 0)
+            .map(_ => _.company.bulkDeals[0]);
+
+          // console.log('filter values = ' + value);
+          // console.dir(value, { depth: null });
         },
         error: (err) => console.log(err),
       });
   }
 
-  clear(table: Table) {
+  clearFilterTable(table: Table) {
     table.clear();
-    (<HTMLInputElement>document.getElementById('search-value')).value = '';
+    (<HTMLInputElement>document.getElementById('filter-search-value')).value = '';
+  }
+
+  clearBulkDealTable(table: Table) {
+    table.clear();
+    (<HTMLInputElement>document.getElementById('bulk-search-value')).value = '';
   }
 
   openModal() {
@@ -50,18 +66,7 @@ export class DashboardComponent implements OnInit {
     this.modalOpen = false;
   }
 
-  constructor(private formBuilder: FormBuilder, private filterService: FilterService) {
-    this.filterGroup = this.formBuilder.group({
-      FilterName: ['', Validators.required],
-      Series: ['EQ', Validators.required],
-      criterias: this.formBuilder.array([this.createInputRow()])
-    });
-  }
-
   ngOnInit() {
-    this.criterias = this.filterGroup.get('criterias') as FormArray;
-    this.sequence = 1;
-
     this.filterService.getAllFilterNames()
       .subscribe({
         next: (value) => {
@@ -69,68 +74,85 @@ export class DashboardComponent implements OnInit {
           //console.log('value = ' + value);
           console.dir(value, { depth: null });
           this.selectedOption = this.filterOptions[0].filterName;
-          this.onOptionChange();
+          this.onFilterFormChange();
         },
         error: (err) => console.log(err),
       });
 
-    console.log("this.filterOptions = " + this.filterOptions);
-  }
-
-  addRow() {
-    this.sequence++;
-    this.criterias.push(this.createInputRow());
-  }
-
-  removeRow(index: number) {
-    this.sequence--;
-    this.criterias.removeAt(index);
-  }
-
-  createInputRow(): FormGroup {
-    return this.formBuilder.group({
-      sequence: this.sequence,
-      fieldName: ['ClosePrice', Validators.required],
-      periodValue: [1, Validators.required],
-      periodType: ['Days', Validators.required],
-      changeType: ['Increase', Validators.required],
-      logicalOperator: ['And', Validators.required]
-    });
-  }
-
-  submitForm() {
-    if (this.filterGroup.valid) {
-      console.log('Form submitted:', this.filterGroup.value);
-      this.filterService
-        .addFilter(this.filterGroup.value as Filter);
-      this.closeModal();
-      this.filterGroup.reset();
-    }
+    // console.log("this.filterOptions = " + this.filterOptions);
   }
 
   getFieldName(filterCriteria: FilterCriteria) {
     //Avg fieldName(periodValue'D/W/M/Y') ^;
+    // console.log("type=", filterCriteria.changeType == ChangeType.Increase);
     return `AVG ${filterCriteria.fieldName}
-    (${filterCriteria.periodValue}${this.getPeriodType(filterCriteria.PeriodType.toString())}${this.getChangeTypeSymbol(filterCriteria.changeType)})`
+    (${filterCriteria.periodValue}${this.getPeriodType(filterCriteria.periodType)}${this.getChangeTypeSymbol(filterCriteria.changeType)})`
   }
 
   getPeriodType(type: string): string {
-    if (type == PeriodType.Days.toString()) {
+    if (type == PeriodType.Days) {
       return 'D';
-    } else if (type == PeriodType.Weeks.toString()) {
+    } else if (type == PeriodType.Weeks) {
       return 'W';
-    } else if (type == PeriodType.Months.toString()) {
+    } else if (type == PeriodType.Months) {
       return 'M';
-    } else if (type == PeriodType.Years.toString()) {
+    } else if (type == PeriodType.Years) {
       return 'Y';
     }
     return 'Y';
   }
 
-  getChangeTypeSymbol(type: ChangeType) {
-    if (type === ChangeType.Increase) {
+  getChangeTypeSymbol(type: string) {
+    if (type == ChangeType.Increase) {
       return '↑';
     }
     return '↓';
+  }
+
+  getStockAction(value: number) {
+    return StockAction[value];
+  }
+
+  filterBulkDeal(companyName: string) {
+    console.dir(this.bulkDealTable, { depth: null });
+    this.bulkDealTable.filterGlobal(companyName, 'contains');
+    this.bulkDealFilterInput = companyName;
+  }
+
+  customSort(event: SortEvent) {
+    event.data!.sort((data1, data2) => {
+      let value1 = null;
+      let value2 = null;
+
+      console.dir(event, { depth: null });
+      if (event.field!.split('.').length > 2) {
+        let fields = event.field!.split('.');
+        value1 = data1.company.bhavCopyInfos[0][fields[2]];
+        value2 = data2.company.bhavCopyInfos[0][fields[2]];
+      } else if (event.field!.split('.').length > 1) {
+        let fields = event.field!.split('.');
+        value1 = data1.company[fields[1]];
+        value2 = data2.company[fields[1]];
+      } else {
+        value1 = data1[event.field!];
+        value2 = data2[event.field!];
+      }
+      let result = null;
+      // console.log('value1=', value1 + ' - value2=' + value2);
+      if (value1 == null && value2 != null)
+        result = -1;
+      else if (value1 != null && value2 == null)
+        result = 1;
+      else if (value1 == null && value2 == null)
+        result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string')
+        result = value1.localeCompare(value2);
+      else {
+        // Compare the values directly
+        result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+      }
+
+      return (event.order! * result);
+    });
   }
 }

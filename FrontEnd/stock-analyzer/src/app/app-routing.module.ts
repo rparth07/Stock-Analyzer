@@ -34,10 +34,6 @@ const routes: Routes = [
     component: ClientComponent
   },
   {
-    path: 'profile',
-    component: ProfileComponent
-  },
-  {
     path: '**',
     redirectTo: 'dashboard',
     pathMatch: 'full'

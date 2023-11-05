@@ -24,8 +24,10 @@ namespace Stock_Analyzer_Domain.Iterface
     public List<BhavCopyInfo> GetBhavInfosByCompany(string company);
     public List<BhavCopyInfo> GetBhavInfosToInsert(List<BhavCopyInfo> bhavInfos);
     public List<BhavCopyInfo> GetAllBhavInfosWithCompanies();
+    public List<BhavCopyInfo> GetAllBhavInfos(DateTime filterDate);
 
     public void AddBulkDeals(List<BulkDeal> bulkDealsToInsert);
+    public List<BulkDeal> GetAllBulkDeals(DateTime filterDate);
     public List<BulkDeal> GetAllBulkDeals();
     public List<BulkDeal> GetBulkDealsByCompany(string company);
   }

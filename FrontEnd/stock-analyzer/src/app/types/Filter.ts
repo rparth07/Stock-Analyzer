@@ -9,9 +9,9 @@ export type Filter = {
 export type FilterCriteria = {
     sequence: number,
     fieldName: string,
-    changeType: ChangeType,
-    logicalOperator: LogicalOperator,
-    PeriodType: PeriodType,
+    changeType: string,
+    logicalOperator: string,
+    periodType: string,
     periodValue: number
 }
 // Symbol, series, date, Avg fieldName(periodValue'D/W/M/Y')^
@@ -24,18 +24,18 @@ export type FilterResult = {
 }
 
 export enum ChangeType {
-    Increase,
-    Decrease
+    Increase = 'Increase',
+    Decrease = 'Decrease'
 }
 
 export enum LogicalOperator {
-    And,
-    Or
+    And = 'And',
+    Or = 'Or'
 }
 
 export enum PeriodType {
-    Days,
-    Weeks,
-    Months,
-    Years,
+    Days = 'Days',
+    Weeks = 'Weeks',
+    Months = 'Months',
+    Years = 'Years',
 }

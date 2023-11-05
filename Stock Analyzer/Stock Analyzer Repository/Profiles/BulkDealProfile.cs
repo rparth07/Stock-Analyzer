@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Repository.DataModels;
 using System;
@@ -9,12 +9,20 @@ using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Repository.Profiles
 {
-    public class BulkDealProfile : Profile
+  public class BulkDealProfile : Profile
+  {
+    public BulkDealProfile()
     {
-        public BulkDealProfile()
-        {
-            CreateMap<BulkDeal, BulkDealDataModel>();
-            CreateMap<BulkDealDataModel, BulkDeal>();
-        }
+      CreateMap<BulkDeal, BulkDealDataModel>()
+        .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => ToDate(src.DealDate)));
+
+      CreateMap<BulkDealDataModel, BulkDeal>()
+        .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => ToDate(src.DealDate)));
     }
+
+    private DateTime ToDate(DateTime dealDate)
+    {
+      return dealDate.Date;
+    }
+  }
 }

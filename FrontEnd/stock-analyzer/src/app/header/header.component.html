@@ -1,7 +1,7 @@
 <nav class="home-header nav navbar d-flex sticky-top" [ngClass]="enableHeader ? 'sticky-home-header' : ''">
     <div class="d-flex align-items-center ms-3">
         <div class="logo-container">
-            <a class="home-link navbar-brand d-flex align-items-center text-decoration-none" routerLink="home">
+            <a class="home-link navbar-brand d-flex align-items-center text-decoration-none" routerLink="dashboard">
                 <img width="38px" src="../../assets/images/stock-analyzer-icon.png" alt="stock-analyzer-logo" />
                 <h1 class="logo-title">
                     Stock Analyzer</h1>
@@ -35,22 +35,5 @@
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="right profile-container me-3">
-        <button type="button" mat-button [matMenuTriggerFor]="belowMenu" class="text-white">
-            <mat-icon>
-                account_circle</mat-icon>
-            User Name
-        </button>
-        <mat-menu #belowMenu="matMenu" yPosition="below">
-            <button type="button" mat-menu-item>
-                <a class="dropdown-item" routerLink="profile">
-                    Profile</a>
-            </button>
-            <button type="button" mat-menu-item>
-                <a class="dropdown-item">
-                    Logout</a>
-            </button>
-        </mat-menu>
     </div>
 </nav>

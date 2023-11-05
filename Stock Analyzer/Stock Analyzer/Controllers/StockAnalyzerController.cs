@@ -32,6 +32,12 @@ namespace Stock_Analyzer.Controllers
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    [HttpGet("health-report")]
+    public IActionResult HealthUpdate()
+    {
+      return Ok("I'm up and running!");
+    }
+
     [HttpPost("analyze-bhav-data-between", Name = "AnalyzeBhavDataFileBetween")]
     public async Task<IActionResult> AnalyzeBhavInfoDataFileBetween([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
     {

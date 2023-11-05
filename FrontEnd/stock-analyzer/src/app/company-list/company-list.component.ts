@@ -29,8 +29,8 @@ export class CompanyListComponent implements OnInit {
       let value2 = null;
       if (event.field!.startsWith('bhavCopyInfos')) {
         let field = event.field!.split('.')[1];
-        value1 = data1.bhavCopyInfos.length !== 0 ? data1.bhavCopyInfos[0][field] : null;
-        value2 = data2.bhavCopyInfos.length !== 0 ? data2.bhavCopyInfos[0][field] : null;
+        value1 = data1.bhavCopyInfos.length > 0 ? data1.bhavCopyInfos[0][field] : null;
+        value2 = data2.bhavCopyInfos.length > 0 ? data2.bhavCopyInfos[0][field] : null;
       } else {
         value1 = data1[event.field!];
         value2 = data2[event.field!];
@@ -58,7 +58,7 @@ export class CompanyListComponent implements OnInit {
     this.getAllCompanies()
       .subscribe((companies: Company[]) => {
         this.companies = companies;
-        console.log(companies);
+        // console.log(companies);
         this.loading = false;
       });
   }

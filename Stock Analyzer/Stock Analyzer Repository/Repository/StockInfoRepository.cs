@@ -169,6 +169,17 @@ namespace Stock_Analyzer_Repository.Repository
       return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
     }
 
+    public List<BhavCopyInfo> GetAllBhavInfos(DateTime filterDate)
+    {
+      var bhavInfoWithCompany = _context.BhavCopyInfo
+          .Include("Company")
+          .AsNoTracking()
+          .Where(_ => _.Date.Date.Equals(filterDate.Date))
+          .ToList();
+
+      return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
+    }
+
     public void AddBulkDeals(List<BulkDeal> bulkDealsToInsert)
     {
       var bulkDealInfos = _mapper.Map<List<BulkDealDataModel>>(bulkDealsToInsert);
@@ -188,6 +199,17 @@ namespace Stock_Analyzer_Repository.Repository
       _context.SaveChanges();
     }
 
+    public List<BulkDeal> GetAllBulkDeals(DateTime filterDate)
+    {
+      var bulkDeals = _context.BulkDeal
+          .Include("Company")
+          .Include("Client")
+          .AsNoTracking()
+          .Where(_ => _.DealDate.Date.Equals(filterDate.Date))
+          .ToList();
+
+      return _mapper.Map<List<BulkDeal>>(bulkDeals);
+    }
     public List<BulkDeal> GetAllBulkDeals()
     {
       var bulkDeals = _context.BulkDeal

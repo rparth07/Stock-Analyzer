@@ -300,12 +300,20 @@ button:focus {
     box-shadow: none;
 }
 
+.border-radius-left {
+    border-radius: 0px 5px 5px 0px;
+}
+
+.border-radius-right {
+    border-radius: 5px 0px 0px 5px;
+}
+
 ::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon,
 ::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover .p-sortable-column-icon {
     color: var(--text-light-color) !important;
 }
 
-::ng-deep .p-datatable .p-datatable-thead>tr>th,
+::ng-deep .p-datatable .p-datatable-thead>tr>th.table-col,
 ::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover {
     background-color: var(--table-color) !important;
     color: var(--text-light-color) !important;
