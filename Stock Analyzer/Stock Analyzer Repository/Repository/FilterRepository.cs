@@ -13,7 +13,7 @@ using LogicalOperator = Stock_Analyzer_Repository.DataModels.Filter.LogicalOpera
 
 namespace Stock_Analyzer_Repository.Repository
 {
-  public class FilterRepository : IFilterRepository
+  public class FilterRepository : IFilterRepository, IDisposable
   {
     private readonly StockAnalyzerContext _context;
     private readonly IMapper _mapper;
@@ -276,6 +276,20 @@ namespace Stock_Analyzer_Repository.Repository
         || series == null)
       {
         throw new Exception("Invalid Filter, Please Enter data correctly!");
+      }
+    }
+
+    public void Dispose()
+    {
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+      if (disposing)
+      {
+        // dispose resources when needed
       }
     }
   }

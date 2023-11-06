@@ -3,93 +3,24 @@ using Microsoft.EntityFrameworkCore;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Repository.DataModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Repository.Repository
 {
-  public class StockInfoRepository : IStockInfoRepository, IDisposable
+  public class BhavInfoRepository : IBhavInfoRepository, IDisposable
   {
+
     private readonly StockAnalyzerContext _context;
     private readonly IMapper _mapper;
 
-    public StockInfoRepository(StockAnalyzerContext context, IMapper mapper)
+    public BhavInfoRepository(StockAnalyzerContext context, IMapper mapper)
     {
       _context = context ?? throw new ArgumentNullException(nameof(context));
       _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-    }
-
-    public void AddCompanies(List<Company> companiesToInsert)
-    {
-      var companyInfos = _mapper.Map<List<CompanyDataModel>>(companiesToInsert);
-
-      _context.Company.AddRange(companyInfos);
-      try
-      {
-        _context.SaveChanges();
-      } catch(Exception ex)
-      {
-        Console.WriteLine(ex.Message.ToString());
-      }
-    }
-
-    public List<Company> GetAllCompaniesWithAllInfo()
-    {
-      var companies = _context.Company
-          .Include("BulkDeals")
-          .Include("BhavCopyInfos")
-          .AsNoTracking()
-          .ToList();
-
-      return _mapper.Map<List<Company>>(companies);
-    }
-
-    public List<Company> GetCompaniesToInsert(List<Company> companies)
-    {
-      var companiesToInsert = companies
-        .Where(_ => _context.Company
-                      .FirstOrDefault(cs => cs.Symbol.Equals(_.Symbol)) == null)
-        .DistinctBy(_ => _.Symbol)
-        .ToList();
-
-      return companiesToInsert;
-    }
-
-    public Company GetCompanyByName(string companyName)
-    {
-      var company = _context.Company
-          .Include("BulkDeals")
-          .Include("BhavCopyInfos")
-          .Include("BulkDeals.Client")
-          .FirstOrDefault(_ => _.Symbol == companyName);
-
-      return _mapper.Map<Company>(company);
-    }
-
-    public List<Company> GetAllCompanies()
-    {
-      var companies = _context.Company
-          .OrderBy(_ => _.Symbol)
-          .AsNoTracking()
-          .ToList();
-
-      return _mapper.Map<List<Company>>(companies);
-    }
-
-    public void AddClients(List<Client> clientsToInsert)
-    {
-      var clientInfos = _mapper.Map<List<ClientDataModel>>(clientsToInsert);
-
-      _context.Client.AddRange(clientInfos);
-      _context.SaveChanges();
-    }
-
-    public List<Client> GetAllClients()
-    {
-      var clients = _context.Client
-          .Include("Deals")
-          .Include("Deals.Company")
-          .ToList();
-
-      return _mapper.Map<List<Client>>(clients);
     }
 
     public void AddBhavInfos(List<BhavCopyInfo> bhavCopyInfosToInsert)
@@ -179,48 +110,6 @@ namespace Stock_Analyzer_Repository.Repository
 
       return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
     }
-
-    public void AddBulkDeals(List<BulkDeal> bulkDealsToInsert)
-    {
-      var bulkDealInfos = _mapper.Map<List<BulkDealDataModel>>(bulkDealsToInsert);
-
-      bulkDealInfos
-          .ForEach(_ =>
-          {
-            _.Company = _context.Company
-                      .Where(company => company.Symbol.Equals(_.Company.Symbol))
-                      .First();
-            _.Client = _context.Client
-                      .Where(client => client.Name.Equals(_.Client.Name))
-                      .First();
-          });
-
-      _context.BulkDeal.AddRange(bulkDealInfos);
-      _context.SaveChanges();
-    }
-
-    public List<BulkDeal> GetAllBulkDeals(DateTime filterDate)
-    {
-      var bulkDeals = _context.BulkDeal
-          .Include("Company")
-          .Include("Client")
-          .AsNoTracking()
-          .Where(_ => _.DealDate.Date.Equals(filterDate.Date))
-          .ToList();
-
-      return _mapper.Map<List<BulkDeal>>(bulkDeals);
-    }
-    public List<BulkDeal> GetAllBulkDeals()
-    {
-      var bulkDeals = _context.BulkDeal
-          .Include("Company")
-          .Include("Client")
-          .AsNoTracking()
-          .ToList();
-
-      return _mapper.Map<List<BulkDeal>>(bulkDeals);
-    }
-
     public void Dispose()
     {
       Dispose(true);

@@ -16,7 +16,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<IStockInfoRepository, StockInfoRepository>();
+builder.Services.AddScoped<IBhavInfoRepository, BhavInfoRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IBulkDealRepository, BulkDealRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IFilterRepository, FilterRepository>();
 
 
