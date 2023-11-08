@@ -110,6 +110,19 @@ namespace Stock_Analyzer_Repository.Repository
 
       return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
     }
+
+    public List<BhavCopyInfo> GetBhvaInfosBy(DateTime fromDate, DateTime toDate, string series, string companyName)
+    {
+      var bhavInfos = _context.BhavCopyInfo
+            .Where(bc => bc.Date > fromDate && bc.Date <= toDate
+              && (bc.Series.ToLower() == series.ToLower())
+              && bc.Company.Symbol == companyName)
+            .AsNoTracking()
+            .ToList();
+
+      return _mapper.Map<List<BhavCopyInfo>>(bhavInfos);
+    }
+
     public void Dispose()
     {
       Dispose(true);

@@ -15,6 +15,8 @@ namespace Stock_Analyzer_Service.Interface
     public List<Filter> GetFilters();
     public Filter GetFilterByName(string filterName);
 
-    public List<FilterResult> ExecuteFilter(Filter filter, DateTime filterDate);
+    public List<FilterResult> GetFilterResults(Filter filter, DateTime filterDate);
+
+    public void StoreFilterResultsByFilterFor(DateTime calculationDate);
   }
 }

@@ -4,7 +4,7 @@ namespace Stock_Analyzer_Domain.Models.Filter
   {
     public Guid Id { get; set; }
 
-    public Filter FilterDataModel { get; set; }
+    public virtual Filter Filter { get; set; }
 
     public int Sequence { get; set; }
 

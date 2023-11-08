@@ -19,6 +19,9 @@ namespace Stock_Analyzer_Repository.DataModels.Filter
     [Required]
     public string Series { get; set; }
 
+    [Required]
+    public FilterType FilterType { get; set; }
+
     public List<FilterCriteriaDataModel> Criterias { get; set; } = new List<FilterCriteriaDataModel>();
   }
 }

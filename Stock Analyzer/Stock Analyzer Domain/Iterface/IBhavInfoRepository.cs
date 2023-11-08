@@ -15,5 +15,6 @@ namespace Stock_Analyzer_Domain.Iterface
     public List<BhavCopyInfo> GetBhavInfosToInsert(List<BhavCopyInfo> bhavInfos);
     public List<BhavCopyInfo> GetAllBhavInfosWithCompanies();
     public List<BhavCopyInfo> GetAllBhavInfos(DateTime filterDate);
+    public List<BhavCopyInfo> GetBhvaInfosBy(DateTime fromDate, DateTime toDate, string series, string companyName);
   }
 }

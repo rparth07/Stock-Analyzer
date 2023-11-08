@@ -11,18 +11,18 @@ namespace Stock_Analyzer_Service
     private readonly ICompanyRepository _companyRepository;
     private readonly IBulkDealRepository _bulkDealRepository;
     private readonly IClientRepository _clientRepository;
-    private readonly IFilterRepository _filterRepository;
+    private readonly IFilterService _filterService;
     public StockInfoService(IBhavInfoRepository bhavInfoRepository,
                             ICompanyRepository companyRepository,
                             IBulkDealRepository bulkDealRepository,
                             IClientRepository clientRepository,
-                            IFilterRepository filterRepository)
+                            IFilterService filterService)
     {
       _bhavInfoRepository = bhavInfoRepository ?? throw new ArgumentNullException(nameof(bhavInfoRepository));
       _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
       _bulkDealRepository = bulkDealRepository ?? throw new ArgumentNullException(nameof(bulkDealRepository));
       _clientRepository = clientRepository ?? throw new ArgumentNullException(nameof(clientRepository));
-      _filterRepository = filterRepository ?? throw new ArgumentNullException(nameof(filterRepository));
+      _filterService = filterService ?? throw new ArgumentNullException(nameof(filterService));
     }
 
     public void AddBhavInfos(List<BhavCopyInfo> bhavInfos)
@@ -37,7 +37,7 @@ namespace Stock_Analyzer_Service
       if (bhavInfosToInsert.Count > 0)
       {
         _bhavInfoRepository.AddBhavInfos(bhavInfosToInsert);
-        _filterRepository.StoreFilterResultsByFilterFor(calculationDate);
+        _filterService.StoreFilterResultsByFilterFor(calculationDate);
       }
     }
 
@@ -128,7 +128,6 @@ namespace Stock_Analyzer_Service
 
       return clientsToInsert;
     }
-
 
     public void AddBulkDeals(List<BulkDeal> bulkDeals)
     {

@@ -65,6 +65,7 @@ namespace Stock_Analyzer_Repository.Repository
           .Include("BulkDeals")
           .Include("BhavCopyInfos")
           .Include("BulkDeals.Client")
+          .AsNoTracking()
           .FirstOrDefault(_ => _.Symbol == companyName);
 
       return _mapper.Map<Company>(company);
@@ -74,7 +75,6 @@ namespace Stock_Analyzer_Repository.Repository
     {
       var companies = _context.Company
           .OrderBy(_ => _.Symbol)
-          .AsNoTracking()
           .ToList();
 
       return _mapper.Map<List<Company>>(companies);

@@ -1,13 +1,15 @@
+using Stock_Analyzer_Domain.Models.Filter;
 using System.ComponentModel.DataAnnotations;
 
 namespace Stock_Analyzer.Dto.Filter
 {
   public class FilterDto
   {
-    public FilterDto(string filterName, string series)
+    public FilterDto(string filterName, string series, FilterType filterType)
     {
       FilterName = filterName;
       Series = series;
+      FilterType = filterType;
       Criterias = new List<FilterCriteriaDto>();
     }
 
@@ -16,6 +18,8 @@ namespace Stock_Analyzer.Dto.Filter
     public string FilterName { get; set; }
 
     public string Series { get; set; }
+
+    public FilterType FilterType { get; set; }
 
     public List<FilterCriteriaDto> Criterias { get; set; } = new List<FilterCriteriaDto>();
 

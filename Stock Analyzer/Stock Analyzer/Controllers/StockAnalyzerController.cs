@@ -72,7 +72,7 @@ namespace Stock_Analyzer.Controllers
     [HttpPost("analyze-bhav-data", Name = "AnalyzeBhavDataFileOfDate")]
     public async Task<IActionResult> AnalyzeBhavInfoDataOfDate([FromQuery] DateTime date)
     {
-      //2018-06-22T08:00:19Z
+      //2023-11-06T08:00:19Z
       date = date.ToLocalTime();
       List<ParsedStockInfo> parsedStocknfos = await GetParsedBhavInfoCSVDataFor(date);
       List<StockInfoDto> stockInfoDtos = _mapper.Map<List<StockInfoDto>>(parsedStocknfos);

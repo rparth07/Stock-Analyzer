@@ -35,6 +35,7 @@ namespace Stock_Analyzer_Repository.Repository
       var clients = _context.Client
           .Include("Deals")
           .Include("Deals.Company")
+          .AsNoTracking()
           .ToList();
 
       return _mapper.Map<List<Client>>(clients);

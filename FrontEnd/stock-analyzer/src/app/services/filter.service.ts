@@ -13,7 +13,7 @@ export class FilterService {
   constructor(private http: HttpClient) { }
 
   executeFilter(filterName: string, filterDate: Date): Observable<FilterResult[]> {
-    const url = `${DomainConstants.Filter_URL}execute-filter`;
+    const url = `${DomainConstants.Filter_URL}get-filter-result`;
     const params = {
       filterName: filterName,
       filterDate: filterDate.toISOString()
