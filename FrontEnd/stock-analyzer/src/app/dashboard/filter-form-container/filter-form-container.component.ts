@@ -20,6 +20,7 @@ export class FilterFormContainerComponent implements OnInit {
     this.filterGroup = this.formBuilder.group({
       FilterName: ['', Validators.required],
       Series: ['EQ', Validators.required],
+      FilterType: ['Continuous', Validators.required],
       criterias: this.formBuilder.array([this.createInputRow()])
     });
   }
@@ -56,7 +57,7 @@ export class FilterFormContainerComponent implements OnInit {
 
   submitForm() {
     if (this.filterGroup.valid) {
-      // console.log('Form submitted:', this.filterGroup.value);
+      console.log('Form submitted:', this.filterGroup.value);
       this.filterService
         .addFilter(this.filterGroup.value as Filter);
       this.closeModal();

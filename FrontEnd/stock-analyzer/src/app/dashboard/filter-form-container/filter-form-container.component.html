@@ -1,11 +1,11 @@
 <div class="modal-container">
     <form [formGroup]="filterGroup" (ngSubmit)="submitForm()">
         <div class="row mb-3">
-            <div class="col-6">
+            <div class="col-5">
                 <label for="FilterName">Filter Name</label>
                 <input class="filter-name" type="text" formControlName="FilterName" placeholder="Enter a filter name">
             </div>
-            <div class="col-6">
+            <div class="col-3">
                 <label for="Series">Series</label>
                 <select class="filter-series w-50 d-inline-block" formControlName="Series">
                     <option value="EQ">EQ</option>
@@ -20,6 +20,13 @@
                     <option value="NH">NH</option>
                     <option value="NV">NV</option>
                     <option value="NX">NX</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="FilterType">Filter Type</label>
+                <select class="filter-series w-50 d-inline-block" formControlName="FilterType">
+                    <option value="Continuous">Continuous</option>
+                    <option value="MovingAverage">Moving Average</option>
                 </select>
             </div>
         </div>

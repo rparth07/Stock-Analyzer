@@ -3,6 +3,7 @@ import { Company } from "./Company"
 export type Filter = {
     filterName: string,
     series: string,
+    filterType: string,
     criterias: FilterCriteria[]
 }
 
@@ -38,4 +39,9 @@ export enum PeriodType {
     Weeks = 'Weeks',
     Months = 'Months',
     Years = 'Years',
+}
+
+export enum filterType {
+    MovingAverage = "MovingAverage",
+    Continuous = "Continuous"
 }

@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
           this.filterOptions = value;
           //console.log('value = ' + value);
           console.dir(value, { depth: null });
-          this.selectedOption = this.filterOptions[0].filterName;
+          this.selectedOption = this.filterOptions[0].filterName ?? '';
           this.onFilterFormChange();
         },
         error: (err) => console.log(err),

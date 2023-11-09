@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Stock_Analyzer_Service.CalculationType
+namespace Stock_Analyzer_Service.FilterCalculationType
 {
   public class MovingAverage
   {

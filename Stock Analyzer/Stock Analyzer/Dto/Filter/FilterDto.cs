@@ -5,7 +5,7 @@ namespace Stock_Analyzer.Dto.Filter
 {
   public class FilterDto
   {
-    public FilterDto(string filterName, string series, FilterType filterType)
+    public FilterDto(string filterName, string series, string filterType)
     {
       FilterName = filterName;
       Series = series;
@@ -19,7 +19,7 @@ namespace Stock_Analyzer.Dto.Filter
 
     public string Series { get; set; }
 
-    public FilterType FilterType { get; set; }
+    public string FilterType { get; set; }
 
     public List<FilterCriteriaDto> Criterias { get; set; } = new List<FilterCriteriaDto>();
 

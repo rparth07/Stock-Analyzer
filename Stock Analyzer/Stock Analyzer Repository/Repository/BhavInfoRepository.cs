@@ -123,6 +123,14 @@ namespace Stock_Analyzer_Repository.Repository
       return _mapper.Map<List<BhavCopyInfo>>(bhavInfos);
     }
 
+    public DateTime GetLatestBhavInfoDate()
+    {
+      return _context.BhavCopyInfo
+        .OrderByDescending(bc => bc.Date)
+        .FirstOrDefault()
+        .Date;
+    }
+
     public void Dispose()
     {
       Dispose(true);

@@ -28,17 +28,6 @@ namespace Stock_Analyzer_Repository.Repository
     {
       var filterData = _mapper.Map<FilterDataModel>(filter);
       _context.Filter.Add(filterData);
-      /*
-      filterData = _context.Filter
-        .First(_ => _.FilterName
-          .Equals(filter.FilterName, StringComparison.OrdinalIgnoreCase));
-
-      var filterCriteriaData = filterData.Criterias;
-
-      filterCriteriaData
-        .ForEach(_ => _.FilterDataModel = filterData);
-
-      _context.FilterCriteria.AddRange(filterCriteriaData);*/
       _context.SaveChanges();
 
     }
@@ -77,20 +66,6 @@ namespace Stock_Analyzer_Repository.Repository
 
     public List<FilterResult> GetFilterResults(Filter filter, DateTime filterDate)
     {
-      /*var filterResults = _context.FilterResult
-        .AsNoTracking()
-        .Where(_ => _.CalculationDate > fromDate
-          && _.CalculationDate <= toDate)
-        .Select(fr => new FilterResultDataModel
-        {
-          Id = fr.Id,
-          FilterCriteria = fr.FilterCriteria,
-          Company = fr.Company,
-          CalculationDate = fr.CalculationDate,
-          Value = fr.Value,
-        })
-        .ToList();*/
-
       var filterCriteriaIds = filter.Criterias.Select(_ => _.Id).ToList();
 
       var filterResults = _context.FilterResult
@@ -113,9 +88,9 @@ namespace Stock_Analyzer_Repository.Repository
 
     public void AddFilterResults(List<FilterResult> filterResults)
     {
-      var filterResultstoInsert = _mapper.Map<List<FilterResultDataModel>>(filterResults);
+      var filterResulToInsert = _mapper.Map<List<FilterResultDataModel>>(filterResults);
 
-      filterResultstoInsert.ForEach(_ =>
+      filterResulToInsert.ForEach(_ =>
       {
         _.Company = _context.Company
               .First(company => company.Symbol.Equals(_.Company.Symbol));
@@ -124,8 +99,22 @@ namespace Stock_Analyzer_Repository.Repository
               .First(fc => fc.Id.Equals(_.FilterCriteria.Id));
       });
 
-      _context.FilterResult.AddRange(filterResultstoInsert);
+      _context.FilterResult.AddRange(filterResulToInsert);
       _context.SaveChanges();
+    }
+
+    public List<FilterResult> GetFilterResultsToInsert(List<FilterResult> filterResults)
+    {
+      var filterResultsToInsert = filterResults
+        .Where(_ => _context.FilterResult
+                      .FirstOrDefault(fr => 
+                        fr.CalculationDate.Equals(_.CalculationDate)
+                        && fr.FilterCriteria.Id.Equals(_.FilterCriteria.Id)
+                        && fr.Company.Id.Equals(_.Company.Id)
+                        ) == null)
+        .ToList();
+
+      return filterResultsToInsert;
     }
 
     public void Dispose()

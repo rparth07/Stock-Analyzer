@@ -1,15 +1,9 @@
-using FluentDateTime;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Domain.Models.Filter;
-using Stock_Analyzer_Service.CalculationType;
+using Stock_Analyzer_Service.FilterCalculationType;
 using Stock_Analyzer_Service.Interface;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Service
 {
@@ -49,6 +43,23 @@ namespace Stock_Analyzer_Service
     {
       var filterResults = _filterRepository.GetFilterResults(filter, filterDate);
 
+      if(filterResults.Count == 0)
+      {
+        //TODO: Currently, it will store result for all filter, but can be modified to store or get filter results
+        // for perticular filter
+
+
+        DateTime latestBhavInfodate = _bhavInfoRepository.GetLatestBhavInfoDate();
+
+        if(latestBhavInfodate < filterDate)
+        {
+          throw new Exception($"Please first enter bhavinfo and bulkinfo till {filterDate}.");
+        }
+
+        StoreFilterResultsByFilterFor(filterDate);
+        filterResults = _filterRepository.GetFilterResults(filter, filterDate);
+      }
+
       var bhavInfosOnCalculationDate = _bhavInfoRepository.GetAllBhavInfos(filterDate);
       var bulkDealOnCalculationDate = _bulkDealRepository.GetAllBulkDeals(filterDate);
 
@@ -78,7 +89,12 @@ namespace Stock_Analyzer_Service
         filterResultsToInsert.AddRange(filterResults);
       });
 
-      _filterRepository.AddFilterResults(filterResultsToInsert);
+      filterResultsToInsert = _filterRepository.GetFilterResultsToInsert(filterResultsToInsert);
+
+      if(filterResultsToInsert.Count() > 0)
+      {
+        _filterRepository.AddFilterResults(filterResultsToInsert);
+      }
     }
 
     private List<FilterResult> ExecuteFilter(Filter filter, DateTime calculationDate, List<Company> companies)
@@ -86,6 +102,10 @@ namespace Stock_Analyzer_Service
       if(filter.FilterType == FilterType.MovingAverage)
       {
         return new MovingAverage(_bhavInfoRepository).ExecuteMovingAverageFilter(filter, calculationDate, companies);
+      }
+      else if(filter.FilterType == FilterType.Continuous)
+      {
+        return new ContinousAverage(_bhavInfoRepository).ExecuteMovingAverageFilter(filter, calculationDate, companies);
       }
 
       return new List<FilterResult>();

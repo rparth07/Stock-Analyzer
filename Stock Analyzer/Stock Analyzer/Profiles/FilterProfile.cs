@@ -9,7 +9,8 @@ namespace Stock_Analyzer.Profiles
   {
     public FilterProfile()
     {
-      CreateMap<FilterDto, Filter>();
+      CreateMap<FilterDto, Filter>()
+        .ForMember(dest => dest.FilterType, opt => opt.MapFrom(src => ConvertToEnum<FilterType>(src.FilterType)));
       CreateMap<FilterCriteriaDto, FilterCriteria>()
         .ForMember(dest => dest.ChangeType, opt => opt.MapFrom(src => ConvertToEnum<ChangeType>(src.ChangeType)))
         .ForMember(dest => dest.LogicalOperator, opt => opt.MapFrom(src => ConvertToEnum<LogicalOperator>(src.LogicalOperator)))

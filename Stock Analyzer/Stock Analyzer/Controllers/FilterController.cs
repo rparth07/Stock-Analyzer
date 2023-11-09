@@ -30,7 +30,7 @@ namespace Stock_Analyzer.Controllers
 
     [HttpPost("add-filter")]
     [Consumes("application/json")]
-    public IActionResult AddFilterAsync(FilterDto filterDto)
+    public IActionResult AddFilter(FilterDto filterDto)
     {
       var filter = _mapper.Map<Filter>(filterDto);
 
