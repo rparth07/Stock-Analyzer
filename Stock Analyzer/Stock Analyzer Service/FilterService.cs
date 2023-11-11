@@ -41,9 +41,14 @@ namespace Stock_Analyzer_Service
 
     public List<FilterResult> GetFilterResults(Filter filter, DateTime filterDate)
     {
+      if (filterDate.DayOfWeek == DayOfWeek.Saturday || filterDate.DayOfWeek == DayOfWeek.Sunday)
+      {
+        return new List<FilterResult>();
+      }
+
       var filterResults = _filterRepository.GetFilterResults(filter, filterDate);
 
-      if(filterResults.Count == 0)
+      if (filterResults.Count == 0)
       {
         //TODO: Currently, it will store result for all filter, but can be modified to store or get filter results
         // for perticular filter
@@ -51,7 +56,7 @@ namespace Stock_Analyzer_Service
 
         DateTime latestBhavInfodate = _bhavInfoRepository.GetLatestBhavInfoDate();
 
-        if(latestBhavInfodate < filterDate)
+        if (latestBhavInfodate < filterDate)
         {
           throw new Exception($"Please first enter bhavinfo and bulkinfo till {filterDate}.");
         }
@@ -91,7 +96,7 @@ namespace Stock_Analyzer_Service
 
       filterResultsToInsert = _filterRepository.GetFilterResultsToInsert(filterResultsToInsert);
 
-      if(filterResultsToInsert.Count() > 0)
+      if (filterResultsToInsert.Count() > 0)
       {
         _filterRepository.AddFilterResults(filterResultsToInsert);
       }
@@ -99,11 +104,11 @@ namespace Stock_Analyzer_Service
 
     private List<FilterResult> ExecuteFilter(Filter filter, DateTime calculationDate, List<Company> companies)
     {
-      if(filter.FilterType == FilterType.MovingAverage)
+      if (filter.FilterType == FilterType.MovingAverage)
       {
         return new MovingAverage(_bhavInfoRepository).ExecuteMovingAverageFilter(filter, calculationDate, companies);
       }
-      else if(filter.FilterType == FilterType.Continuous)
+      else if (filter.FilterType == FilterType.Continuous)
       {
         return new ContinousAverage(_bhavInfoRepository).ExecuteMovingAverageFilter(filter, calculationDate, companies);
       }

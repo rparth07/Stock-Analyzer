@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   selectedOption: string = '';
   filterDate: string = new Date().toISOString().split('T')[0];
 
+  selectedFilter!: Filter;
   filterOptions: Filter[] = [];
   filterResults: FilterResult[] = [];
   bulkDeals: BulkDeal[] = [];
@@ -26,10 +27,12 @@ export class DashboardComponent implements OnInit {
 
   modalOpen: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private filterService: FilterService) {
+  constructor(private filterService: FilterService) {
   }
 
   onFilterFormChange() {
+    this.updateSelectedFilter();
+
     this.loadingFilterResults = true;
     // Handle the selected option change here
     this.filterService.executeFilter(this.selectedOption, new Date(this.filterDate))
@@ -46,6 +49,11 @@ export class DashboardComponent implements OnInit {
         },
         error: (err) => console.log(err),
       });
+  }
+
+  updateSelectedFilter() {
+    this.selectedFilter = this.filterOptions
+      .filter(_ => _.filterName == this.selectedOption)[0];
   }
 
   clearFilterTable(table: Table) {
@@ -73,7 +81,8 @@ export class DashboardComponent implements OnInit {
           this.filterOptions = value;
           //console.log('value = ' + value);
           console.dir(value, { depth: null });
-          this.selectedOption = this.filterOptions[0].filterName ?? '';
+          this.selectedOption = this.filterOptions[0]?.filterName ?? '';
+          this.updateSelectedFilter();
           this.onFilterFormChange();
         },
         error: (err) => console.log(err),
@@ -154,5 +163,19 @@ export class DashboardComponent implements OnInit {
 
       return (event.order! * result);
     });
+  }
+
+  displayFilterCriteria(criterias: FilterCriteria[]): string {
+    criterias = criterias.sort(_ => _.sequence);
+
+    let criteriaResult = '';
+    criterias.forEach((criteria, index) => {
+
+      criteriaResult += `${criteria.fieldName} (${criteria.periodValue} ${this.getPeriodType(criteria.periodType)}) ${criteria.changeType}`;
+
+      if (index < criterias.length - 1)
+        criteriaResult += `\n${criteria.logicalOperator} `;
+    });
+    return criteriaResult;
   }
 }

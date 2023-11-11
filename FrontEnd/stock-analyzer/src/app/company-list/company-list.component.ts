@@ -65,38 +65,6 @@ export class CompanyListComponent implements OnInit {
 
   getAllCompanies() {
     return this.companyService.fetchAllCompanies();
-    // return Promise.resolve([
-    //   {
-    //     companySymbol: 'Jainam',
-    //     companyFullName: 'Jainam full name',
-    //     bhavInfos: [],
-    //     bulkDeals: []
-    //   },
-    //   {
-    //     companySymbol: 'Parth',
-    //     companyFullName: 'Parth full name',
-    //     bhavInfos: [],
-    //     bulkDeals: []
-    //   },
-    //   {
-    //     companySymbol: 'Jainam',
-    //     companyFullName: 'Jainam full name',
-    //     bhavInfos: [],
-    //     bulkDeals: []
-    //   },
-    //   {
-    //     companySymbol: 'Jainam',
-    //     companyFullName: 'Jainam full name',
-    //     bhavInfos: [],
-    //     bulkDeals: []
-    //   },
-    //   {
-    //     companySymbol: 'Jainam',
-    //     companyFullName: 'Jainam full name',
-    //     bhavInfos: [],
-    //     bulkDeals: []
-    //   }
-    // ]);
   }
 
   getCompanyQueryParams(company: Company): { [key: string]: string } {

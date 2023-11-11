@@ -1,5 +1,5 @@
 <div class="filter-container">
-    <div class="border p-3">
+    <div class="filter-info d-flex justify-content-around border p-3">
         <div class="dropdown-container">
             <select [(ngModel)]="selectedOption" (change)="onFilterFormChange()">
                 <option *ngFor="let filter of filterOptions" (value)="filter.filterName">{{filter.filterName}}</option>
@@ -7,6 +7,12 @@
             <input [(ngModel)]="filterDate" type="date" (change)="onFilterFormChange()"
                 class="filter-date me-3 ms-3 p-1 w-50">
             <button class="new-filter-button" (click)="openModal()">New</button>
+        </div>
+        <div class="filter-criteria-details">
+            <h4>filterDetail:</h4>
+            <p>
+                {{displayFilterCriteria(selectedFilter.criterias)}}
+            </p>
         </div>
         <app-filter-form-container *ngIf="modalOpen" (closeModalEvent)="closeModal()"></app-filter-form-container>
     </div>
@@ -153,7 +159,13 @@
                                     (click)="filterBulkDeal(filterResult.company.symbol)">
                                     <td style="min-width:10rem">
                                         <span class="p-column-title">Company Name</span>
-                                        {{ filterResult.company.symbol }}
+                                        <!-- {{ filterResult.company.symbol }} -->
+                                        <a [routerLink]="['../company-detail']" [queryParams]="{
+                                                symbol: filterResult.company.symbol
+                                              }" [state]="{
+                                                symbol: filterResult.company.symbol
+                                              }">{{
+                                            filterResult.company.symbol}}</a>
                                     </td>
                                     <td style="min-width:15rem">
                                         <span class="p-column-title">Field Name</span>
