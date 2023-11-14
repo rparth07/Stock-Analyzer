@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   selectedOption: string = '';
   filterDate: string = new Date().toISOString().split('T')[0];
 
-  selectedFilter!: Filter;
+  selectedFilter: Filter | undefined;
   filterOptions: Filter[] = [];
   filterResults: FilterResult[] = [];
   bulkDeals: BulkDeal[] = [];
@@ -165,15 +165,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  displayFilterCriteria(criterias: FilterCriteria[]): string {
+  displayFilterCriteria(criterias: FilterCriteria[] | undefined | null): string {
+    let criteriaResult = '';
+    if (criterias == null) {
+      return criteriaResult;
+    }
+
     criterias = criterias.sort(_ => _.sequence);
 
-    let criteriaResult = '';
     criterias.forEach((criteria, index) => {
 
       criteriaResult += `${criteria.fieldName} (${criteria.periodValue} ${this.getPeriodType(criteria.periodType)}) ${criteria.changeType}`;
 
-      if (index < criterias.length - 1)
+      if (index < criterias!.length - 1)
         criteriaResult += `\n${criteria.logicalOperator} `;
     });
     return criteriaResult;

@@ -1,0 +1,23 @@
+<div class="container sticky-bottom float-end">
+    <div class="chatbox">
+        <div class="chatbox__support" [ngClass]="openChatBox ? 'chatbox--active' : ''">
+            <div class="chatbox__header">
+                <div class="chatbox__content--header">
+                    <h4 class="chatbox__heading--header m-0">Daily Notebook</h4>
+                </div>
+            </div>
+            <div class="chatbox__messages">
+                <textarea #notebook type="text" rows="20"
+                    placeholder="Write a message..."> {{ existingNotebook?.content }}</textarea>
+            </div>
+            <div class="chatbox__footer">
+                <button (click)="toggleState(); updateContent(notebook.value)"
+                    class="float-end chatbox__send--footer send__button">Save</button>
+            </div>
+        </div>
+        <div class="chatbox__button">
+            <button (click)="toggleState(); updateContent(notebook.value)"><img
+                    src="../../assets/images/chatbox-icon.svg" /></button>
+        </div>
+    </div>
+</div>
