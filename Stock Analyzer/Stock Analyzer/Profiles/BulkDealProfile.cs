@@ -12,13 +12,13 @@ namespace Stock_Analyzer.Profiles
     public BulkDealProfile()
     {
       CreateMap<ParsedBulkDeal, BulkDealDto>()
-          .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => ToDate(src.DealDate)))
+          .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => src.DealDate.Date))
           .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => ConvertToLong(src.Quantity)))
           .ForMember(dest => dest.TradePrice, opt => opt.MapFrom(src => ConvertToDouble(src.TradePrice)))
           .ForMember(dest => dest.StockAction, opt => opt.MapFrom(src => ConvertToEnum(src.StockAction)));
 
       CreateMap<BulkDeal, BulkDealDto>()
-          .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => ToDate(src.DealDate)))
+          .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => src.DealDate.Date))
           .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client.Name))
           .ForMember(dest => dest.CompanySymbol, opt => opt.MapFrom(src => src.Company.Symbol));
 
@@ -29,16 +29,11 @@ namespace Stock_Analyzer.Profiles
           .ForMember(dest => dest.Symbol, opt => opt.MapFrom(src => src.CompanySymbol));
 
       CreateMap<BulkDealDto, BulkDeal>()
-          .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => ToDate(src.DealDate)))
+          .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => src.DealDate.Date))
           .ForMember(dest => dest.Client, opt => opt.MapFrom(src => new Client(src.ClientName)))
           .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company(src.CompanySymbol)));
 
       CreateMap<Client, ClientDto>();
-    }
-
-    private DateTime ToDate(DateTime dealDate)
-    {
-      return dealDate.Date;
     }
 
     public static StockAction ConvertToEnum(string strEnumValue)

@@ -1,4 +1,4 @@
 export type Notebook = {
-    contentDate: Date;
+    contentDate: string;
     content: string,
 }

@@ -14,15 +14,10 @@ namespace Stock_Analyzer_Repository.Profiles
     public BulkDealProfile()
     {
       CreateMap<BulkDeal, BulkDealDataModel>()
-        .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => ToDate(src.DealDate)));
+        .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => src.DealDate.Date));
 
       CreateMap<BulkDealDataModel, BulkDeal>()
-        .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => ToDate(src.DealDate)));
-    }
-
-    private DateTime ToDate(DateTime dealDate)
-    {
-      return dealDate.Date;
+        .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => src.DealDate.Date));
     }
   }
 }

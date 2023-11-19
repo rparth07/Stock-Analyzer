@@ -1,4 +1,4 @@
-﻿delete from dbo.BhavCopyInfo where Date='2023-10-31';
+/*delete from dbo.BhavCopyInfo where Date='2023-10-31';*/
 
 
 select * from dbo.BhavCopyInfo where Date > '2023-10-30' and Date <= '2023-10-31' and CompanyId='6738454A-FE2C-411F-3867-08DBC103D682';
@@ -13,3 +13,7 @@ select CalculationDate, Count(Id) from FilterResult group by CalculationDate ord
 select Max(CalculationDate) from FilterResult;
 select Max(Date) from BhavCopyInfo;
 select Max(DealDate) from BulkDeal;
+
+/*delete from dbo.Notebook;*/
+
+select * from dbo.Notebook;

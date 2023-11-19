@@ -10,19 +10,19 @@ namespace Stock_Analyzer.Profiles
     public StockInfoProfile()
     {
       CreateMap<StockInfoDto, BhavCopyInfo>()
-          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => ToDate(src.Date)))
+          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date))
           .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company(src.CompanySymbol)));
 
       CreateMap<StockInfoDto, Company>()
           .ForMember(dest => dest.Symbol, opt => opt.MapFrom(src => src.CompanySymbol));
 
       CreateMap<BhavCopyInfo, StockInfoDto>()
-          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => ToDate(src.Date)))
+          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date))
           .ForMember(dest => dest.CompanySymbol, opt => opt.MapFrom(src => src.Company.Symbol))
           .ForMember(dest => dest.Series, opt => opt.MapFrom(src => src.Series));
 
       CreateMap<ParsedStockInfo, StockInfoDto>()
-          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => ToDate(src.Date)))
+          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date))
           .ForMember(dest => dest.PreviousClose, opt => opt.MapFrom(src => ConvertToDouble(src.PreviousClose)))
           .ForMember(dest => dest.OpenPrice, opt => opt.MapFrom(src => ConvertToDouble(src.OpenPrice)))
           .ForMember(dest => dest.HighPrice, opt => opt.MapFrom(src => ConvertToDouble(src.HighPrice)))
@@ -40,12 +40,7 @@ namespace Stock_Analyzer.Profiles
 
 
       CreateMap<ParsedHistoricalBhavInfo, ParsedStockInfo>()
-          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => ToDate(src.Date)));
-    }
-
-    private DateTime ToDate(DateTime date)
-    {
-      return date.Date;
+          .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date));
     }
 
     private static double ConvertToDouble(string? value)

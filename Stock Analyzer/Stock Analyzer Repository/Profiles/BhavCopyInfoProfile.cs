@@ -14,16 +14,11 @@ namespace Stock_Analyzer_Repository.Profiles
     public BhavCopyInfoProfile()
     {
       CreateMap<BhavCopyInfoDataModel, BhavCopyInfo>()
-        .ForMember(dest => dest.Date, opt => opt.MapFrom(src => ToDate(src.Date)));
+        .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date));
 
       CreateMap<BhavCopyInfo, BhavCopyInfoDataModel>()
-        .ForMember(dest => dest.Date, opt => opt.MapFrom(src => ToDate(src.Date)));
+        .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date));
 
-    }
-
-    private DateTime ToDate(DateTime date)
-    {
-      return date.Date;
     }
   }
 }

@@ -1,14 +1,9 @@
 using AutoMapper;
-using FluentDateTime;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using Stock_Analyzer.Dto.Filter;
 using Stock_Analyzer_Domain.Models.Filter;
-using Stock_Analyzer_Service;
 using Stock_Analyzer_Service.Interface;
-using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

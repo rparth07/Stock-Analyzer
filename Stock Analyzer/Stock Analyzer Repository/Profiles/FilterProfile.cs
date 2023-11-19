@@ -11,17 +11,12 @@ namespace Stock_Analyzer_Repository.Profiles
       CreateMap<Filter, FilterDataModel>();
       CreateMap<FilterCriteria, FilterCriteriaDataModel>();
       CreateMap<FilterResult, FilterResultDataModel>()
-        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => ToDate(src.CalculationDate)));
+        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
 
       CreateMap<FilterDataModel, Filter>();
       CreateMap<FilterCriteriaDataModel, FilterCriteria>();
       CreateMap<FilterResultDataModel, FilterResult>()
-        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => ToDate(src.CalculationDate)));
-    }
-
-    private DateTime ToDate(DateTime calculationDate)
-    {
-      return calculationDate.Date;
+        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
     }
   }
 }

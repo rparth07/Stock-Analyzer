@@ -10,19 +10,17 @@ export class NotebookService {
 
   constructor(private http: HttpClient) { }
 
-  getExistingNotebook(filterDate: Date) {
-    const url = `${DomainConstants.Filter_URL}get-notebook-content`;
+  getExistingNotebook(notebookDate: Date) {
+    console.log('notebook date = ' + notebookDate);
+    const url = `${DomainConstants.Notebook_URL}get-notebook`;
     const params = {
-      filterDate: filterDate.toISOString()
+      notebookDate: notebookDate.toISOString()
     };
     return this.http.get<Notebook>(url, { params });
   }
 
   updateNotebook(notebook: Notebook) {
-    const url = `${DomainConstants.Filter_URL}update-notebook-content`;
-    const params = {
-      notebook: notebook
-    };
-    this.http.put<Notebook>(url, { params });
+    const url = `${DomainConstants.Notebook_URL}update-notebook`;
+    return this.http.post<Notebook>(url, notebook);
   }
 }

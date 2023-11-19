@@ -16,17 +16,12 @@ namespace Stock_Analyzer.Profiles
         .ForMember(dest => dest.LogicalOperator, opt => opt.MapFrom(src => ConvertToEnum<LogicalOperator>(src.LogicalOperator)))
         .ForMember(dest => dest.PeriodType, opt => opt.MapFrom(src => ConvertToEnum<PeriodType>(src.PeriodType)));
       CreateMap<FilterResultDto, FilterResult>()
-        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => ToDate(src.CalculationDate)));
+        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
 
       CreateMap<Filter, FilterDto>();
       CreateMap<FilterCriteria, FilterCriteriaDto>();
       CreateMap<FilterResult, FilterResultDto>()
-        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => ToDate(src.CalculationDate)));
-    }
-
-    private DateTime ToDate(DateTime date)
-    {
-      return date.Date;
+        .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
     }
 
     public TEnum ConvertToEnum<TEnum>(string strEnumValue) where TEnum : struct

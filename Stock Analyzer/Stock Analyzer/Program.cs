@@ -21,10 +21,12 @@ builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IBulkDealRepository, BulkDealRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IFilterRepository, FilterRepository>();
+builder.Services.AddScoped<INotebookRepository, NotebookRepository>();
 
 
 builder.Services.AddScoped<IStockInfoService, StockInfoService>();
 builder.Services.AddScoped<IFilterService, FilterService>();
+builder.Services.AddScoped<INotebookService, NotebookService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NotebookService } from '../services/notebook.service';
 import { Notebook } from '../types/Notebook';
 
@@ -9,8 +9,8 @@ import { Notebook } from '../types/Notebook';
 })
 export class NotebookComponent implements OnInit {
 
-  filterDate: Date = new Date(new Date().toISOString().split('T')[0]);
-  openChatBox: Boolean = true;
+  filterDate: string = new Date().toISOString().split('T')[0];
+  openChatBox: Boolean = false;
   existingNotebook: Notebook = {
     contentDate: this.filterDate,
     content: ''
@@ -21,15 +21,7 @@ export class NotebookComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.notebookService.getExistingNotebook(this.filterDate)
-      .subscribe({
-        next: (value) => {
-          this.existingNotebook = value;
-          console.log('filter values = ' + value);
-          // console.dir(value, { depth: null });
-        },
-        error: (err) => console.log(err),
-      });
+    this.onNotebookDateChange();
   }
 
   toggleState() {
@@ -37,10 +29,26 @@ export class NotebookComponent implements OnInit {
   }
 
   updateContent(content: string) {
-    if (content != this.existingNotebook.content) {
-      this.existingNotebook.content = content;
-      this.notebookService.updateNotebook(this.existingNotebook);
-    }
-    console.log('content = ' + content);
+    this.existingNotebook.content = content;
+    this.notebookService.updateNotebook(this.existingNotebook)
+      .subscribe({
+        next: (value) => {
+          console.log(value);
+        },
+        error: (err) => console.log(err),
+      });
+    this.toggleState();
+  }
+
+  onNotebookDateChange() {
+    this.notebookService.getExistingNotebook(new Date(this.filterDate))
+      .subscribe({
+        next: (value: Notebook) => {
+          value.contentDate = value.contentDate.split('T')[0];
+          this.existingNotebook = value;
+          console.dir(this.existingNotebook, { depth: null });
+        },
+        error: (err) => console.log(err),
+      });
   }
 }
