@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
 import { BhavInfo } from '../types/BhavInfo';
 import { BhavInfoService } from '../services/bhav-info.service';
 import { Table } from 'primeng/table';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MYFormats } from '../shared/domain.constants';
+import { MY_DATE_FORMATS } from '../shared/domain.constants';
 
 @Component({
   selector: 'app-bhav-info',
@@ -14,7 +14,7 @@ import { MYFormats } from '../shared/domain.constants';
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, // choose your locale
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MYFormats },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],
 },)
 export class BhavInfoComponent implements OnInit {

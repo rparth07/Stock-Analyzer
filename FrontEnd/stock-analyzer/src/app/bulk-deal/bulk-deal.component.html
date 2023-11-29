@@ -61,13 +61,13 @@
                                         <div class="customTable-widthCorp tableScroll">
                                             <div class="card">
                                                 <p-table #dt [value]="bulkDeals" [(selection)]="selectedBulkDeals"
-                                                    dataKey="id" [rowHover]="true" [rows]="5"
-                                                    [showCurrentPageReport]="true"
+                                                    dataKey="id" [rowHover]="true" [rows]="5" sortField="dealDate"
+                                                    [sortOrder]="-1" [showCurrentPageReport]="true"
                                                     [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [loading]="loading"
                                                     [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                                     [filterDelay]="0"
-                                                    [globalFilterFields]="['clientName', 'series', 'date', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
+                                                    [globalFilterFields]="['clientName', 'series', 'dealDate', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
                                                     <ng-template pTemplate="caption">
                                                         <div class="d-flex">
                                                             <div class="flex">

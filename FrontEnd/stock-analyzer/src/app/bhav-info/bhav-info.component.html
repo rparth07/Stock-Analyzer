@@ -61,8 +61,8 @@
                                         <div class="customTable-widthCorp tableScroll">
                                             <div class="card">
                                                 <p-table #dt [value]="bhavInfos" [(selection)]="selectedBhavInfos"
-                                                    dataKey="id" [rowHover]="true" [rows]="10"
-                                                    [showCurrentPageReport]="true"
+                                                    dataKey="id" [rowHover]="true" [rows]="10" sortField="date"
+                                                    [sortOrder]="-1" [showCurrentPageReport]="true"
                                                     [rowsPerPageOptions]="[10, 25, 50, 100]" [loading]="loading"
                                                     [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"

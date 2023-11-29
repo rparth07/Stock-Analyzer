@@ -3,12 +3,20 @@ import { Form } from '@angular/forms';
 import { BulkDeal, StockAction } from '../types/BulkDeal';
 import { BulkDealService } from '../services/bulk-deal.service';
 import { Table } from 'primeng/table';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MAT_DATE_LOCALE, MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
+import { MY_DATE_FORMATS } from '../shared/domain.constants';
 
 @Component({
   selector: 'app-bulk-deal',
   templateUrl: './bulk-deal.component.html',
   styleUrls: ['./bulk-deal.component.css',
-    '../shared/css/common-page-style.css']
+    '../shared/css/common-page-style.css'],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, // choose your locale
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+  ],
 })
 export class BulkDealComponent implements OnInit {
   date: Date = new Date();//analyze bulkinfo date
