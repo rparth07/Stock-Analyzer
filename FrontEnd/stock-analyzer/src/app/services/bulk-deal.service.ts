@@ -20,4 +20,13 @@ export class BulkDealService {
   fetchBulkDeals() {
     return this.http.get<BulkDeal[]>(DomainConstants.StockAnalyzer_URL + 'all-bulk-deals/');
   }
+
+  fetchBulkDealsBetween(startDate: Date, endDate: Date) {
+    const url = DomainConstants.StockAnalyzer_URL + 'bulk-deals-between';
+    const params = {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString()
+    };
+    return this.http.get<BulkDeal[]>(url, { params });
+  }
 }

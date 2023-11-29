@@ -17,3 +17,5 @@ select Max(DealDate) from BulkDeal;
 /*delete from dbo.Notebook;*/
 
 select * from dbo.Notebook;
+
+select * from dbo.BhavCopyInfo where Date='2023-11-14';

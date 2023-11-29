@@ -47,6 +47,11 @@ namespace Stock_Analyzer_Service
       return _bhavInfoRepository.GetAllBhavInfosWithCompany(date);
     }
 
+    public List<BhavCopyInfo> GetBhavInfosBetween(DateTime startDate, DateTime endDate)
+    {
+      return _bhavInfoRepository.GetBhavInfosBetween(startDate, endDate);
+    }
+
     public List<BhavCopyInfo> GetAllBhavInfosWithCompanies()
     {
       return _bhavInfoRepository.GetAllBhavInfosWithCompanies();
@@ -145,6 +150,11 @@ namespace Stock_Analyzer_Service
     public List<BulkDeal> GetBulkDealsByCompany(string company)
     {
       return _bulkDealRepository.GetBulkDealsByCompany(company);
+    }
+
+    public List<BulkDeal> GetBulkDealsBetween(DateTime startDate, DateTime endDate)
+    {
+      return _bulkDealRepository.GetBulkDealsBetween(startDate, endDate);
     }
 
     public List<BulkDeal> GetAllBulkDeals()

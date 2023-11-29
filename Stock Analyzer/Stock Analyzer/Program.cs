@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Stock_Analyzer;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Repository;
 using Stock_Analyzer_Repository.Repository;
@@ -31,26 +33,27 @@ builder.Services.AddScoped<INotebookService, NotebookService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+builder.Services.AddDbContext<StockAnalyzerContext>((services, options) =>
 {
-  options.AddPolicy("AllowAngularOrigins",
-  builder =>
-  {
-    builder.WithOrigins("http://localhost:4200").AllowAnyHeader();
-    builder.WithOrigins("http://localhost:4200").AllowAnyMethod();
-
-    builder.WithOrigins("http://localhost:5052").AllowAnyHeader();
-    builder.WithOrigins("http://localhost:5052").AllowAnyMethod();
-
-    builder.WithOrigins("http://192.168.1.4:5052").AllowAnyHeader();
-    builder.WithOrigins("http://192.168.1.4:5052").AllowAnyMethod();
-  });
+  var appSettings = services.GetRequiredService<IOptions<AppSettings>>().Value;
+  options.UseSqlServer(appSettings.DatabaseConnection);
 });
 
-builder.Services.AddDbContext<StockAnalyzerContext>(options =>
+builder.Services.AddCors(options =>
 {
-  options.UseSqlServer(
-        @"Server=LAPTOP-6RMK97C7\SQLEXPRESS; Database=StockAnalyzer; User Id=sa; password=12345; Trusted_Connection=False; TrustServerCertificate=true; MultipleActiveResultSets=true;");
+  options.AddPolicy("AllowAngularOrigins", cpb =>
+  {
+    var allowedOrigins = builder.Configuration.GetSection("CORS:AllowedOrigins").Get<string[]>();
+
+    foreach (var origin in allowedOrigins)
+    {
+      cpb.WithOrigins(origin).AllowAnyHeader().AllowAnyMethod();
+    }
+  });
 });
 
 var app = builder.Build();

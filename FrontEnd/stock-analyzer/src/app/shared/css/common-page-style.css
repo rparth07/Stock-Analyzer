@@ -10,7 +10,7 @@ ul {
     list-style: none !important;
     list-style-type: none !important;
     margin: 0;
-    padding: 0
+    padding: 0 !important;
 }
 
 li {
@@ -131,7 +131,7 @@ mat-form-field.mat-form-field-wrapper {
 }
 
 .scrollWrap {
-    overflow-x: auto
+    overflow-x: visible
 }
 
 .common_table {
@@ -326,6 +326,6 @@ button:focus {
     outline: 0 none;
 }
 
-::ng-deep .table-col {
-    /* height: 100px; */
+::ng-deep .p-dropdown-items {
+    padding: 0px;
 }

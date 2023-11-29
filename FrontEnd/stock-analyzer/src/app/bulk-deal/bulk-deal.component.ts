@@ -11,7 +11,10 @@ import { Table } from 'primeng/table';
     '../shared/css/common-page-style.css']
 })
 export class BulkDealComponent implements OnInit {
-  date: Date = new Date();
+  date: Date = new Date();//analyze bulkinfo date
+
+  endDate: Date = new Date();
+  startDate: Date = new Date(this.endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
 
   analyzeBulkDealsOfDate() {
     this.bulkDealService.analyzeBulkDeals(this.date);
@@ -33,68 +36,21 @@ export class BulkDealComponent implements OnInit {
   constructor(private bulkDealService: BulkDealService) { }
 
   ngOnInit() {
-    this.getAllBulkDeals()
-      .subscribe((bulkDeals) => {
-        this.bulkDeals = bulkDeals;
-        this.loading = false;
-
-        this.bulkDeals.forEach((bulkDeal) => (bulkDeal.dealDate = new Date(<Date>bulkDeal.dealDate)));
-      });
+    this.getBulkDealsBetween(this.startDate, this.endDate);
   }
 
   getAllBulkDeals() {
     return this.bulkDealService.fetchBulkDeals();
-    // return Promise.resolve([
-    //   {
-    //     clientName: 'Jainam',
-    //     dealDate: new Date(),
-    //     companySymbol: 'ACC',
-    //     companyFullName: 'ACC',
-    //     stockAction: StockAction.Buy,
-    //     quantity: 100,
-    //     tradePrice: 10,
-    //     remarks: null
-    //   },
-    //   {
-    //     clientName: 'Parth',
-    //     dealDate: new Date(),
-    //     companySymbol: '5Paisa',
-    //     companyFullName: '5Paisa',
-    //     stockAction: StockAction.Buy,
-    //     quantity: 1000,
-    //     tradePrice: 20,
-    //     remarks: null
-    //   },
-    //   {
-    //     clientName: 'Jainam',
-    //     dealDate: new Date(),
-    //     companySymbol: 'ACC',
-    //     companyFullName: 'ACC',
-    //     stockAction: StockAction.Buy,
-    //     quantity: 100,
-    //     tradePrice: 10,
-    //     remarks: null
-    //   },
-    //   {
-    //     clientName: 'Jainam',
-    //     dealDate: new Date(),
-    //     companySymbol: 'ACC',
-    //     companyFullName: 'ACC',
-    //     stockAction: StockAction.Buy,
-    //     quantity: 100,
-    //     tradePrice: 10,
-    //     remarks: null
-    //   },
-    //   {
-    //     clientName: 'Jainam',
-    //     dealDate: new Date(),
-    //     companySymbol: 'ACC',
-    //     companyFullName: 'ACC',
-    //     stockAction: StockAction.Buy,
-    //     quantity: 100,
-    //     tradePrice: 10,
-    //     remarks: null
-    //   }
-    // ]);
+  }
+
+  getBulkDealsBetween(startDate: Date, endDate: Date) {
+    console.log("this is outside Start Date", startDate);
+    this.bulkDealService.fetchBulkDealsBetween(startDate, endDate)
+      .subscribe((bulkDeals) => {
+        this.bulkDeals = bulkDeals;
+        this.loading = false;
+        console.log('this bulk deal is called!');
+        this.bulkDeals.forEach((bulkDeal) => (bulkDeal.dealDate = new Date(<Date>bulkDeal.dealDate)));
+      });
   }
 }

@@ -11,6 +11,7 @@ namespace Stock_Analyzer_Domain.Iterface
   {
     public void AddBulkDeals(List<BulkDeal> bulkDealsToInsert);
     public List<BulkDeal> GetAllBulkDeals(DateTime filterDate);
+    public List<BulkDeal> GetBulkDealsBetween(DateTime startDate, DateTime endDate);
     public List<BulkDeal> GetAllBulkDeals();
     public List<BulkDeal> GetBulkDealsByCompany(string company);
   }

@@ -21,4 +21,13 @@ export class BhavInfoService {
   fetchBhavInfos() {
     return this.http.get<BhavInfo[]>(DomainConstants.StockAnalyzer_URL + 'bhav-infos-of-all-companies/');
   }
+
+  fetchBhavInfosBetween(startDate: Date, endDate: Date) {
+    const url = DomainConstants.StockAnalyzer_URL + 'bhav-infos-between';
+    const params = {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString()
+    };
+    return this.http.get<BhavInfo[]>(url, { params });
+  }
 }

@@ -133,6 +133,16 @@ namespace Stock_Analyzer.Controllers
       return Ok(bulkDealDtos);
     }
 
+    [HttpGet("bhav-infos-between")]
+    public IActionResult GetBhavInfosBetween(DateTime startDate, DateTime endDate)
+    {
+      startDate = startDate.Date; endDate = endDate.Date;
+
+      List<BhavCopyInfo> bhavInfos = _stockInfoService.GetBhavInfosBetween(startDate, endDate);
+      List<StockInfoDto> bhavInfoDtos = _mapper.Map<List<StockInfoDto>>(bhavInfos);
+      return Ok(bhavInfoDtos);
+    }
+
     [HttpGet("bhav-infos-of-all-companies")]
     public IActionResult GetAllBhavInfosWithCompanies()
     {
@@ -221,6 +231,16 @@ namespace Stock_Analyzer.Controllers
       _stockInfoService.AddBulkDeals(bulkDeals);
 
       return Ok("Analysis completed successfully!");
+    }
+
+    [HttpGet("bulk-deals-between")]
+    public IActionResult GetBulkDealsBetween(DateTime startDate, DateTime endDate)
+    {
+      startDate = startDate.Date; endDate = endDate.Date;
+
+      List<BulkDeal> bulkDeals = _stockInfoService.GetBulkDealsBetween(startDate, endDate);
+      List<BulkDealDto> bulkDealDtos = _mapper.Map<List<BulkDealDto>>(bulkDeals);
+      return Ok(bulkDealDtos);
     }
 
     [HttpGet("all-bulk-deals")]

@@ -11,7 +11,7 @@
                     placeholder="Write a message...">{{existingNotebook.content}}</textarea>
             </div>
             <div class="chatbox__footer">
-                <input [(ngModel)]="filterDate" type="date" (change)="onNotebookDateChange()"
+                <input [(ngModel)]="filterDate" type="date" (ngModelChange)="onNotebookDateChange()"
                     class="filter-date me-3 ms-3 p-1 w-50">
                 <button (click)="updateContent(notebook.value)"
                     class="float-end chatbox__send--footer send__button">Save</button>

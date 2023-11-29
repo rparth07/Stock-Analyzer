@@ -90,6 +90,17 @@ namespace Stock_Analyzer_Repository.Repository
       return _mapper.Map<List<BulkDeal>>(bulkDeals);
     }
 
+    public List<BhavCopyInfo> GetBhavInfosBetween(DateTime startDate, DateTime endDate)
+    {
+      var bhavInfoWithCompany = _context.BhavCopyInfo
+          .Include("Company")
+          .AsNoTracking()
+          .Where(_ => _.Date >= startDate && _.Date <= endDate)
+          .ToList();
+
+      return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
+    }
+
     public List<BhavCopyInfo> GetAllBhavInfosWithCompanies()
     {
       var bhavInfoWithCompany = _context.BhavCopyInfo

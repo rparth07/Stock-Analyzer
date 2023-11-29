@@ -69,17 +69,52 @@
                                                     [filterDelay]="0"
                                                     [globalFilterFields]="['clientName', 'series', 'date', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
                                                     <ng-template pTemplate="caption">
-                                                        <div class="flex">
-                                                            <button pButton label="Clear"
-                                                                class="p-button-outlined border-radius-right"
-                                                                icon="pi pi-filter-slash" (click)="clear(dt)"></button>
-                                                            <span class="p-input-icon-left ml-auto">
-                                                                <i class="pi pi-search"></i>
-                                                                <input class="border-radius-left" pInputText type="text"
-                                                                    id="search-value" value=""
-                                                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                                                    placeholder="Search keyword" />
-                                                            </span>
+                                                        <div class="d-flex">
+                                                            <div class="flex">
+                                                                <button pButton label="Clear"
+                                                                    class="p-button-outlined border-radius-right"
+                                                                    icon="pi pi-filter-slash"
+                                                                    (click)="clear(dt)"></button>
+                                                                <span class="p-input-icon-left ml-auto">
+                                                                    <i class="pi pi-search"></i>
+                                                                    <input class="border-radius-left" pInputText
+                                                                        type="text" id="search-value" value=""
+                                                                        (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                                                        placeholder="Search keyword" />
+                                                                </span>
+                                                            </div>
+                                                            <div class="date-range d-flex ms-5">
+                                                                <div class="start-date">
+                                                                    <div class="input-group">
+                                                                        <mat-form-field class="mat-form-field-wrapper">
+                                                                            <mat-label>Choose a start date</mat-label>
+                                                                            <input matInput [matDatepicker]="sDate"
+                                                                                name="startDate" [(ngModel)]="startDate"
+                                                                                (ngModelChange)="getBulkDealsBetween(startDate, endDate)"
+                                                                                disabled>
+                                                                            <mat-datepicker-toggle matIconSuffix
+                                                                                [for]="sDate"></mat-datepicker-toggle>
+                                                                            <mat-datepicker #sDate
+                                                                                disabled="false"></mat-datepicker>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="end-date">
+                                                                    <div class="input-group">
+                                                                        <mat-form-field class="mat-form-field-wrapper">
+                                                                            <mat-label>Choose a end date</mat-label>
+                                                                            <input matInput [matDatepicker]="eDate"
+                                                                                name="endDate" [(ngModel)]="endDate"
+                                                                                (ngModelChange)="getBulkDealsBetween(startDate, endDate)"
+                                                                                disabled>
+                                                                            <mat-datepicker-toggle matIconSuffix
+                                                                                [for]="eDate"></mat-datepicker-toggle>
+                                                                            <mat-datepicker #eDate
+                                                                                disabled="false"></mat-datepicker>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </ng-template>
                                                     <ng-template pTemplate="header"

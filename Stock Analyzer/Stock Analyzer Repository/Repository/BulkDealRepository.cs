@@ -80,6 +80,19 @@ namespace Stock_Analyzer_Repository.Repository
 
       return _mapper.Map<List<BulkDeal>>(bulkDeals);
     }
+
+    public List<BulkDeal> GetBulkDealsBetween(DateTime startDate, DateTime endDate)
+    {
+      var bulkDeals = _context.BulkDeal
+          .Include("Company")
+          .Include("Client")
+          .AsNoTracking()
+          .Where(_ => _.DealDate >= startDate && _.DealDate <= endDate)
+          .ToList();
+
+      return _mapper.Map<List<BulkDeal>>(bulkDeals);
+    }
+
     public List<BulkDeal> GetAllBulkDeals()
     {
       var bulkDeals = _context.BulkDeal
