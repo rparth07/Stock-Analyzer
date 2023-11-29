@@ -13,7 +13,7 @@ export class BulkDealService {
     //2018-06-22T08:00:19Z
     let response;
     this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bulk-deals?date=' + dateToProcess.toISOString(), null)
-      .subscribe(res => response = res);
+      .subscribe((res: any) => response = res);
     return response;
   }
 
