@@ -117,6 +117,15 @@ namespace Stock_Analyzer_Repository.Repository
       return filterResultsToInsert;
     }
 
+    public void DeleteFilterByName(string filterName)
+    {
+      var filterToDelete = _context.Filter
+        .First(_ => _.FilterName == filterName);
+
+      _context.Filter.Remove(filterToDelete);
+      _context.SaveChanges();
+    }
+
     public void Dispose()
     {
       Dispose(true);

@@ -24,13 +24,22 @@ export class BulkDealComponent implements OnInit {
   endDate: Date = new Date();
   startDate: Date = new Date(this.endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-  analyzeBulkDealsOfDate() {
-    this.bulkDealService.analyzeBulkDeals(this.date);
-  }
-
   bulkDeals!: BulkDeal[];
   selectedBulkDeals!: BulkDeal[];
   loading: boolean = true;
+
+  analyzeBulkDealsOfDate() {
+    this.bulkDealService.analyzeBulkDeals(this.date)
+      .subscribe((res: string) => {
+        this.reloadPage();
+      });
+  }
+
+  reloadPage() {
+    this.endDate = new Date();
+    this.startDate = new Date(this.endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+    window.location.reload();
+  }
 
   getStockAction(value: number) {
     return StockAction[value];

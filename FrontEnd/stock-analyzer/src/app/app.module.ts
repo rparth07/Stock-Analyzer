@@ -117,6 +117,8 @@ import { CompanyDetailComponent } from './company-list/company-detail/company-de
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FilterFormContainerComponent } from './dashboard/filter-form-container/filter-form-container.component';
 import { NotebookComponent } from './notebook/notebook.component';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import { DeleteFilterFormContainerComponent } from './dashboard/delete-filter-form-container/delete-filter-form-container.component';
 
 @NgModule({
   declarations: [
@@ -131,6 +133,7 @@ import { NotebookComponent } from './notebook/notebook.component';
     CompanyDetailComponent,
     DashboardComponent,
     FilterFormContainerComponent,
+    DeleteFilterFormContainerComponent,
     NotebookComponent,
   ],
   imports: [
@@ -237,7 +240,9 @@ import { NotebookComponent } from './notebook/notebook.component';
     TreeSelectModule,
     TreeTableModule,
     AnimateModule,
-    CardModule
+    CardModule,
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
   ],
   providers: [],
   bootstrap: [AppComponent]

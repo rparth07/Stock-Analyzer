@@ -58,7 +58,7 @@ namespace Stock_Analyzer_Service
 
         if (latestBhavInfodate < filterDate)
         {
-          throw new Exception($"Please first enter bhavinfo and bulkinfo till {filterDate}.");
+          return new List<FilterResult>();/* throw new Exception($"Please first enter bhavinfo and bulkinfo till {filterDate}.");*/
         }
 
         StoreFilterResultsByFilterFor(filterDate);
@@ -78,6 +78,11 @@ namespace Stock_Analyzer_Service
       });
 
       return filterResults;
+    }
+
+    public void DeleteFilterByName(string filterName)
+    {
+      _filterRepository.DeleteFilterByName(filterName);
     }
 
     public void StoreFilterResultsByFilterFor(DateTime calculationDate)

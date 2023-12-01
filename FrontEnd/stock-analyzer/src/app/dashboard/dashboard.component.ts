@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   loadingFilterResults: boolean = true;
 
   modalOpen: boolean = false;
+  deleteModalOpen: boolean = false;
 
   constructor(private filterService: FilterService) {
   }
@@ -74,20 +75,37 @@ export class DashboardComponent implements OnInit {
     this.modalOpen = false;
   }
 
-  ngOnInit() {
+  openDeleteModal() {
+    this.deleteModalOpen = true;
+  }
+
+  closeDeleteModal() {
+    this.deleteModalOpen = false;
+  }
+
+  getAllFilterNames() {
     this.filterService.getAllFilterNames()
       .subscribe({
-        next: (value) => {
-          this.filterOptions = value;
-          //console.log('value = ' + value);
-          console.dir(value, { depth: null });
+        next: (filters: Filter[]) => {
+          this.filterOptions = filters;
+          //console.log('filters = ' + filters);
+          console.dir(filters, { depth: null });
           this.selectedOption = this.filterOptions[0]?.filterName ?? '';
           this.updateSelectedFilter();
           this.onFilterFormChange();
         },
         error: (err) => console.log(err),
       });
+  }
 
+  reloadPage() {
+    // console.log('page reloaded!');
+    // this.getAllFilterNames();
+    window.location.reload();
+  }
+
+  ngOnInit() {
+    this.getAllFilterNames();
     // console.log("this.filterOptions = " + this.filterOptions);
   }
 

@@ -23,9 +23,17 @@ export class BhavInfoComponent implements OnInit {
   endDate: Date = new Date();
   startDate: Date = new Date(this.endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-
   analyzeBhavInfosOfDate() {
-    this.bhavInfoService.analyzeBhavInfos(this.analyzeBhavInfodate);
+    this.bhavInfoService.analyzeBhavInfos(this.analyzeBhavInfodate)
+      .subscribe(res => {
+        this.reloadPage();
+      });
+  }
+
+  reloadPage() {
+    this.endDate = new Date();
+    this.startDate = new Date(this.endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+    window.location.reload();
   }
 
   bhavInfos!: BhavInfo[];
@@ -35,6 +43,8 @@ export class BhavInfoComponent implements OnInit {
   constructor(private bhavInfoService: BhavInfoService) { }
 
   ngOnInit() {
+    this.endDate = new Date();
+    this.startDate = new Date(this.endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
     this.getBhavInfosBetween(this.startDate, this.endDate);
   }
 

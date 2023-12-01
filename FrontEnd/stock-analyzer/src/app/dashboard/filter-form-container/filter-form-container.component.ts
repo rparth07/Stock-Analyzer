@@ -15,6 +15,7 @@ export class FilterFormContainerComponent implements OnInit {
   criterias!: FormArray;
 
   sequence: number = 1;
+  isLoading: Boolean = false;
 
   constructor(private formBuilder: FormBuilder, private filterService: FilterService) {
     this.filterGroup = this.formBuilder.group({
@@ -57,10 +58,18 @@ export class FilterFormContainerComponent implements OnInit {
 
   submitForm() {
     if (this.filterGroup.valid) {
+      this.isLoading = true;
       console.log('Form submitted:', this.filterGroup.value);
-      this.filterService
-        .addFilter(this.filterGroup.value as Filter);
-      this.closeModal();
+      this.filterService.addFilter(this.filterGroup.value as Filter)
+        .subscribe({
+          next: (value) => {
+            console.log(value);
+            console.log('reloadPage');
+            this.isLoading = false;
+            this.closeModal();
+          },
+          error: (err) => console.log(err),
+        });
       this.filterGroup.reset();
     }
   }

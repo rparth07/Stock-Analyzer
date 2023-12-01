@@ -21,18 +21,19 @@ export class FilterService {
     return this.http.get<FilterResult[]>(url, { params });
   }
 
-  addFilter(filter: Filter): void {
+  addFilter(filter: Filter) {
     console.dir(filter, { depth: null });
     const url = `${DomainConstants.Filter_URL}add-filter`;
-    this.http.post<Filter>(url, filter)
-      .subscribe({
-        next: (value) => console.log(value),
-        error: (err) => console.log(err),
-      });
+    return this.http.post<Filter>(url, filter);
   }
 
   getAllFilterNames(): Observable<Filter[]> {
     const url = `${DomainConstants.Filter_URL}get-filters`;
     return this.http.get<Filter[]>(url);
+  }
+
+  deleteFilter(filter: string) {
+    const url = `${DomainConstants.Filter_URL}delete-filter/${filter}`;
+    return this.http.delete(url);
   }
 }

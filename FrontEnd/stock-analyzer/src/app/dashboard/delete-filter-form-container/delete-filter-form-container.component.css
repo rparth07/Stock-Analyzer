@@ -1,0 +1,125 @@
+/* Style for the dropdown container */
+
+.filter-container {
+    margin: 2rem;
+}
+
+.dropdown-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    /* Adjust as needed */
+    margin: 0 auto;
+    padding: 10px;
+    /* background-color: #f2f2f2; */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Style for the select dropdown */
+select {
+    width: 60%;
+    padding: 5px;
+}
+
+/* Style for the "New" button */
+.new-filter-button {
+    width: 30%;
+    padding: 5px;
+    background-color: #007bff;
+    color: var(--text-light-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style for the new container */
+.new-container {
+    display: none;
+    width: 100%;
+    max-width: 400px;
+    /* Adjust as needed */
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.new-container.open {
+    display: block;
+}
+
+.new-filter-button {
+    background-color: var(--button-color);
+}
+
+/* Style for the modal container */
+.modal-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-container.open {
+    display: block;
+}
+
+/* Style for the .form inside the modal container */
+.form {
+    background-color: var(--text-light-color);
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 80%;
+    text-align: center;
+}
+
+/* Style for the .form inputs */
+.form select,
+.form input[type="number"],
+.form button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.filter-name,
+.filter-series {
+    margin: 10px 0px 0px 10px !important;
+    padding: 10px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 5px !important;
+}
+
+/* Style for the "Add" button */
+.form button {
+    background-color: var(--button-color);
+    color: var(--text-light-color);
+    border: none;
+    cursor: pointer;
+}
+
+.form button:disabled,
+button[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
+.w-32 {
+    width: 32rem;
+}

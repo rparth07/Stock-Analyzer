@@ -1,6 +1,8 @@
 <main class="home-content">
   <div class="position-relative">
     <app-header></app-header>
+    <ngx-ui-loader fgsColor="#3b77dc" pbColor="#3b77dc" fgsType="square-jelly-box" overlayColor="#fff" [fgsSize]="100"
+      [pbThickness]="6"></ngx-ui-loader>
     <router-outlet></router-outlet>
     <app-footer></app-footer>
     <app-notebook></app-notebook>

@@ -63,5 +63,19 @@ namespace Stock_Analyzer.Controllers
       _filterService.StoreFilterResultsByFilterFor(filterDate);
       return Ok();
     }
+
+    [HttpDelete("delete-filter/{filterName}")]
+    public IActionResult ExecuteAllFilters(string filterName)
+    {
+      try
+      {
+        _filterService.DeleteFilterByName(filterName);
+      }
+      catch (Exception ex)
+      {
+        throw new Exception(ex.Message);
+      }
+      return Ok();
+    }
   }
 }

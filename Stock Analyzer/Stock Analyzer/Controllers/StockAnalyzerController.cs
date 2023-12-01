@@ -35,7 +35,7 @@ namespace Stock_Analyzer.Controllers
     [HttpGet("health-report")]
     public IActionResult HealthUpdate()
     {
-      return Ok("I'm up and running!");
+      return Ok(new { message = "I'm up and running!" });
     }
 
     [HttpPost("analyze-bhav-data-between", Name = "AnalyzeBhavDataFileBetween")]
@@ -66,7 +66,7 @@ namespace Stock_Analyzer.Controllers
         throw new Exception(ex.Message.ToString());
       }
       //Need to handle this ok scenarios
-      return Ok("Analysis completed successfully!");
+      return Ok(new { message = "Analysis completed successfully!" });
     }
 
     [HttpPost("analyze-bhav-data", Name = "AnalyzeBhavDataFileOfDate")]
@@ -83,7 +83,7 @@ namespace Stock_Analyzer.Controllers
       List<BhavCopyInfo> bhavInfos = _mapper.Map<List<BhavCopyInfo>>(stockInfoDtos);
       _stockInfoService.AddBhavInfos(bhavInfos);
       //Need to handle this ok scenarios
-      return Ok("Analysis completed successfully!");
+      return Ok(new { message = "Analysis completed successfully!" });
     }
 
     [HttpPost("analyze-daily-bhav-data")]
@@ -98,7 +98,7 @@ namespace Stock_Analyzer.Controllers
       List<BhavCopyInfo> bhavInfos = _mapper.Map<List<BhavCopyInfo>>(stockInfoDtos);
       _stockInfoService.AddBhavInfos(bhavInfos);
 
-      return Ok("Analysis completed successfully!");
+      return Ok(new { message = "Analysis completed successfully!" });
     }
 
     [HttpPost("analyze-bhav-data-by-file"), DisableRequestSizeLimit]
@@ -114,7 +114,7 @@ namespace Stock_Analyzer.Controllers
       List<BhavCopyInfo> bhavInfos = _mapper.Map<List<BhavCopyInfo>>(stockInfoDtos);
       _stockInfoService.AddBhavInfos(bhavInfos);
 
-      return Ok("Analysis completed successfully!");
+      return Ok(new { message = "Analysis completed successfully!" });
     }
 
     [HttpGet("bhav-infos")]
@@ -192,7 +192,7 @@ namespace Stock_Analyzer.Controllers
       List<BulkDeal> bulkDeals = _mapper.Map<List<BulkDeal>>(bulkDealDtos);
       _stockInfoService.AddBulkDeals(bulkDeals);
 
-      return Ok("Analysis completed successfully!");
+      return Ok(new { message = "Analysis completed successfully!" });
     }
 
     [HttpPost("analyze-bulk-deals")]
@@ -211,7 +211,7 @@ namespace Stock_Analyzer.Controllers
       List<BulkDeal> bulkDeals = _mapper.Map<List<BulkDeal>>(bulkDealDtos);
       _stockInfoService.AddBulkDeals(bulkDeals);
 
-      return Ok("Analysis completed successfully!");
+      return Ok(new { message = "Analysis completed successfully!" });
     }
 
     [HttpPost("analyze-daily-bulk-deals")]
@@ -230,7 +230,7 @@ namespace Stock_Analyzer.Controllers
       List<BulkDeal> bulkDeals = _mapper.Map<List<BulkDeal>>(bulkDealDtos);
       _stockInfoService.AddBulkDeals(bulkDeals);
 
-      return Ok("Analysis completed successfully!");
+      return Ok(new { message = "Analysis completed successfully!" });
     }
 
     [HttpGet("bulk-deals-between")]

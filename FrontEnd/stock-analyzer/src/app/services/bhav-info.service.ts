@@ -12,10 +12,7 @@ export class BhavInfoService {
 
   analyzeBhavInfos(dateToProcess: Date) {
     //2018-06-22T08:00:19Z
-    let response;
-    this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bhav-data?date=' + dateToProcess.toISOString(), null)
-      .subscribe(res => response = res);
-    return response;
+    return this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bhav-data?date=' + dateToProcess.toISOString(), null);
   }
 
   fetchBhavInfos() {
