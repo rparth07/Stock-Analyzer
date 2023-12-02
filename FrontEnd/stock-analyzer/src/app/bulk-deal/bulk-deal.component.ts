@@ -61,12 +61,12 @@ export class BulkDealComponent implements OnInit {
   }
 
   getBulkDealsBetween(startDate: Date, endDate: Date) {
-    console.log("this is outside Start Date", startDate);
+    // console.log("this is outside Start Date", startDate);
     this.bulkDealService.fetchBulkDealsBetween(startDate, endDate)
       .subscribe((bulkDeals: BulkDeal[]) => {
         this.bulkDeals = bulkDeals;
         this.loading = false;
-        console.log('this bulk deal is called!');
+        // console.log('this bulk deal is called!');
         this.bulkDeals.forEach((bulkDeal) => (bulkDeal.dealDate = new Date(<Date>bulkDeal.dealDate)));
       });
   }

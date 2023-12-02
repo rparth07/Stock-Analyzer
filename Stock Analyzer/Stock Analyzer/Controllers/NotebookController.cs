@@ -27,12 +27,27 @@ namespace Stock_Analyzer.Controllers
       return Ok(notebookDto);
     }
 
+    [HttpPost("update-all-notebooks")]
+    public IActionResult UpdateNotebook(List<NotebookDto> notebookDtos)
+    {
+      var notebooks = _mapper.Map<List<Notebook>>(notebookDtos);
+
+      _notebookService.UpdateNotebooks(notebooks);
+      return Ok(notebookDtos);
+    }
+
     [HttpGet("get-notebook")]
     public IActionResult GetNotebook([FromQuery]DateTime notebookDate)
     {
       var notebook = _notebookService.GetNotebook(notebookDate);
 
       return Ok(_mapper.Map<NotebookDto>(notebook));
+    }
+
+    [HttpGet("get-notebooks")]
+    public IActionResult GetNotebooks()
+    {
+      return Ok(_mapper.Map<List<NotebookDto>>(_notebookService.GetNotebooks()));
     }
   }
 }

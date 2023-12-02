@@ -25,7 +25,7 @@ export class FilterService {
 
   setSelectedOption(option: string) {
     this.selectedOption = option;
-    console.log('----> IN SERVICE => selectedOption = ' + this.selectedOption);
+    // console.log('----> IN SERVICE => selectedOption = ' + this.selectedOption);
   }
 
   getSelectedOption(): string {
@@ -34,7 +34,7 @@ export class FilterService {
 
   setFilterDate(filterDate: string) {
     this.filterDate = filterDate;
-    console.log('----> IN SERVICE => filterDate = ' + this.filterDate);
+    // console.log('----> IN SERVICE => filterDate = ' + this.filterDate);
   }
 
   getFilterDate(): string {
@@ -43,7 +43,7 @@ export class FilterService {
 
   setFilterResults(results: FilterResult[]) {
     this.filterResults = results;
-    console.log('----> IN SERVICE => filterResults = ' + this.filterResults);
+    // console.log('----> IN SERVICE => filterResults = ' + this.filterResults);
   }
 
   getFilterResults(): FilterResult[] {
@@ -52,7 +52,7 @@ export class FilterService {
 
   setBulkDeals(bulkDeals: BulkDeal[]) {
     this.bulkDeals = bulkDeals;
-    console.log('----> IN SERVICE => bulkDeals = ' + this.bulkDeals);
+    // console.log('----> IN SERVICE => bulkDeals = ' + this.bulkDeals);
   }
 
   getBulkDeals(): BulkDeal[] {

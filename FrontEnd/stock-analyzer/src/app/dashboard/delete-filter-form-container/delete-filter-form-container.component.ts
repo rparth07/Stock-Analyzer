@@ -23,8 +23,8 @@ export class DeleteFilterFormContainerComponent implements OnInit, AfterViewInit
   ngOnInit() {
     this.selectedOption = this.filterOptions.length > 0 ? this.filterOptions[0].filterName : '';
     this.updateSelectedFilter();
-    console.log('this.selectedFilter = ' + this.selectedFilter);
-    console.dir(this.filterOptions, { depth: null });
+    // console.log('this.selectedFilter = ' + this.selectedFilter);
+    // console.dir(this.filterOptions, { depth: null });
   }
 
   ngAfterViewInit() {
@@ -34,11 +34,11 @@ export class DeleteFilterFormContainerComponent implements OnInit, AfterViewInit
   }
 
   updateSelectedFilter() {
-    console.log('this.selected option = ' + this.selectedOption);
+    // console.log('this.selected option = ' + this.selectedOption);
     this.selectedFilter = this.filterOptions
       .filter(_ => _.filterName == this.selectedOption)[0];
-    console.log('selected filter = ');
-    console.dir(this.selectedFilter, { depth: null });
+    // console.log('selected filter = ');
+    // console.dir(this.selectedFilter, { depth: null });
   }
 
   closeModal() {
@@ -49,7 +49,7 @@ export class DeleteFilterFormContainerComponent implements OnInit, AfterViewInit
     this.filterService.deleteFilter(this.selectedOption)
       .subscribe({
         next: (value) => {
-          console.log(value);
+          // console.log(value);
           this.closeModal();
         },
         error: (err) => console.log(err),

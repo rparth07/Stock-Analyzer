@@ -7,18 +7,19 @@
                 </div>
             </div>
             <div class="chatbox__messages">
-                <textarea #notebook type="text" rows="20" [(ngModel)]="existingNotebook.content"
-                    placeholder="Write a message...">{{existingNotebook.content}}</textarea>
+                <span *ngFor="let nt of notebooks let i = index;" class="align-items-center d-flex flex-column">
+                    <p class="message-date">{{formatDate(nt.contentDate)}}</p>
+                    <textarea #notebook type="text" rows="20" [(ngModel)]="nt.content" class="w-100"
+                        placeholder="Write a message...">{{nt.content}}</textarea>
+                    <!-- <hr /> -->
+                </span>
             </div>
             <div class="chatbox__footer">
-                <input [(ngModel)]="filterDate" type="date" (ngModelChange)="onNotebookDateChange()"
-                    class="filter-date me-3 ms-3 p-1 w-50">
-                <button (click)="updateContent(notebook.value)"
-                    class="float-end chatbox__send--footer send__button">Save</button>
+                <button (click)="updateNoteBooks()" class="float-end chatbox__send--footer send__button">Save</button>
             </div>
         </div>
         <div class="chatbox__button">
-            <button (click)="updateContent(notebook.value)"><img src="../../assets/images/chatbox-icon.svg" /></button>
+            <button (click)="updateNoteBooks()"><img src="../../assets/images/chatbox-icon.svg" /></button>
         </div>
     </div>
 </div>

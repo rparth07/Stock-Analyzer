@@ -17,8 +17,8 @@ html {
 /* CHATBOX
 =============== */
 .chatbox {
-    position: absolute;
-    bottom: 30px;
+    position: fixed;
+    bottom: 25px;
     right: 30px;
 }
 
@@ -36,7 +36,7 @@ html {
 
 /* CONTENT ISOPEN */
 .chatbox--active {
-    transform: translateY(-40px);
+    transform: translateY(-20px);
     z-index: 123456;
     opacity: 1;
 
@@ -45,7 +45,6 @@ html {
 /* BUTTON */
 .chatbox__button {
     text-align: right;
-    margin-top: 1.5rem;
 }
 
 .send__button {
@@ -69,7 +68,8 @@ html {
     margin-top: auto;
     display: flex;
     outline: none;
-    flex-direction: column-reverse;
+    overflow-y: scroll;
+    flex-direction: column;
     background-color: rgb(234, 238, 243);
 }
 
@@ -77,6 +77,13 @@ html {
 .chatbox__messages textarea:focus-visible {
     resize: none;
     outline: none;
+}
+
+.message-date {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+    /* Adjust the color based on your design */
 }
 
 .textarea-content {

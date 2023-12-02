@@ -109,9 +109,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.selectedOption = this.filterService.getSelectedOption() != ''
             ? this.filterService.getSelectedOption() :
             this.filterOptions[0]?.filterName ?? '';
-          console.log('get al filter names= ' + this.selectedOption);
+          // console.log('get al filter names= ' + this.selectedOption);
           this.filterService.setSelectedOption(this.selectedOption);
-          console.log('after setting  = ' + this.filterService.getSelectedOption());
+          // console.log('after setting  = ' + this.filterService.getSelectedOption());
 
           this.getSavedFilterDetailsFromService();
           this.updateSelectedFilter();
@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getAllFilterNames();
-    console.log('ngoninit = ' + this.selectedOption);
+    // console.log('ngoninit = ' + this.selectedOption);
   }
 
   getSavedFilterDetailsFromService() {

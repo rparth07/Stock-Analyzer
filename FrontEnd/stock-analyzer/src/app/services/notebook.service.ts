@@ -7,11 +7,9 @@ import { Notebook } from '../types/Notebook';
   providedIn: 'root'
 })
 export class NotebookService {
-
   constructor(private http: HttpClient) { }
 
   getExistingNotebook(notebookDate: Date) {
-    console.log('notebook date = ' + notebookDate);
     const url = `${DomainConstants.Notebook_URL}get-notebook`;
     const params = {
       notebookDate: notebookDate.toISOString()
@@ -19,8 +17,13 @@ export class NotebookService {
     return this.http.get<Notebook>(url, { params });
   }
 
-  updateNotebook(notebook: Notebook) {
-    const url = `${DomainConstants.Notebook_URL}update-notebook`;
-    return this.http.post<Notebook>(url, notebook);
+  getAllNotebooks() {
+    const url = `${DomainConstants.Notebook_URL}get-notebooks`;
+    return this.http.get<Notebook[]>(url);
+  }
+
+  updateNotebooks(notebooks: Notebook[]) {
+    const url = `${DomainConstants.Notebook_URL}update-all-notebooks`;
+    return this.http.post<Notebook[]>(url, notebooks);
   }
 }

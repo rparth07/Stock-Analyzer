@@ -119,6 +119,7 @@ import { FilterFormContainerComponent } from './dashboard/filter-form-container/
 import { NotebookComponent } from './notebook/notebook.component';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 import { DeleteFilterFormContainerComponent } from './dashboard/delete-filter-form-container/delete-filter-form-container.component';
+import { DomainConstants } from './shared/domain.constants';
 
 @NgModule({
   declarations: [
@@ -242,7 +243,10 @@ import { DeleteFilterFormContainerComponent } from './dashboard/delete-filter-fo
     AnimateModule,
     CardModule,
     NgxUiLoaderModule,
-    NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
+    NgxUiLoaderHttpModule.forRoot({
+      showForeground: true,
+      exclude: [DomainConstants.Notebook_URL],
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -36,14 +36,40 @@ namespace Stock_Analyzer_Repository.Repository
       return _mapper.Map<Notebook>(notebook);
     }
 
-    public void UpdateNotebook(Notebook notebook)
+    public List<Notebook> GetNotebooks()
+    {
+      var notebooks = _context.Notebook.
+        Where(_ => _.ContentDate >= DateTime.Today.AddMonths(-6));
+
+      return _mapper.Map<List<Notebook>>(notebooks);
+    }
+
+    public void UpsertNotebook(Notebook notebook)
     {
       var notebookToUpdate = _context.Notebook
-        .First(_ => _.ContentDate == notebook.ContentDate);
+        .FirstOrDefault(_ => _.ContentDate == notebook.ContentDate);
 
-      notebookToUpdate.Content = notebook.Content;
-      _context.Notebook.Update(notebookToUpdate);
-      _context.SaveChanges();
+      if(notebookToUpdate != null)
+      {
+        notebookToUpdate.Content = notebook.Content;
+        _context.Notebook.Update(notebookToUpdate);
+        _context.SaveChanges();
+      } else
+      {
+        CreateNotebook(notebook);
+      }
+    }
+
+    public void DeleteNotebook(Notebook notebook)
+    {
+      var notebookToDelete = _context.Notebook
+        .FirstOrDefault(_ => _.ContentDate == notebook.ContentDate);
+
+      if(notebookToDelete != null)
+      {
+        _context.Notebook.Remove(notebookToDelete);
+        _context.SaveChanges();
+      }
     }
   }
 }

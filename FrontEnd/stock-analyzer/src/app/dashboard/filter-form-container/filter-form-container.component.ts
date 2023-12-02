@@ -59,12 +59,12 @@ export class FilterFormContainerComponent implements OnInit {
   submitForm() {
     if (this.filterGroup.valid) {
       this.isLoading = true;
-      console.log('Form submitted:', this.filterGroup.value);
+      // console.log('Form submitted:', this.filterGroup.value);
       this.filterService.addFilter(this.filterGroup.value as Filter)
         .subscribe({
           next: (value) => {
-            console.log(value);
-            console.log('reloadPage');
+            // console.log(value);
+            // console.log('reloadPage');
             this.isLoading = false;
             this.closeModal();
           },
