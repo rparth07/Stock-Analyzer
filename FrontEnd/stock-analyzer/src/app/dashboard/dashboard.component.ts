@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { FilterService } from '../services/filter.service';
 import { ChangeType, Filter, FilterCriteria, FilterResult, PeriodType } from '../types/Filter';
@@ -11,24 +11,39 @@ import { SortEvent } from 'primeng/api';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css', '../shared/css/common-page-style.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('filterTable', { static: true }) filterTable!: Table;
   @ViewChild('bulkDealTable', { static: true }) bulkDealTable!: Table;
   bulkDealFilterInput: string = '';
 
   selectedOption: string = '';
-  filterDate: string = new Date().toISOString().split('T')[0];
+  filterDate: string = this.getDateOfToday();
 
   selectedFilter: Filter | undefined;
   filterOptions: Filter[] = [];
   filterResults: FilterResult[] = [];
   bulkDeals: BulkDeal[] = [];
-  loadingFilterResults: boolean = true;
+  loadingFilterResults: boolean = false;
 
   modalOpen: boolean = false;
   deleteModalOpen: boolean = false;
 
   constructor(private filterService: FilterService) {
+  }
+
+  ngOnDestroy(): void {
+    this.saveFilterDetailsInService();
+  }
+
+  saveFilterDetailsInService() {
+    this.filterService.setSelectedOption(this.selectedOption);
+    this.filterService.setFilterDate(this.filterDate);
+    this.filterService.setFilterResults(this.filterResults);
+    this.filterService.setBulkDeals(this.bulkDeals);
+  }
+
+  getDateOfToday(): string {
+    return new Date().toISOString().split('T')[0];
   }
 
   onFilterFormChange() {
@@ -90,9 +105,19 @@ export class DashboardComponent implements OnInit {
           this.filterOptions = filters;
           //console.log('filters = ' + filters);
           console.dir(filters, { depth: null });
-          this.selectedOption = this.filterOptions[0]?.filterName ?? '';
+
+          this.selectedOption = this.filterService.getSelectedOption() != ''
+            ? this.filterService.getSelectedOption() :
+            this.filterOptions[0]?.filterName ?? '';
+          console.log('get al filter names= ' + this.selectedOption);
+          this.filterService.setSelectedOption(this.selectedOption);
+          console.log('after setting  = ' + this.filterService.getSelectedOption());
+
+          this.getSavedFilterDetailsFromService();
           this.updateSelectedFilter();
-          this.onFilterFormChange();
+          if (this.filterDate == this.getDateOfToday()) {
+            this.onFilterFormChange();
+          }
         },
         error: (err) => console.log(err),
       });
@@ -106,7 +131,14 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getAllFilterNames();
-    // console.log("this.filterOptions = " + this.filterOptions);
+    console.log('ngoninit = ' + this.selectedOption);
+  }
+
+  getSavedFilterDetailsFromService() {
+    this.selectedOption = this.filterService.getSelectedOption() ?? '';
+    this.filterDate = this.filterService.getFilterDate() != '' ? this.filterService.getFilterDate() : this.getDateOfToday();
+    this.filterResults = this.filterService.getFilterResults() ?? [];
+    this.bulkDeals = this.filterService.getBulkDeals() ?? [];
   }
 
   getFieldName(filterCriteria: FilterCriteria) {

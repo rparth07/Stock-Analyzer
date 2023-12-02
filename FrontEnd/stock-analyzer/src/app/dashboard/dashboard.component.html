@@ -30,8 +30,7 @@
                         <p-table #filterTable [value]="filterResults" dataKey="id" [rowHover]="true" [rows]="5"
                             [customSort]="true" (sortFunction)="customSort($event)" [scrollable]="true"
                             [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
-                            sortField="company.symbol" [sortOrder]="1" [loading]="loadingFilterResults"
-                            [paginator]="true"
+                            sortField="company.symbol" [sortOrder]="1" [paginator]="true"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                             [filterDelay]="0"
                             [globalFilterFields]="['company.symbol', 'fieldName', 'value', 'calculationDate']">
@@ -259,8 +258,7 @@
                     <div class="card">
                         <p-table #bulkDealTable [value]="bulkDeals" dataKey="id" [rowHover]="true" [rows]="5"
                             sortField="clientName" [sortOrder]="1" [scrollable]="true" [showCurrentPageReport]="true"
-                            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [loading]="loadingFilterResults"
-                            [paginator]="true"
+                            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [paginator]="true"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                             [filterDelay]="0"
                             [globalFilterFields]="['clientName', 'dealDate', 'companySymbol', 'companyFullName', 'stockAction', 'quantity', 'tradePrice', 'remarks']">

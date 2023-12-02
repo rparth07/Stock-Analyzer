@@ -4,13 +4,60 @@ import { DomainConstants } from '../shared/domain.constants';
 import { Company } from '../types/Company';
 import { Observable } from 'rxjs';
 import { Filter, FilterResult } from '../types/Filter';
+import { BulkDeal } from '../types/BulkDeal';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterService {
 
-  constructor(private http: HttpClient) { }
+  private selectedOption: string;
+  private filterDate: string;
+  private filterResults: FilterResult[];
+  private bulkDeals: BulkDeal[];
+
+  constructor(private http: HttpClient) {
+    this.selectedOption = '';
+    this.filterDate = '';
+    this.filterResults = [];
+    this.bulkDeals = [];
+  }
+
+  setSelectedOption(option: string) {
+    this.selectedOption = option;
+    console.log('----> IN SERVICE => selectedOption = ' + this.selectedOption);
+  }
+
+  getSelectedOption(): string {
+    return this.selectedOption;
+  }
+
+  setFilterDate(filterDate: string) {
+    this.filterDate = filterDate;
+    console.log('----> IN SERVICE => filterDate = ' + this.filterDate);
+  }
+
+  getFilterDate(): string {
+    return this.filterDate;
+  }
+
+  setFilterResults(results: FilterResult[]) {
+    this.filterResults = results;
+    console.log('----> IN SERVICE => filterResults = ' + this.filterResults);
+  }
+
+  getFilterResults(): FilterResult[] {
+    return this.filterResults;
+  }
+
+  setBulkDeals(bulkDeals: BulkDeal[]) {
+    this.bulkDeals = bulkDeals;
+    console.log('----> IN SERVICE => bulkDeals = ' + this.bulkDeals);
+  }
+
+  getBulkDeals(): BulkDeal[] {
+    return this.bulkDeals;
+  }
 
   executeFilter(filterName: string, filterDate: Date): Observable<FilterResult[]> {
     const url = `${DomainConstants.Filter_URL}get-filter-result`;

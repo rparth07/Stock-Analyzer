@@ -64,8 +64,7 @@
                                                     [customSort]="true" (sortFunction)="customSort($event)" dataKey="id"
                                                     [rowHover]="true" [rows]="10" sortField="deals.dealDate"
                                                     [sortOrder]="-1" [showCurrentPageReport]="true"
-                                                    [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
-                                                    [paginator]="true"
+                                                    [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                                     [filterDelay]="0"
                                                     [globalFilterFields]="['clientName', 'series', 'deals.dealDate', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
