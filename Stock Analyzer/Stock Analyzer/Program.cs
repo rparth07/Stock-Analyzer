@@ -7,6 +7,7 @@ using Stock_Analyzer_Repository;
 using Stock_Analyzer_Repository.Repository;
 using Stock_Analyzer_Service;
 using Stock_Analyzer_Service.Interface;
+using Stock_Analyzer_Service.ScrapperJob;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +26,16 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IFilterRepository, FilterRepository>();
 builder.Services.AddScoped<INotebookRepository, NotebookRepository>();
 
-
 builder.Services.AddScoped<IStockInfoService, StockInfoService>();
 builder.Services.AddScoped<IFilterService, FilterService>();
 builder.Services.AddScoped<INotebookService, NotebookService>();
+
+ScrapperJob myJob = new ScrapperJob();
+ScrapperScheduler myScheduler = new ScrapperScheduler(myJob);
+
+// Start the scheduler when the application starts
+myScheduler.Start();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

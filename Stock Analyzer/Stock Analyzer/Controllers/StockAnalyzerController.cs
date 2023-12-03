@@ -65,7 +65,7 @@ namespace Stock_Analyzer.Controllers
         Console.WriteLine(ex.Message.ToString());
         throw new Exception(ex.Message.ToString());
       }
-      //Need to handle this ok scenarios
+
       return Ok(new { message = "Analysis completed successfully!" });
     }
 
@@ -89,7 +89,7 @@ namespace Stock_Analyzer.Controllers
     [HttpPost("analyze-daily-bhav-data")]
     public async Task<IActionResult> AnalyzeBhavDataFileOfToday()
     {
-      List<ParsedStockInfo> parsedStocknfos = await GetParsedBhavInfoCSVDataFor(DateTime.Now);
+      List<ParsedStockInfo> parsedStocknfos = await GetParsedBhavInfoCSVDataFor(DateTime.Today);
       List<StockInfoDto> stockInfoDtos = _mapper.Map<List<StockInfoDto>>(parsedStocknfos);
 
       List<Company> companies = _mapper.Map<List<Company>>(stockInfoDtos);
@@ -216,9 +216,8 @@ namespace Stock_Analyzer.Controllers
 
     [HttpPost("analyze-daily-bulk-deals")]
     public async Task<IActionResult> AnalyzeBulkDealsDataFileOfToday()
-    {//TODO: Request part remaining
-
-      List<ParsedBulkDeal> parsedBulkDeals = await GetParsedBulkDealCSVDataBetween(DateTime.Today.AddDays(-1), DateTime.Today);
+    {
+      List<ParsedBulkDeal> parsedBulkDeals = await GetParsedBulkDealCSVDataBetween(DateTime.Today, DateTime.Today);
       List<BulkDealDto> bulkDealDtos = _mapper.Map<List<BulkDealDto>>(parsedBulkDeals);
 
       List<Client> clients = _mapper.Map<List<Client>>(bulkDealDtos);
