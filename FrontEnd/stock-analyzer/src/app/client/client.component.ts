@@ -26,7 +26,7 @@ export class ClientComponent implements OnInit {
   }
 
   customSort(event: SortEvent) {
-    console.dir(event, { depth: null });
+    // console.dir(event, { depth: null });
     event.data!.sort((data1, data2) => {
       let value1 = null;
       let value2 = null;

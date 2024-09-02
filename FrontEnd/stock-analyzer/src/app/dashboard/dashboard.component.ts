@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (filters: Filter[]) => {
           this.filterOptions = filters;
           //console.log('filters = ' + filters);
-          console.dir(filters, { depth: null });
+          // console.dir(filters, { depth: null });
 
           this.selectedOption = this.filterService.getSelectedOption() != ''
             ? this.filterService.getSelectedOption() :
@@ -173,7 +173,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   filterBulkDeal(companyName: string) {
-    console.dir(this.bulkDealTable, { depth: null });
+    // console.dir(this.bulkDealTable, { depth: null });
     this.bulkDealTable.filterGlobal(companyName, 'contains');
     this.bulkDealFilterInput = companyName;
   }
@@ -183,7 +183,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       let value1 = null;
       let value2 = null;
 
-      console.dir(event, { depth: null });
+      // console.dir(event, { depth: null });
       if (event.field!.split('.').length > 2) {
         let fields = event.field!.split('.');
         value1 = data1.company.bhavCopyInfos[0][fields[2]];

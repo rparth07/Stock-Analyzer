@@ -65,7 +65,7 @@ namespace Stock_Analyzer.Controllers
     }
 
     [HttpDelete("delete-filter/{filterName}")]
-    public IActionResult ExecuteAllFilters(string filterName)
+    public IActionResult DeleteFilter(string filterName)
     {
       try
       {

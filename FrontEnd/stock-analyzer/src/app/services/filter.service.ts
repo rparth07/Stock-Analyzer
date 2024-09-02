@@ -69,7 +69,7 @@ export class FilterService {
   }
 
   addFilter(filter: Filter) {
-    console.dir(filter, { depth: null });
+    // console.dir(filter, { depth: null });
     const url = `${DomainConstants.Filter_URL}add-filter`;
     return this.http.post<Filter>(url, filter);
   }

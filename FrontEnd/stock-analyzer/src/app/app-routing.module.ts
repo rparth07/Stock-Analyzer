@@ -34,6 +34,11 @@ const routes: Routes = [
     component: ClientComponent
   },
   {
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full'
+  },
+  {
     path: '**',
     redirectTo: 'dashboard',
     pathMatch: 'full'
