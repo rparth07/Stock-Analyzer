@@ -43,20 +43,10 @@ namespace Stock_Analyzer_Repository.Repository
           .Include("BulkDeals")
           .Include("BhavCopyInfos")
           .AsNoTracking()
-          .ToList();
+          .ToList()
+          .OrderBy(_ => _.BulkDeals.OrderByDescending(_ => _.DealDate));
 
       return _mapper.Map<List<Company>>(companies);
-    }
-
-    public List<Company> GetCompaniesToInsert(List<Company> companies)
-    {
-      var companiesToInsert = companies
-        .Where(_ => _context.Company
-                      .FirstOrDefault(cs => cs.Symbol.Equals(_.Symbol)) == null)
-        .DistinctBy(_ => _.Symbol)
-        .ToList();
-
-      return companiesToInsert;
     }
 
     public Company GetCompanyByName(string companyName)

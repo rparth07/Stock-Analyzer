@@ -54,15 +54,16 @@ namespace Stock_Analyzer_Repository.Repository
     {
       var bulkDealInfos = _mapper.Map<List<BulkDealDataModel>>(bulkDealsToInsert);
 
+      var companies = _context.Company.ToList();
+      var clients = _context.Client.ToList();
+
       bulkDealInfos
           .ForEach(_ =>
           {
-            _.Company = _context.Company
-                      .Where(company => company.Symbol.Equals(_.Company.Symbol))
-                      .First();
-            _.Client = _context.Client
-                      .Where(client => client.Name.Equals(_.Client.Name))
-                      .First();
+            _.Company = companies
+                      .First(company => company.Symbol.Equals(_.Company.Symbol));
+            _.Client = clients
+                      .First(client => client.Name.Equals(_.Client.Name));
           });
 
       _context.BulkDeal.AddRange(bulkDealInfos);

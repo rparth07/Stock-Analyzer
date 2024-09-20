@@ -26,11 +26,11 @@ namespace Stock_Analyzer_Repository.Repository
     public void AddBhavInfos(List<BhavCopyInfo> bhavCopyInfosToInsert)
     {
       var bhavCopyInfos = _mapper.Map<List<BhavCopyInfoDataModel>>(bhavCopyInfosToInsert);
+      var companies = _context.Company.ToList();
 
       bhavCopyInfos
-          .ForEach(_ => _.Company = _context.Company
-              .Where(company => company.Symbol.Equals(_.Company.Symbol))
-              .First());
+          .ForEach(_ => _.Company = companies
+              .First(company => company.Symbol.Equals(_.Company.Symbol)));
 
       _context.BhavCopyInfo.AddRange(bhavCopyInfos);
 
@@ -53,18 +53,6 @@ namespace Stock_Analyzer_Repository.Repository
           .ToList();
 
       return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
-    }
-
-    public List<BhavCopyInfo> GetBhavInfosToInsert(List<BhavCopyInfo> bhavInfos)
-    {
-      var bhavInfoToInsert = bhavInfos
-        .Where(_ => _context.BhavCopyInfo
-              .FirstOrDefault(bis => bis.Company.Symbol.Equals(_.Company.Symbol)
-                  && bis.Series.Equals(_.Series)
-                  && bis.Date.Equals(_.Date)) == null)
-          .ToList();
-
-      return bhavInfoToInsert;
     }
 
     public List<BhavCopyInfo> GetBhavInfosByCompany(string company)

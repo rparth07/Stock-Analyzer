@@ -103,18 +103,10 @@ namespace Stock_Analyzer_Repository.Repository
       _context.SaveChanges();
     }
 
-    public List<FilterResult> GetFilterResultsToInsert(List<FilterResult> filterResults)
+    public bool ExistFilterResultsFor(Filter filter, DateTime calculationDate)
     {
-      var filterResultsToInsert = filterResults
-        .Where(_ => _context.FilterResult
-                      .FirstOrDefault(fr => 
-                        fr.CalculationDate.Equals(_.CalculationDate)
-                        && fr.FilterCriteria.Id.Equals(_.FilterCriteria.Id)
-                        && fr.Company.Id.Equals(_.Company.Id)
-                        ) == null)
-        .ToList();
-
-      return filterResultsToInsert;
+      return _context.FilterResult.Any(_ => _.CalculationDate.Equals(calculationDate)
+                      && _.FilterCriteria.Filter.Id.Equals(filter.Id));
     }
 
     public void DeleteFilterByName(string filterName)
