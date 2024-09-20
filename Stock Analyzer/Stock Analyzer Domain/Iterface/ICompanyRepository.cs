@@ -13,6 +13,5 @@ namespace Stock_Analyzer_Domain.Iterface
     public List<Company> GetAllCompaniesWithAllInfo();
     public Company GetCompanyByName(string companyName);
     public List<Company> GetAllCompanies();
-    public List<Company> GetCompaniesToInsert(List<Company> companies);
   }
 }

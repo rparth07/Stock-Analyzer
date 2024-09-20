@@ -95,11 +95,12 @@ namespace Stock_Analyzer_Service
 
       filters.ForEach(filter =>
       {
-        var filterResults = ExecuteFilter(filter, calculationDate, companies);
-        filterResultsToInsert.AddRange(filterResults);
+        //if for this filter and calculationDate, filterResult exist?
+        if(!_filterRepository.ExistFilterResultsFor(filter, calculationDate)) {
+          var filterResults = ExecuteFilter(filter, calculationDate, companies);
+          filterResultsToInsert.AddRange(filterResults);
+        }
       });
-
-      filterResultsToInsert = _filterRepository.GetFilterResultsToInsert(filterResultsToInsert);
 
       if (filterResultsToInsert.Count() > 0)
       {

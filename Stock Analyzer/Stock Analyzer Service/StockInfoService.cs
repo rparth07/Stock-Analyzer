@@ -32,11 +32,15 @@ namespace Stock_Analyzer_Service
         return;
       }
       DateTime calculationDate = bhavInfos.First().Date;
-      var bhavInfosToInsert = _bhavInfoRepository.GetBhavInfosToInsert(bhavInfos);
+      var existingBhavCopyInfos = _bhavInfoRepository.GetAllBhavInfosWithCompany(calculationDate);
 
-      if (bhavInfosToInsert.Count > 0)
+      bhavInfos.RemoveAll(_ => existingBhavCopyInfos
+          .Any(eb => eb.Company.Symbol.Equals(_.Company.Symbol)
+                && eb.Series.Equals(_.Series)
+                && eb.Date.Equals(_.Date)));
+      if (bhavInfos.Count > 0)
       {
-        _bhavInfoRepository.AddBhavInfos(bhavInfosToInsert);
+        _bhavInfoRepository.AddBhavInfos(bhavInfos);
         _filterService.StoreFilterResultsByFilterFor(calculationDate);
       }
     }
@@ -69,7 +73,12 @@ namespace Stock_Analyzer_Service
       {
         return;
       }
-      var companiesToInsert = _companyRepository.GetCompaniesToInsert(companies);
+
+      var existingCompanies = _companyRepository.GetAllCompanies();
+      companies.RemoveAll(_ => existingCompanies
+            .Any(ec => ec.Symbol.Equals(_.Symbol)));
+      var companiesToInsert = companies.DistinctBy(_ => _.Symbol).ToList();
+
       if (companiesToInsert.Count > 0)
       {
         _companyRepository.AddCompanies(companiesToInsert);
@@ -79,7 +88,7 @@ namespace Stock_Analyzer_Service
     public List<Company> GetAllCompaniesWithAllInfo()
     {
       var companies = _companyRepository.GetAllCompaniesWithAllInfo();
-      companies.ForEach(x => x.BulkDeals = x.BulkDeals.OrderByDescending(_ => _.DealDate).ToList());
+      //companies.ForEach(x => x.BulkDeals = x.BulkDeals.OrderByDescending(_ => _.DealDate).ToList());
       return companies;
     }
 
@@ -96,15 +105,18 @@ namespace Stock_Analyzer_Service
       return companies;
     }
 
-    
+
     public void AddClients(List<Client> clients)
     {
       if (clients == null || clients.Count == 0)
       {
         return;
       }
-      List<Client> clientsFromServer = GetAllClients();
-      var clientsToInsert = GetClientsToInsert(clients, clientsFromServer);
+
+      List<Client> existingClients = GetAllClients();
+      clients.RemoveAll(_ => existingClients.Any(ec => ec.Name.Equals(_.Name)));
+      var clientsToInsert = clients.DistinctBy(_ => _.Name).ToList();
+
       if (clientsToInsert.Count > 0)
       {
         _clientRepository.AddClients(clientsToInsert);
@@ -118,31 +130,19 @@ namespace Stock_Analyzer_Service
       return clients;
     }
 
-    private List<Client> GetClientsToInsert(List<Client> clients, List<Client> clientsFromServer)
-    {
-      clients = clients.DistinctBy(_ => _.Name).ToList();
-      if (clientsFromServer.Count == 0)
-      {
-        return clients;
-      }
-
-      List<Client> clientsToInsert = clients
-          .Where(_ => clientsFromServer
-              .FirstOrDefault(cs => cs.Name.Equals(_.Name)) == null)
-          .ToList();
-
-      return clientsToInsert;
-    }
-
     public void AddBulkDeals(List<BulkDeal> bulkDeals)
     {
       if (bulkDeals != null && bulkDeals.Count > 0)
       {
-        List<BulkDeal> bulkDealsFromServer = GetAllBulkDeals();
-        var bulkDealsToInsert = GetBulkDealsToInsert(bulkDeals, bulkDealsFromServer);
-        if (bulkDealsToInsert.Count > 0)
+        List<BulkDeal> existingBulkDeals = GetAllBulkDeals();
+        bulkDeals.RemoveAll(_ => existingBulkDeals
+             .Any(eb => eb.DealDate.Equals(_.DealDate)
+                  && eb.Company.Symbol.Equals(_.Company.Symbol)
+                  && eb.Client.Name.Equals(_.Client.Name)));
+
+        if (bulkDeals.Count > 0)
         {
-          _bulkDealRepository.AddBulkDeals(bulkDealsToInsert);
+          _bulkDealRepository.AddBulkDeals(bulkDeals);
         }
       }
     }
@@ -161,21 +161,5 @@ namespace Stock_Analyzer_Service
     {
       return _bulkDealRepository.GetAllBulkDeals();
     }
-
-    private List<BulkDeal> GetBulkDealsToInsert(List<BulkDeal> bulkDeals, List<BulkDeal> bulkDealsFromServer)
-    {
-      if (bulkDealsFromServer.Count == 0)
-      {
-        return bulkDeals;
-      }
-
-      List<BulkDeal> bulkDealsToInsert = bulkDeals
-          .Where(_ => bulkDealsFromServer
-              .FirstOrDefault(cs => cs.DealDate.Equals(_.DealDate)) == null)
-          .ToList();
-
-      return bulkDealsToInsert;
-    }
-
   }
 }
