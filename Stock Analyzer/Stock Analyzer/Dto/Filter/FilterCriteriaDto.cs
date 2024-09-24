@@ -1,5 +1,3 @@
-using Stock_Analyzer_Domain.Models.Filter;
-
 namespace Stock_Analyzer.Dto.Filter
 {
   public class FilterCriteriaDto

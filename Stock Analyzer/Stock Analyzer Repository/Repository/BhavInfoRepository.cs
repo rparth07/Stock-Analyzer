@@ -3,17 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Repository.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Repository.Repository
 {
   public class BhavInfoRepository : IBhavInfoRepository, IDisposable
   {
-
     private readonly StockAnalyzerContext _context;
     private readonly IMapper _mapper;
 
@@ -84,6 +78,7 @@ namespace Stock_Analyzer_Repository.Repository
           .Include("Company")
           .AsNoTracking()
           .Where(_ => _.Date >= startDate && _.Date <= endDate)
+          .OrderBy(_ => _.Date)
           .ToList();
 
       return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
@@ -110,12 +105,12 @@ namespace Stock_Analyzer_Repository.Repository
       return _mapper.Map<List<BhavCopyInfo>>(bhavInfoWithCompany);
     }
 
-    public List<BhavCopyInfo> GetBhvaInfosBy(DateTime fromDate, DateTime toDate, string series, string companyName)
+    public List<BhavCopyInfo> GetBhvaInfosBy(DateTime fromDate, DateTime toDate, string series)
     {
       var bhavInfos = _context.BhavCopyInfo
             .Where(bc => bc.Date > fromDate && bc.Date <= toDate
-              && (bc.Series.ToLower() == series.ToLower())
-              && bc.Company.Symbol == companyName)
+              && (bc.Series.ToLower() == series.ToLower()))
+            .Include("Company")
             .AsNoTracking()
             .ToList();
 

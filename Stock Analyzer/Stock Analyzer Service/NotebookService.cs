@@ -23,7 +23,7 @@ namespace Stock_Analyzer_Service
     {
       var notebook = _notebookRepository.GetNotebook(notebookDate);
 
-      if(notebook == null)
+      if (notebook == null)
       {
         CreateNotebook(notebookDate);
         notebook = _notebookRepository.GetNotebook(notebookDate);
@@ -52,10 +52,11 @@ namespace Stock_Analyzer_Service
 
       notebooks.ForEach(_ =>
       {
-        if(_.Content == null || _.Content.Length == 0)
+        if (_.Content == null || _.Content.Length == 0)
         {
           _notebookRepository.DeleteNotebook(_);
-        } else
+        }
+        else
         {
           _notebookRepository.UpsertNotebook(_);
         }

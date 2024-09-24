@@ -1,7 +1,6 @@
 using AutoMapper;
 using Stock_Analyzer.Dto;
 using Stock_Analyzer_Domain.Models;
-using Stock_Analyzer_Repository.DataModels;
 
 namespace Stock_Analyzer.Profiles
 {

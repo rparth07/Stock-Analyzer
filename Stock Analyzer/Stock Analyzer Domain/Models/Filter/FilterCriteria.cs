@@ -16,7 +16,7 @@ namespace Stock_Analyzer_Domain.Models.Filter
 
     public PeriodType PeriodType { get; set; }
 
-    public int PeriodValue { get; set; } 
+    public int PeriodValue { get; set; }
 
     public List<FilterResult> FilterResults { get; set; } = new List<FilterResult>();
   }

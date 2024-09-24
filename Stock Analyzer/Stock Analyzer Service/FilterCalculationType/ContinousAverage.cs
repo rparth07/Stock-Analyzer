@@ -1,13 +1,8 @@
 using FluentDateTime;
 using Stock_Analyzer_Domain.Iterface;
-using Stock_Analyzer_Domain.Models.Filter;
 using Stock_Analyzer_Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Stock_Analyzer_Domain.Models.Filter;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Service.FilterCalculationType
 {
@@ -55,6 +50,8 @@ namespace Stock_Analyzer_Service.FilterCalculationType
       var series = filterCriteria.Filter.Series;
       var periodValue = ConvertToDays(filterCriteria.PeriodType, filterCriteria.PeriodValue);
 
+      var bhavInfosByCompany = GetBhavInfosByCompany(calculationDate, periodValue, series);//TODO: reduce db call here, n3 level db calls
+
       var filterCriteriaResults = new List<FilterResult>();
 
       foreach (var company in companies)
@@ -66,14 +63,16 @@ namespace Stock_Analyzer_Service.FilterCalculationType
 
         EnsureAllFieldsPresents(fieldName, calculationDate, periodValue, company.Symbol, series);
 
-        var bhavInfos = GetBhavInfosBy(calculationDate, periodValue, company.Symbol, series);
+        bhavInfosByCompany.TryGetValue(company.Symbol, out var bhavInfos);
+        if (bhavInfos?.Count > 0)
+        {
+          var matchCriteria = DoesMatchCriteria(filterCriteria, bhavInfos, fieldName, periodValue);
 
-        var matchCriteria = DoesMatchCriteria(filterCriteria, bhavInfos, fieldName, periodValue);
+          var average = GetAverageOf(fieldName, calculationDate, periodValue, bhavInfos);
 
-        var average = GetAverageOf(fieldName, calculationDate, periodValue, bhavInfos);
-
-        if (matchCriteria)
-          filterCriteriaResults.Add(CreateFilterResult(filterCriteria, company, average, calculationDate));
+          if (matchCriteria)
+            filterCriteriaResults.Add(CreateFilterResult(filterCriteria, company, average, calculationDate));
+        }
       }
 
       return filterCriteriaResults;
@@ -84,7 +83,7 @@ namespace Stock_Analyzer_Service.FilterCalculationType
                                           string fieldName,
                                           int periodValue)
     {
-      if(criteria == null || bhavInfos.Count == 0 || bhavInfos.Count() < periodValue)
+      if (criteria == null || bhavInfos.Count == 0 || bhavInfos.Count() < periodValue)
       {
         return false;
       }
@@ -105,7 +104,8 @@ namespace Stock_Analyzer_Service.FilterCalculationType
             .Zip(bhavInfos.Skip(1),
                   (current, next) => (double)property.GetValue(current) <= (double)property.GetValue(next))
             .All(isIncreasing => isIncreasing);
-        } else
+        }
+        else
         {
           return bhavInfos
             .Zip(bhavInfos.Skip(1),
@@ -174,13 +174,20 @@ namespace Stock_Analyzer_Service.FilterCalculationType
       return periodValue;
     }
 
-    private List<BhavCopyInfo> GetBhavInfosBy(DateTime calculationDate,
+    private Dictionary<string, List<BhavCopyInfo>> GetBhavInfosByCompany(DateTime calculationDate,
                                               int periodValue,
-                                              string companyName,
                                               string series)
     {
       var fromDate = calculationDate.AddBusinessDays(-periodValue);
-      return _bhavInfoRepository.GetBhvaInfosBy(fromDate, calculationDate, series, companyName);
+      var bhavInfos = _bhavInfoRepository.GetBhvaInfosBy(fromDate, calculationDate, series);
+
+      var c = bhavInfos.Select(_ => _.Company.Symbol).Distinct().Count();
+
+      var bhavInfosbyCompany = bhavInfos
+        .GroupBy(b => b.Company.Symbol)
+        .ToDictionary(g => g.Key, g => g.ToList());
+
+      return bhavInfosbyCompany;
     }
 
     private static void EnsureAllFieldsPresents(string fieldName, DateTime? calculationDate, int? periodValue, string companyName, string series)

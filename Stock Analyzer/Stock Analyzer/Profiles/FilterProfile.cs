@@ -1,6 +1,5 @@
 using AutoMapper;
 using Stock_Analyzer.Dto.Filter;
-using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Domain.Models.Filter;
 
 namespace Stock_Analyzer.Profiles

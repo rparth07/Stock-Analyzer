@@ -1,7 +1,6 @@
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Service.Interface;
-using System.Linq;
 
 namespace Stock_Analyzer_Service
 {

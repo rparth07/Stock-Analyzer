@@ -1,15 +1,8 @@
 using AutoMapper;
-using Stock_Analyzer_Domain.Iterface;
-using Stock_Analyzer_Domain.Models;
-using Stock_Analyzer_Domain.Models.Filter;
-using Stock_Analyzer_Repository.DataModels;
-using Stock_Analyzer_Repository.DataModels.Filter;
 using Microsoft.EntityFrameworkCore;
-using PeriodTypeModel = Stock_Analyzer_Repository.DataModels.Filter.PeriodType;
-using FluentDateTime;
-using System.Text.RegularExpressions;
-using ChangeType = Stock_Analyzer_Repository.DataModels.Filter.ChangeType;
-using LogicalOperator = Stock_Analyzer_Repository.DataModels.Filter.LogicalOperator;
+using Stock_Analyzer_Domain.Iterface;
+using Stock_Analyzer_Domain.Models.Filter;
+using Stock_Analyzer_Repository.DataModels.Filter;
 
 namespace Stock_Analyzer_Repository.Repository
 {
@@ -69,7 +62,6 @@ namespace Stock_Analyzer_Repository.Repository
       var filterCriteriaIds = filter.Criterias.Select(_ => _.Id).ToList();
 
       var filterResults = _context.FilterResult
-        .AsNoTracking()
         .Where(_ => filterCriteriaIds.Contains(_.FilterCriteria.Id)
           && _.CalculationDate.Date == filterDate.Date)
         .Select(fr => new FilterResultDataModel
@@ -90,12 +82,15 @@ namespace Stock_Analyzer_Repository.Repository
     {
       var filterResulToInsert = _mapper.Map<List<FilterResultDataModel>>(filterResults);
 
+      var companies = _context.Company.ToList();
+      var filterCriteria = _context.FilterCriteria.ToList();
+
       filterResulToInsert.ForEach(_ =>
       {
-        _.Company = _context.Company
+        _.Company = companies
               .First(company => company.Symbol.Equals(_.Company.Symbol));
 
-        _.FilterCriteria = _context.FilterCriteria
+        _.FilterCriteria = filterCriteria
               .First(fc => fc.Id.Equals(_.FilterCriteria.Id));
       });
 

@@ -60,9 +60,9 @@ namespace Stock_Analyzer.Controllers
           List<BhavCopyInfo> bhavInfos = _mapper.Map<List<BhavCopyInfo>>(stockInfoDtos);
           _stockInfoService.AddBhavInfos(bhavInfos);
         }
-      } catch(Exception ex)
+      }
+      catch (Exception ex)
       {
-        Console.WriteLine(ex.Message.ToString());
         throw new Exception(ex.Message.ToString());
       }
 
@@ -134,10 +134,9 @@ namespace Stock_Analyzer.Controllers
     }
 
     [HttpGet("bhav-infos-between")]
-    public IActionResult GetBhavInfosBetween(DateTime startDate, DateTime endDate)
+    public IActionResult GetBhavInfosBetween([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
     {
       startDate = startDate.Date; endDate = endDate.Date;
-
       List<BhavCopyInfo> bhavInfos = _stockInfoService.GetBhavInfosBetween(startDate, endDate);
       List<StockInfoDto> bhavInfoDtos = _mapper.Map<List<StockInfoDto>>(bhavInfos);
       return Ok(bhavInfoDtos);
@@ -285,11 +284,9 @@ namespace Stock_Analyzer.Controllers
 
         if (fileResponse != null)
         {
-          using (StreamReader reader = new StreamReader(fileResponse, Encoding.UTF8))
-          {
-            List<ParsedBulkDeal> parsedBulkDeals = new ParsedBulkDeal().ParseData(reader);
-            return parsedBulkDeals;
-          }
+          using StreamReader reader = new StreamReader(fileResponse, Encoding.UTF8);
+          List<ParsedBulkDeal> parsedBulkDeals = new ParsedBulkDeal().ParseData(reader);
+          return parsedBulkDeals;
         }
       }
       catch (Exception ex)
@@ -328,11 +325,9 @@ namespace Stock_Analyzer.Controllers
 
         if (fileResponse != null)
         {
-          using (StreamReader reader = new StreamReader(fileResponse, Encoding.UTF8))
-          {
-            List<ParsedStockInfo> parsedStockInfos = new ParsedStockInfo().ParseData(reader);
-            return parsedStockInfos;
-          }
+          using StreamReader reader = new StreamReader(fileResponse, Encoding.UTF8);
+          List<ParsedStockInfo> parsedStockInfos = new ParsedStockInfo().ParseData(reader);
+          return parsedStockInfos;
         }
       }
       catch (Exception ex)
@@ -403,7 +398,8 @@ namespace Stock_Analyzer.Controllers
           {
             WrapperBhavInfo apiResponse = JsonConvert.DeserializeObject<WrapperBhavInfo>(response);
             return apiResponse;
-          } catch(Exception ex)
+          }
+          catch (Exception ex)
           {
             throw new Exception(response.ToString(), ex);
           }
