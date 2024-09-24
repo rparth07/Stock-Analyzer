@@ -44,7 +44,7 @@ namespace Stock_Analyzer.Controllers
     [HttpGet("get-filter-result")]
     public IActionResult GetFilterResults(string filterName, DateTime filterDate)
     {
-      if(filterName.IsNullOrEmpty() || filterDate == null)
+      if (filterName.IsNullOrEmpty() || filterDate == null)
       {
         return Ok();
       }

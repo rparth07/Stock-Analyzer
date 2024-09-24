@@ -1,6 +1,3 @@
-using Stock_Analyzer_Domain.Models.Filter;
-using Stock_Analyzer_Domain.Models;
-
 namespace Stock_Analyzer.Dto.Filter
 {
   public class FilterResultDto

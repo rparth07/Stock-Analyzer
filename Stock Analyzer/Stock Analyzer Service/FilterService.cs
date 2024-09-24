@@ -3,7 +3,6 @@ using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Domain.Models.Filter;
 using Stock_Analyzer_Service.FilterCalculationType;
 using Stock_Analyzer_Service.Interface;
-using System;
 
 namespace Stock_Analyzer_Service
 {
@@ -91,12 +90,13 @@ namespace Stock_Analyzer_Service
 
       var companies = _companyRepository.GetAllCompanies();
 
-      List<FilterResult> filterResultsToInsert = new List<FilterResult>();
+      var filterResultsToInsert = new List<FilterResult>();
 
       filters.ForEach(filter =>
       {
         //if for this filter and calculationDate, filterResult exist?
-        if(!_filterRepository.ExistFilterResultsFor(filter, calculationDate)) {
+        if (!_filterRepository.ExistFilterResultsFor(filter, calculationDate))
+        {
           var filterResults = ExecuteFilter(filter, calculationDate, companies);
           filterResultsToInsert.AddRange(filterResults);
         }

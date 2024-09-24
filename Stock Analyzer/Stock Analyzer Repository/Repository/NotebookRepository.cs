@@ -2,11 +2,6 @@ using AutoMapper;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Repository.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Repository.Repository
 {
@@ -49,12 +44,13 @@ namespace Stock_Analyzer_Repository.Repository
       var notebookToUpdate = _context.Notebook
         .FirstOrDefault(_ => _.ContentDate == notebook.ContentDate);
 
-      if(notebookToUpdate != null)
+      if (notebookToUpdate != null)
       {
         notebookToUpdate.Content = notebook.Content;
         _context.Notebook.Update(notebookToUpdate);
         _context.SaveChanges();
-      } else
+      }
+      else
       {
         CreateNotebook(notebook);
       }
@@ -65,7 +61,7 @@ namespace Stock_Analyzer_Repository.Repository
       var notebookToDelete = _context.Notebook
         .FirstOrDefault(_ => _.ContentDate == notebook.ContentDate);
 
-      if(notebookToDelete != null)
+      if (notebookToDelete != null)
       {
         _context.Notebook.Remove(notebookToDelete);
         _context.SaveChanges();

@@ -37,7 +37,7 @@ namespace Stock_Analyzer.Controllers
     }
 
     [HttpGet("get-notebook")]
-    public IActionResult GetNotebook([FromQuery]DateTime notebookDate)
+    public IActionResult GetNotebook([FromQuery] DateTime notebookDate)
     {
       var notebook = _notebookService.GetNotebook(notebookDate);
 

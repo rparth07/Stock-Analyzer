@@ -1,8 +1,6 @@
 using AutoMapper;
-using CsvHelper;
 using Stock_Analyzer.CSVParserModel;
 using Stock_Analyzer.Dto;
-using Stock_Analyzer.Helper;
 using Stock_Analyzer_Domain.Models;
 
 namespace Stock_Analyzer.Profiles

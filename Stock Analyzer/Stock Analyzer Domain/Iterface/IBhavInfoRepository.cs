@@ -1,9 +1,4 @@
 using Stock_Analyzer_Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stock_Analyzer_Domain.Iterface
 {
@@ -15,7 +10,7 @@ namespace Stock_Analyzer_Domain.Iterface
     public List<BhavCopyInfo> GetBhavInfosBetween(DateTime startDate, DateTime endDate);
     public List<BhavCopyInfo> GetAllBhavInfosWithCompanies();
     public List<BhavCopyInfo> GetAllBhavInfos(DateTime filterDate);
-    public List<BhavCopyInfo> GetBhvaInfosBy(DateTime fromDate, DateTime toDate, string series, string companyName);
+    public List<BhavCopyInfo> GetBhvaInfosBy(DateTime fromDate, DateTime toDate, string series);
     public DateTime GetLatestBhavInfoDate();
   }
 }
