@@ -1,11 +1,13 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+
 using Stock_Analyzer.CSVParserModel;
 using Stock_Analyzer.Dto;
 using Stock_Analyzer.Helper;
 using Stock_Analyzer_Domain.Models;
 using Stock_Analyzer_Service.Interface;
+using System.IO.Compression;
 using System.Net;
 using System.Text;
 
@@ -370,7 +372,7 @@ namespace Stock_Analyzer.Controllers
     }
 
     //TODO: Need to implement it to get the json data
-    private static async Task<WrapperBhavInfo> GetJsonAsync(string url)
+    private static async Task<WrapperBhavInfo?> GetJsonAsync(string url)
     {
       var handler = new HttpClientHandler
       {
@@ -390,13 +392,17 @@ namespace Stock_Analyzer.Controllers
         var cookies = handler.CookieContainer.GetCookies(new Uri(allReportsUrl));
         handler.CookieContainer.Add(new Uri(url), cookies);
 
-        var response = await client.GetStringAsync(url);
-
+        var response = await client.GetAsync(url);
         if (response != null)
         {
+          var contentEncoding = response.Content.Headers.ContentEncoding.ToString();
           try
           {
-            WrapperBhavInfo apiResponse = JsonConvert.DeserializeObject<WrapperBhavInfo>(response);
+            Stream responseStream = await DecodeStream(response, contentEncoding);
+
+            using var reader = new StreamReader(responseStream);
+            var responseContent = await reader.ReadToEndAsync();
+            var apiResponse = JsonConvert.DeserializeObject<WrapperBhavInfo>(responseContent);
             return apiResponse;
           }
           catch (Exception ex)
@@ -416,6 +422,25 @@ namespace Stock_Analyzer.Controllers
         Console.WriteLine($"When tried to Set Cookie, Request failed with status code: {allReportsUrlResponse.StatusCode}");
         return null;
       }
+    }
+
+    private static async Task<Stream> DecodeStream(HttpResponseMessage response, string? contentEncoding)
+    {
+      var responseStream = await response.Content.ReadAsStreamAsync();
+      if (contentEncoding.Contains("gzip"))
+      {
+        responseStream = new GZipStream(responseStream, CompressionMode.Decompress);
+      }
+      else if (contentEncoding.Contains("deflate"))
+      {
+        responseStream = new DeflateStream(responseStream, CompressionMode.Decompress);
+      }
+      else if (contentEncoding.Contains("br"))
+      {
+        responseStream = new BrotliStream(responseStream, CompressionMode.Decompress);
+      }
+
+      return responseStream;
     }
   }
 }
