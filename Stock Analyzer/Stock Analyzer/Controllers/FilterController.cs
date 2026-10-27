@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+
 using Stock_Analyzer.Dto.Filter;
 using Stock_Analyzer_Domain.Models.Filter;
 using Stock_Analyzer_Service.Interface;
@@ -44,9 +44,9 @@ namespace Stock_Analyzer.Controllers
     [HttpGet("get-filter-result")]
     public IActionResult GetFilterResults(string filterName, DateTime filterDate)
     {
-      if (filterName.IsNullOrEmpty() || filterDate == null)
+      if (string.IsNullOrWhiteSpace(filterName) || filterDate == default)
       {
-        return Ok();
+        return BadRequest(new { message = "Select a filter and trading date." });
       }
       filterDate = filterDate.ToLocalTime().Date;
       var filterToExecute = _filterService.GetFilterByName(filterName);

@@ -8,10 +8,10 @@ namespace Stock_Analyzer_Repository.Profiles
   {
     public BhavCopyInfoProfile()
     {
-      CreateMap<BhavCopyInfoDataModel, BhavCopyInfo>()
+      CreateMap<BhavCopyInfoDataModel, BhavCopyInfo>().MaxDepth(8)
         .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date));
 
-      CreateMap<BhavCopyInfo, BhavCopyInfoDataModel>()
+      CreateMap<BhavCopyInfo, BhavCopyInfoDataModel>().MaxDepth(8)
         .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date));
 
     }

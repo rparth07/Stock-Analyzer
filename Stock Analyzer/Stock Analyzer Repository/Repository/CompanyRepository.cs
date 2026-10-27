@@ -35,13 +35,16 @@ namespace Stock_Analyzer_Repository.Repository
     public List<Company> GetAllCompaniesWithAllInfo()
     {
       var companies = _context.Company
-          .Include("BulkDeals")
-          .Include("BhavCopyInfos")
+          .Include(x => x.BulkDeals.OrderByDescending(b => b.DealDate).Take(1))
+          .Include(x => x.BhavCopyInfos.OrderByDescending(b => b.Date).Take(1))
+          .AsSplitQuery()
           .AsNoTracking()
           .ToList()
-          .OrderBy(_ => _.BulkDeals.OrderByDescending(_ => _.DealDate));
+          .OrderBy(_ => _.Symbol);
 
-      return _mapper.Map<List<Company>>(companies);
+      var result = _mapper.Map<List<Company>>(companies);
+      result.ForEach(c => c.BhavCopyInfos = c.BhavCopyInfos.OrderByDescending(x => x.Date).ToList());
+      return result;
     }
 
     public Company GetCompanyByName(string companyName)

@@ -1,3 +1,7 @@
+<div *ngIf="loadError" role="alert" class="alert alert-warning m-3">Data could not be loaded. An empty table does not confirm there are no matching records.
+  <button type="button" class="btn btn-outline-dark btn-sm" (click)="getBulkDealsBetween(startDate, endDate)">Try again</button>
+</div>
+<p *ngIf="dateError" role="alert" class="alert alert-warning">{{ dateError }}</p>
 <section class="breadcrumb_head trade_info_head">
     <div class="container">
         <!-- <ul vocab="https://schema.org/" typeof="BreadcrumbList">

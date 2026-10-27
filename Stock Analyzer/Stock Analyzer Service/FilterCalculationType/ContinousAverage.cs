@@ -90,8 +90,9 @@ namespace Stock_Analyzer_Service.FilterCalculationType
 
       var property = typeof(BhavCopyInfo).GetProperty(fieldName);
 
-      if (property != null && property.PropertyType == typeof(double))
+      if (property != null && (property.PropertyType == typeof(double) || property.PropertyType == typeof(double?)))
       {
+        if (bhavInfos.Any(info => property.GetValue(info) is not double value || !double.IsFinite(value))) return false;
         bhavInfos = bhavInfos
                       .OrderBy(_ => _.Date)
                       .ToList();
@@ -126,13 +127,13 @@ namespace Stock_Analyzer_Service.FilterCalculationType
     {
       var property = typeof(BhavCopyInfo).GetProperty(fieldName);
 
-      if (property != null && property.PropertyType == typeof(double))
+      if (property != null && (property.PropertyType == typeof(double) || property.PropertyType == typeof(double?)))
       {
         var fromDate = calculationDate.AddBusinessDays(-periodValue);
 
         var average = bhavInfos.Count() == 0 ? 0.0
           : bhavInfos
-              .Average(bc => (double)property.GetValue(bc));
+              .Select(bc => property.GetValue(bc)).Where(value => value is double number && double.IsFinite(number)).Select(value => (double)value).DefaultIfEmpty(double.NaN).Average();
 
         return average;
       }

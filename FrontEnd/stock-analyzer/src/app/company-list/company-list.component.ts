@@ -12,9 +12,10 @@ import { Table } from 'primeng/table';
   styleUrls: ['./company-list.component.css', '../shared/css/common-page-style.css']
 })
 export class CompanyListComponent implements OnInit {
-  companies!: Company[];
+  companies: Company[] = [];
   selectedCompanies!: Company[];
   loading: boolean = true;
+  loadError = false;
 
   constructor(private companyService: CompanyService) { }
 
@@ -55,12 +56,13 @@ export class CompanyListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true; this.loadError = false;
     this.getAllCompanies()
-      .subscribe((companies: Company[]) => {
+      .subscribe({ next: (companies: Company[]) => {
         this.companies = companies;
         // console.log(companies);
         this.loading = false;
-      });
+      }, error: () => { this.loading = false; this.loadError = true; } });
   }
 
   getAllCompanies() {

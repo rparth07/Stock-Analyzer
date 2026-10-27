@@ -12,9 +12,10 @@ import { Table } from 'primeng/table';
   styleUrls: ['./client.component.css', '../shared/css/common-page-style.css']
 })
 export class ClientComponent implements OnInit {
-  clients!: Client[];
+  clients: Client[] = [];
   selectedClients!: Client[];
   loading: boolean = true;
+  loadError = false;
 
   getStockAction(value: number) {
     return StockAction[value];
@@ -60,12 +61,13 @@ export class ClientComponent implements OnInit {
   constructor(private clientService: ClientService) { }
 
   ngOnInit() {
+    this.loading = true; this.loadError = false;
     this.getAllClients()
-      .subscribe((response: Client[]) => {
+      .subscribe({ next: (response: Client[]) => {
         this.clients = response;
         this.loading = false;
         // console.log("this is the data", JSON.stringify(this.clients));
-      });
+      }, error: () => { this.loading = false; this.loadError = true; } });
   }
 
   getAllClients() {

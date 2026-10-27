@@ -7,6 +7,9 @@
                 </div>
             </div>
             <div class="chatbox__messages">
+                <p *ngIf="!loaded" role="status">Notes are unavailable. Saving is disabled until existing notes load.
+                  <button type="button" (click)="getAllNotebooks()">Retry loading notes</button>
+                </p>
                 <span *ngFor="let nt of notebooks let i = index;" class="align-items-center d-flex flex-column">
                     <p class="message-date">{{formatDate(nt.contentDate)}}</p>
                     <textarea #notebook type="text" rows="20" [(ngModel)]="nt.content" class="w-100"
@@ -15,11 +18,11 @@
                 </span>
             </div>
             <div class="chatbox__footer">
-                <button (click)="updateNoteBooks()" class="float-end chatbox__send--footer send__button">Save</button>
+                <button type="button" [disabled]="!loaded || saving" (click)="updateNoteBooks()" class="float-end chatbox__send--footer send__button">Save</button>
             </div>
         </div>
         <div class="chatbox__button">
-            <button (click)="updateNoteBooks()"><img src="../../assets/images/chatbox-icon.svg" /></button>
+            <button type="button" aria-label="Toggle daily notebook" (click)="toggleState()"><img src="../../assets/images/chatbox-icon.svg" /></button>
         </div>
     </div>
 </div>

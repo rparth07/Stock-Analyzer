@@ -36,9 +36,11 @@ export class BhavInfoComponent implements OnInit {
     window.location.reload();
   }
 
-  bhavInfos!: BhavInfo[];
+  bhavInfos: BhavInfo[] = [];
   selectedBhavInfos!: BhavInfo[];
   loading: boolean = true;
+  loadError = false;
+  dateError = '';
 
   constructor(private bhavInfoService: BhavInfoService) { }
 
@@ -58,12 +60,17 @@ export class BhavInfoComponent implements OnInit {
   }
 
   getBhavInfosBetween(startDate: Date, endDate: Date) {
+    if (!startDate || !endDate || !Number.isFinite(new Date(startDate).getTime()) || !Number.isFinite(new Date(endDate).getTime()) || new Date(startDate) > new Date(endDate)) {
+      this.dateError = 'Choose a valid date range with the start date on or before the end date.';
+      this.loading = false; return;
+    }
+    this.dateError = ''; this.loading = true; this.loadError = false;
     this.bhavInfoService.fetchBhavInfosBetween(startDate, endDate)
-      .subscribe((response: BhavInfo[]) => {
+      .subscribe({ next: (response: BhavInfo[]) => {
         this.bhavInfos = response;
         this.loading = false;
         // console.log("this is the data", JSON.stringify(this.bhavInfos));
         this.bhavInfos.forEach((bhavInfo) => (bhavInfo.date = new Date(<Date>bhavInfo.date)));
-      });
+      }, error: () => { this.loading = false; this.loadError = true; } });
   }
 }

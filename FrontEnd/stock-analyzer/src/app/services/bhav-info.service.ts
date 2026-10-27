@@ -13,7 +13,7 @@ export class BhavInfoService {
 
   analyzeBhavInfos(dateToProcess: Date) {
     //2018-06-22T08:00:19Z
-    return this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bhav-data?date=' + dateToProcess.toISOString(), null);
+    return this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bhav-data?date=' + moment(dateToProcess).format('YYYY-MM-DD'), null);
   }
 
   fetchBhavInfos() {
@@ -23,12 +23,12 @@ export class BhavInfoService {
   fetchBhavInfosBetween(startDate: Date, endDate: Date) {//2023-11-06T08:00:19Z
     const url = DomainConstants.StockAnalyzer_URL + 'bhav-infos-between';
     // Format dates correctly
-    const startFormatted = moment(startDate).endOf('day').toISOString();
-    const endFormatted = moment(endDate).endOf('day').toISOString();
+    const startFormatted = moment(startDate).format('YYYY-MM-DD');
+    const endFormatted = moment(endDate).format('YYYY-MM-DD');
 
     const params = {
-      startDate: startFormatted.split('T')[0], // YYYY-MM-DD
-      endDate: endFormatted.split('T')[0]      // YYYY-MM-DD
+      startDate: startFormatted, // YYYY-MM-DD
+      endDate: endFormatted      // YYYY-MM-DD
     };
     return this.http.get<BhavInfo[]>(url, { params });
   }

@@ -11,6 +11,8 @@ export class NotebookComponent implements OnInit {
   openChatBox: Boolean = false;
 
   notebooks: Notebook[] = [];
+  loaded = false;
+  saving = false;
 
   constructor(private notebookService: NotebookService) {
   }
@@ -31,6 +33,7 @@ export class NotebookComponent implements OnInit {
             return -1;
           });
           this.addTodayNotebookIfMissing();
+          this.loaded = true;
         },
         error: (err) => console.log(err),
       });
@@ -58,17 +61,20 @@ export class NotebookComponent implements OnInit {
   }
 
   updateNoteBooks() {
+    if (!this.loaded || this.saving) return;
+    this.saving = true;
     // console.log('updated notebooks = ');
     // console.dir(this.notebooks, { depth: null });
     this.notebookService.updateNotebooks(this.notebooks)
       .subscribe({
         next: (value) => {
           // console.log('updated all notebooks successfully! ' + value);
-          this.getAllNotebooks();
+          this.saving = false;
+          this.openChatBox = false;
         },
-        error: (err) => console.log(err),
+        error: () => { this.saving = false; },
       });
-    this.toggleState();
+
   }
 
   addTodayNotebookIfMissing() {

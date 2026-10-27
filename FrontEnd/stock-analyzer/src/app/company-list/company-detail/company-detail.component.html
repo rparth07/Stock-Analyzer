@@ -1,4 +1,9 @@
-<div class="main">
+<p *ngIf="loading" role="status" class="m-3">Loading company data...</p>
+<div *ngIf="errorMessage" role="alert" class="alert alert-warning m-3">{{errorMessage}}
+  <button type="button" class="btn btn-outline-dark" (click)="getCompanyDetails()">Try again</button>
+  <a routerLink="/company-list" class="ms-2">Company list</a>
+</div>
+<div class="main" *ngIf="company">
     <div class="container p-0">
         <div class="tab_header">
             <div class="row">

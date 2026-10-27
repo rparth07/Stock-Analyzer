@@ -12,12 +12,13 @@ import { Company } from 'src/app/types/Company';
   styleUrls: ['./company-detail.component.css', '../../shared/css/common-page-style.css']
 })
 export class CompanyDetailComponent implements OnInit {
-  company!: Company;
+  company: Company | null = null;
+  errorMessage = '';
 
-  bhavInfos!: BhavInfo[];
+  bhavInfos: BhavInfo[] = [];
   selectedBhavInfos!: BhavInfo[];
 
-  bulkDeals!: BulkDeal[];
+  bulkDeals: BulkDeal[] = [];
   selectedBulkDeals!: BulkDeal[];
 
   loading: boolean = true;
@@ -36,14 +37,19 @@ export class CompanyDetailComponent implements OnInit {
 
   getCompanyDetails(): void {
     let companyName = this.route.snapshot.queryParams['symbol'];
+    if (!companyName || typeof companyName !== 'string' || !companyName.trim()) {
+      this.errorMessage = 'Choose a company from the company list.'; this.loading = false; return;
+    }
+    this.loading = true; this.errorMessage = '';
     this.companyService.fetchCompany(companyName)
-      .subscribe(company => {
+      .subscribe({ next: company => {
+        if (!company) { this.errorMessage = 'No company data was returned.'; this.loading = false; return; }
         this.company = company;
-        this.bhavInfos = this.company.bhavCopyInfos;
-        this.bulkDeals = this.company.bulkDeals;
+        this.bhavInfos = this.company.bhavCopyInfos ?? [];
+        this.bulkDeals = this.company.bulkDeals ?? [];
         this.showBhavInfo = true;
         this.loading = false;
-      });
+      }, error: () => { this.loading = false; this.errorMessage = 'Company data is unavailable. Try again or choose another symbol.'; } });
   }
 
   showBhavInfos() {

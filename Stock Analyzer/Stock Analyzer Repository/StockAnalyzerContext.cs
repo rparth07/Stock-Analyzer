@@ -19,8 +19,17 @@ namespace Stock_Analyzer_Repository
     {
     }
 
+    public DbSet<ImportBatch> ImportBatches { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        foreach (var property in entity.GetProperties())
+          if (property.ClrType == typeof(DateTime)) property.SetColumnType("date");
+      modelBuilder.Entity<ImportBatch>().HasKey(x => x.Id);
+      modelBuilder.Entity<ImportBatch>().HasIndex(x => new { x.Source, x.TradingDate }).IsUnique();
+      modelBuilder.Entity<ImportBatch>().Property(x => x.ImportedAt).HasColumnType("timestamp with time zone");
+      modelBuilder.Entity<BhavCopyInfoDataModel>().HasIndex("CompanyId", "Series", "Date").IsUnique();
       modelBuilder.Entity<CompanyDataModel>(entity =>
       {
         entity.HasKey(e => e.Id);
@@ -66,13 +75,5 @@ namespace Stock_Analyzer_Repository
       });
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-      optionsBuilder.EnableSensitiveDataLogging();
-      if (!optionsBuilder.IsConfigured)
-      {
-        optionsBuilder.UseSqlServer("Data Source=.");
-      }
-    }
   }
 }
