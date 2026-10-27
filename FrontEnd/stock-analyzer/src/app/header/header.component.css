@@ -137,6 +137,16 @@ button {
 
 @media (max-width: 426px) {
     nav.navbar {
-        width: max-content;
+        width: 100%;
     }
 }
+@media (max-width: 767px) {
+  .home-header > div { flex-wrap: wrap; width: calc(100% - 1rem); }
+  .navbar .navbar-brand { transform: none; white-space: normal; }
+  .logo-title { font-size: 1.35rem; }
+  .menu-container { width: 100%; }
+  .navbar-nav { flex-wrap: wrap; }
+  .navbar-nav li { padding-left: 0; }
+  .navbar-nav li a { min-height: 44px; padding: 10px; }
+}
+.home-header a:focus-visible { outline: 2px solid white !important; outline-offset: 2px; }

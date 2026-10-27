@@ -10,7 +10,7 @@
     </section>
     <p class="mx-3 small text-muted">NSE historical end-of-day reports, not real-time quotes. Prices in INR; turnover in lakhs where indicated. Check each record's trading date.</p>
     <p *ngIf="marketStatus" class="mx-3 small" role="status">
-      <span *ngFor="let source of marketStatus.sources">{{source.source}}: trading date {{source.tradingDate | date:'dd MMM yyyy':'UTC'}}, fetched {{source.importedAt | date:'medium'}}. </span>
+      <span *ngFor="let source of marketStatus.sources">{{source.source}}: trading date {{source.tradingDate.slice(0,10)}}, fetched {{source.importedAt | date:'medium'}}. </span>
       Raw report prices are unadjusted. Free hosting may take up to 90 seconds to wake.
     </p>
     <router-outlet></router-outlet>

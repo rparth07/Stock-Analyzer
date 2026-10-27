@@ -32,3 +32,10 @@ body {
 ::ng-table .p-datatable .p-datatable-thead>tr>th {
     height: 100px;
 }
+/* Keep wide financial tables scrollable without widening the page. */
+.p-datatable, .p-datatable-wrapper { max-width: 100%; }
+.p-datatable-wrapper { overflow-x: auto; }
+.p-datatable table { min-width: 825px; }
+.p-datatable .p-datatable-header .flex { display: flex; flex-wrap: wrap; gap: .5rem; }
+.p-datatable .p-datatable-header .p-input-icon-left { max-width: 100%; }
+.p-datatable .p-datatable-header input { max-width: 100%; }

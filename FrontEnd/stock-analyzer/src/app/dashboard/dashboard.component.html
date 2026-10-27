@@ -1,10 +1,10 @@
 <div class="filter-container">
     <div class="filter-info d-flex justify-content-around border p-3">
         <div class="dropdown-container">
-            <select [(ngModel)]="selectedOption" (change)="onFilterFormChange()">
+            <select aria-label="Saved filter" [(ngModel)]="selectedOption" (change)="onFilterFormChange()">
                 <option *ngFor="let filter of filterOptions" (value)="filter.filterName">{{filter.filterName}}</option>
             </select>
-            <input [(ngModel)]="filterDate" type="date" (change)="onFilterFormChange()"
+            <input aria-label="Trading date" [(ngModel)]="filterDate" type="date" (change)="onFilterFormChange()"
                 class="filter-date me-3 ms-3 p-1 w-50">
             <button class="new-filter-button" (click)="openModal()">New</button>
             <button class="new-filter-button bg-danger ms-3" (click)="openDeleteModal()">Delete</button>
@@ -33,7 +33,7 @@
                             sortField="company.symbol" [sortOrder]="1" [paginator]="true"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                             [filterDelay]="0"
-                            [globalFilterFields]="['company.symbol', 'fieldName', 'value', 'calculationDate']">
+                            [globalFilterFields]="['company.symbol', 'filterCriteria.fieldName', 'value', 'calculationDate']">
                             <ng-template pTemplate="caption">
                                 <div class="flex">
                                     <button pButton label="Clear" class="p-button-outlined border-radius-right"
@@ -43,7 +43,7 @@
                                         <input class="border-radius-left" pInputText type="text"
                                             id="filter-search-value" value=""
                                             (input)="filterTable.filterGlobal($any($event.target).value, 'contains')"
-                                            placeholder="Search keyword" />
+                                            placeholder="Search keyword" aria-label="Search table" />
                                     </span>
                                 </div>
                             </ng-template>
@@ -55,10 +55,10 @@
                                             <p-sortIcon field="company.symbol"></p-sortIcon>
                                         </div>
                                     </th>
-                                    <th style="min-width:10rem" class="table-col" pSortableColumn="fieldName">
+                                    <th style="min-width:10rem" class="table-col" pSortableColumn="filterCriteria.fieldName">
                                         <div class="flex justify-content-between align-items-center">
                                             Field
-                                            <p-sortIcon field="fieldName"></p-sortIcon>
+                                            <p-sortIcon field="filterCriteria.fieldName"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:5rem" class="table-col" pSortableColumn="value">
@@ -271,7 +271,7 @@
                                         <input class="border-radius-left" pInputText type="text" id="bulk-search-value"
                                             value="" [(ngModel)]="bulkDealFilterInput"
                                             (input)="bulkDealTable.filterGlobal($any($event.target).value, 'contains')"
-                                            placeholder="Search keyword" />
+                                            placeholder="Search keyword" aria-label="Search table" />
                                     </span>
                                 </div>
                             </ng-template>
