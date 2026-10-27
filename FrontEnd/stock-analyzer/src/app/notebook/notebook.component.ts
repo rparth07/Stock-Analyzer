@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NotebookService } from '../services/notebook.service';
 import { Notebook } from '../types/Notebook';
 
@@ -8,18 +8,28 @@ import { Notebook } from '../types/Notebook';
   styleUrls: ['./notebook.component.css']
 })
 export class NotebookComponent implements OnInit {
+  @ViewChild('noteFeedback') noteFeedback?: ElementRef<HTMLElement>;
+  focusFeedback() { setTimeout(() => this.noteFeedback?.nativeElement.focus()); }
   openChatBox: Boolean = false;
 
   notebooks: Notebook[] = [];
+  loaded = false;
+  saving = false;
+  loading = false;
+  message = '';
+  loadError = false;
+  dirty = false;
 
   constructor(private notebookService: NotebookService) {
   }
 
   ngOnInit(): void {
-    this.getAllNotebooks();
+    // Fetch only when the notes drawer is opened.
   }
 
   getAllNotebooks() {
+    if (this.loading) return;
+    this.loading = true; this.loadError = false;
     this.notebookService.getAllNotebooks()
       .subscribe({
         next: (value: Notebook[]) => {
@@ -31,8 +41,9 @@ export class NotebookComponent implements OnInit {
             return -1;
           });
           this.addTodayNotebookIfMissing();
+          this.loaded = true; this.loading = false;
         },
-        error: (err) => console.log(err),
+        error: () => { this.loading = false; this.loadError = true; },
       });
   }
 
@@ -55,24 +66,28 @@ export class NotebookComponent implements OnInit {
 
   toggleState() {
     this.openChatBox = !this.openChatBox;
+    if (this.openChatBox && !this.loaded) this.getAllNotebooks();
   }
 
   updateNoteBooks() {
+    if (!this.loaded || this.saving) return;
+    this.saving = true; this.message = '';
     // console.log('updated notebooks = ');
     // console.dir(this.notebooks, { depth: null });
     this.notebookService.updateNotebooks(this.notebooks)
       .subscribe({
         next: (value) => {
           // console.log('updated all notebooks successfully! ' + value);
-          this.getAllNotebooks();
+          this.saving = false;
+          this.dirty = false; this.message = 'Saved to the shared notebook.'; this.focusFeedback();
         },
-        error: (err) => console.log(err),
+        error: () => { this.saving = false; this.message = 'Save could not be confirmed. Your draft is still here. Check before submitting again.'; this.focusFeedback(); },
       });
-    this.toggleState();
+
   }
 
   addTodayNotebookIfMissing() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Kolkata', year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
     if (this.notebooks.findIndex(_ => this.toDateStr(_.contentDate) == today) == -1) {
       // console.log('added the today notebook');
       this.notebooks.unshift({

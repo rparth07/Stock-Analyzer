@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FilterService } from 'src/app/services/filter.service';
 import { Filter } from 'src/app/types/Filter';
@@ -14,12 +14,15 @@ export class FilterFormContainerComponent implements OnInit {
   filterGroup: FormGroup;
   criterias!: FormArray;
 
+  @ViewChild('errorSummary') errorSummary?: ElementRef<HTMLElement>;
+  focusError() { setTimeout(() => this.errorSummary?.nativeElement.focus()); }
+  errorMessage = '';
   sequence: number = 1;
   isLoading: Boolean = false;
 
   constructor(private formBuilder: FormBuilder, private filterService: FilterService) {
     this.filterGroup = this.formBuilder.group({
-      FilterName: ['', Validators.required],
+      FilterName: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(80)]],
       Series: ['EQ', Validators.required],
       FilterType: ['Continuous', Validators.required],
       criterias: this.formBuilder.array([this.createInputRow()])
@@ -32,7 +35,7 @@ export class FilterFormContainerComponent implements OnInit {
   }
 
   closeModal() {
-    this.closeModalEvent.emit(true);
+    if (!this.isLoading) this.closeModalEvent.emit(false);
   }
 
   addRow() {
@@ -49,7 +52,7 @@ export class FilterFormContainerComponent implements OnInit {
     return this.formBuilder.group({
       sequence: this.sequence,
       fieldName: ['ClosePrice', Validators.required],
-      periodValue: [1, Validators.required],
+      periodValue: [2, [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]+$/)]],
       periodType: ['Days', Validators.required],
       changeType: ['Increase', Validators.required],
       logicalOperator: ['And', Validators.required]
@@ -57,20 +60,15 @@ export class FilterFormContainerComponent implements OnInit {
   }
 
   submitForm() {
-    if (this.filterGroup.valid) {
-      this.isLoading = true;
-      // console.log('Form submitted:', this.filterGroup.value);
-      this.filterService.addFilter(this.filterGroup.value as Filter)
-        .subscribe({
-          next: (value) => {
-            // console.log(value);
-            // console.log('reloadPage');
-            this.isLoading = false;
-            this.closeModal();
-          },
-          error: (err) => console.log(err),
-        });
-      this.filterGroup.reset();
-    }
+    if (this.isLoading) return;
+    this.filterGroup.markAllAsTouched();
+    if (this.filterGroup.invalid) { this.errorMessage = 'Enter a name and positive whole numbers for every period.'; this.focusError(); return; }
+    this.isLoading = true; this.errorMessage = '';
+    const value = this.filterGroup.getRawValue(); value.FilterName = value.FilterName.trim();
+    value.criterias = value.criterias.map((row: any, i: number) => ({ ...row, sequence: i + 1 }));
+    this.filterService.addFilter(value as Filter).subscribe({
+      next: () => { this.isLoading = false; this.closeModalEvent.emit(true); },
+      error: () => { this.isLoading = false; this.errorMessage = 'The filter was not saved. Your inputs are still here. Try again or use a different name.'; this.focusError(); }
+    });
   }
 }

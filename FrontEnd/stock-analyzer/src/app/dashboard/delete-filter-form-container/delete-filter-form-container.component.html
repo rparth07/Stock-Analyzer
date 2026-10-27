@@ -1,16 +1,1 @@
-<div class="modal-container">
-    <div class="form">
-        <div class="row">
-            <label for="selectedOption">
-                <h2>Select Filter to Delete</h2>
-            </label>
-            <select [(ngModel)]="selectedOption" (change)="updateSelectedFilter()">
-                <option *ngFor="let filter of filterOptions" (value)="filter.filterName">{{filter.filterName}}
-                </option>
-            </select>
-        </div>
-        <hr class="mt-0" />
-        <button type="submit" class="bg-danger" (click)="submitForm()">Delete</button>
-        <button type="button" (click)="closeModal()">Cancel</button>
-    </div>
-</div>
+<div class="dialog-backdrop" (keydown.escape)="closeModal()"><section class="research-dialog research-dialog-small" role="dialog" aria-modal="true" aria-labelledby="manage-filter-title" cdkTrapFocus [cdkTrapFocusAutoCapture]="true"><header class="dialog-header"><div><p class="eyebrow">Saved filters</p><h2 id="manage-filter-title">Manage your filters</h2><p>Remove a filter you no longer need.</p></div><button type="button" class="dialog-close" aria-label="Close manage filters" (click)="closeModal()" [disabled]="saving">&times;</button></header><p *ngIf="errorMessage" role="alert" class="form-error">{{errorMessage}}</p><label class="ui-label" for="delete-filter">Filter to remove</label><select id="delete-filter" class="ui-select w-100" [(ngModel)]="selectedOption" (change)="updateSelectedFilter()" [disabled]="saving"><option *ngFor="let filter of filterOptions" [value]="filter.filterName">{{filter.filterName}}</option></select><p class="dialog-description mt-3">Deleting <strong>{{selectedOption}}</strong> removes the saved filter and stored results. This cannot be undone.</p><footer class="dialog-actions"><button type="button" class="ui-button ui-button-quiet" (click)="closeModal()" [disabled]="saving">Keep filter</button><button type="button" class="ui-button ui-button-danger" (click)="submitForm()" [disabled]="saving || !selectedOption">{{saving ? 'Deleting...' : 'Delete filter'}}</button></footer></section></div>

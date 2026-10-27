@@ -15,6 +15,6 @@ export class CompanyService {
 
   fetchCompany(company: string | null) {
     // if (company === null) return;
-    return this.http.get<Company>(DomainConstants.StockAnalyzer_URL + 'company-detail?symbol=' + company);
+    return this.http.get<Company>(DomainConstants.StockAnalyzer_URL + 'company-detail', { params: { symbol: company ?? '' } });
   }
 }

@@ -8,8 +8,8 @@ namespace Stock_Analyzer_Repository.Profiles
   {
     public ClientProfile()
     {
-      CreateMap<Client, ClientDataModel>();
-      CreateMap<ClientDataModel, Client>();
+      CreateMap<Client, ClientDataModel>().MaxDepth(8);
+      CreateMap<ClientDataModel, Client>().MaxDepth(8);
     }
   }
 }

@@ -121,8 +121,7 @@ namespace Stock_Analyzer_Repository.Repository
     {
       return _context.BhavCopyInfo
         .OrderByDescending(bc => bc.Date)
-        .FirstOrDefault()
-        .Date;
+        .Select(bc => (DateTime?)bc.Date).FirstOrDefault() ?? DateTime.MinValue;
     }
 
     public void Dispose()

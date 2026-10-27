@@ -1,20 +1,7 @@
-<section class="breadcrumb_head trade_info_head">
-    <div class="container">
-        <!-- <ul vocab="https://schema.org/" typeof="BreadcrumbList">
-            <li property="itemListElement" typeof="ListItem">
-                <a property="item" typeof="WebPage" href="/">Home</a>
-                <meta property="position" content="1">
-            </li>
-            <li property="itemListElement" typeof="ListItem">
-                Report Detail
-                <meta property="position" content="2">
-            </li>
-        </ul> -->
-        <h1 class="page-title text-uppercase">
-            Companies
-        </h1>
-    </div>
-</section>
+<div *ngIf="loadError" role="alert" class="alert alert-warning m-3">Data could not be loaded. An empty table does not confirm there are no matching records.
+  <button type="button" class="btn btn-outline-dark btn-sm" (click)="ngOnInit()">Try again</button>
+</div>
+<header class="page-heading"><p class="eyebrow">Company directory</p><h1>Find a company. Follow its trading history.</h1><p>Search NSE symbols and open a company for prices, volume and bulk deals.</p></header>
 
 <div class="mid_body getquote_contianer">
     <section class="common-tabs">
@@ -24,50 +11,19 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" role="tabpanel">
                             <div class="container py-3">
-                                <!-- <div class="border p-3">
-                                    <div class="col-md-1 pl-3">Filter By :</div>
-                                    <form class="row align-items-center" (ngSubmit)="analyzeCompaniesOfDate(form)"
-                                        #form="ngForm">
-                                        <div class="col-md-7">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <h2 class="m-0">Analyze Companies</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="input-group">
-                                                <mat-form-field class="mat-form-field-wrapper">
-                                                    <mat-label>Choose a date</mat-label>
-                                                    <input matInput [matDatepicker]="picker" disabled>
-                                                    <mat-datepicker-toggle matIconSuffix
-                                                        [for]="picker"></mat-datepicker-toggle>
-                                                    <mat-datepicker #picker disabled="false"></mat-datepicker>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <div class="input-group">
-                                                <button type="submit" class="btn button-width-85 go-button"
-                                                    [disabled]="!form.valid">
-                                                    <span>Go</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div> -->
-                                <div class="row mt-5">
+
+                                <div class="row mt-4">
                                     <div class="table-wrap borderSet customTable-widthCorp tableScroll scrollWrap p-0">
                                         <div class="customTable-widthCorp tableScroll">
                                             <div class="card">
-                                                <p-table #dt [value]="companies" [(selection)]="selectedCompanies"
+                                                <p-table #dt [loading]="loading" [value]="companies" [(selection)]="selectedCompanies"
                                                     [customSort]="true" (sortFunction)="customSort($event)" dataKey="id"
                                                     [rowHover]="true" [rows]="10" sortField="symbol" [sortOrder]="1"
-                                                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+                                                    [showCurrentPageReport]="true" paginatorDropdownAppendTo="body" [rowsPerPageOptions]="[10, 25, 50]"
                                                     [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                                     [filterDelay]="0"
-                                                    [globalFilterFields]="['clientName', 'series', 'date', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
+                                                    [globalFilterFields]="['symbol', 'bhavCopyInfos.0.series', 'bhavCopyInfos.0.date', 'bhavCopyInfos.0.previousClose', 'bhavCopyInfos.0.openPrice', 'bhavCopyInfos.0.highPrice', 'bhavCopyInfos.0.lowPrice', 'bhavCopyInfos.0.lastPrice', 'bhavCopyInfos.0.closePrice', 'bhavCopyInfos.0.avgPrice']">
                                                     <ng-template pTemplate="caption">
                                                         <div class="flex">
                                                             <button pButton label="Clear" class="p-button-outlined"
@@ -76,7 +32,7 @@
                                                                 <i class="pi pi-search"></i>
                                                                 <input pInputText type="text" id="search-value" value=""
                                                                     (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                                                    placeholder="Search keyword" />
+                                                                    placeholder="Search NSE symbols..." aria-label="Search NSE symbols" />
                                                             </span>
                                                         </div>
                                                     </ng-template>
@@ -87,7 +43,7 @@
                                                                 pSortableColumn="symbol">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Company Symbol
+                                                                    Company symbol
                                                                     <p-sortIcon field="symbol"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -95,7 +51,7 @@
                                                                 pSortableColumn="bhavCopyInfos.date">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Latest Trading Date
+                                                                    Trading date
                                                                     <p-sortIcon field="bhavCopyInfos.date"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -112,7 +68,7 @@
                                                                 pSortableColumn="bhavCopyInfos.previousClose">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Prev Close
+                                                                    Previous close
                                                                     <p-sortIcon
                                                                         field="bhavCopyInfos.previousClose"></p-sortIcon>
                                                                 </div>
@@ -167,53 +123,18 @@
                                                                 pSortableColumn="bhavCopyInfos.avgPrice">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Avg Price
+                                                                    Average price
                                                                     <p-sortIcon
                                                                         field="bhavCopyInfos.avgPrice"></p-sortIcon>
                                                                 </div>
                                                             </th>
                                                         </tr>
-                                                        <!-- <tr>
-                                                            <td class="p-0"><p-columnFilter type="text" field="symbol"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="bhavCopyInfos.date" display="menu"
-                                                                    class="ml-auto"></p-columnFilter></td>
-                                                            <td class="p-0"><p-columnFilter type="text"
-                                                                    field="bhavCopyInfos.series" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="bhavCopyInfos.previousClose" display="menu"
-                                                                    class="ml-auto"></p-columnFilter></td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="bhavCopyInfos.openPrice" display="menu"
-                                                                    currency="USD" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="bhavCopyInfos.highPrice" display="menu"
-                                                                    currency="USD" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="bhavCopyInfos.lowPrice" display="menu"
-                                                                    currency="USD" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="text"
-                                                                    field="bhavCopyInfos.lastPrice" display="menu"
-                                                                    class="ml-auto"></p-columnFilter></td>
-                                                            <td class="p-0"><p-columnFilter type="text"
-                                                                    field="bhavCopyInfos.closePrice" display="menu"
-                                                                    class="ml-auto"></p-columnFilter></td>
-                                                            <td class="p-0"><p-columnFilter type="text"
-                                                                    field="bhavCopyInfos.avgPrice" display="menu"
-                                                                    class="ml-auto"></p-columnFilter></td>
-                                                        </tr> -->
+
                                                     </ng-template>
                                                     <ng-template pTemplate="body" let-company>
                                                         <tr class="p-selectable-row border border-1">
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Company Symbol</span>
+                                                                <span class="p-column-title">Company symbol</span>
                                                                 <a [routerLink]="['../company-detail']"
                                                                     [queryParams]="getCompanyQueryParams(company)"
                                                                     [state]="getCompanyQueryParams(company)">{{
@@ -229,7 +150,7 @@
                                                                 {{ company.bhavCopyInfos[0]?.series }}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Prev Close</span>
+                                                                <span class="p-column-title">Previous close</span>
                                                                 {{ company.bhavCopyInfos[0]?.previousClose | currency:
                                                                 'INR':'symbol' }}
                                                             </td>
@@ -259,7 +180,7 @@
                                                                 'INR':'symbol' }}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Avg Price</span>
+                                                                <span class="p-column-title">Average price</span>
                                                                 {{ company.bhavCopyInfos[0]?.avgPrice | currency:
                                                                 'INR':'symbol' }}
                                                             </td>
@@ -267,7 +188,7 @@
                                                     </ng-template>
                                                     <ng-template pTemplate="emptymessage">
                                                         <tr>
-                                                            <td colspan="8">No Companies found.</td>
+                                                            <td colspan="8">No matching companies. Try another NSE symbol or clear your search.</td>
                                                         </tr>
                                                     </ng-template>
                                                 </p-table>

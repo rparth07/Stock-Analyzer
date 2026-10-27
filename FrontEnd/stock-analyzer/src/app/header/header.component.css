@@ -1,142 +1,111 @@
-.nav-item>a {
-    border-bottom: transparent 3px solid;
+.app-header {
+  display:flex;
+  align-items:center;
+  gap:36px;
+  min-height:88px;
+  padding:18px 32px;
+  background:#102d39;
+  color:#fff;
+  border-bottom:3px solid #168177
 }
-
-.nav-item>a:hover,
-.nav-item>a:active,
-.navbar-nav .nav-link.active {
-    /* background-color: var(--text-light-color);
-    color: var(--theme-color); */
-    background: rgba(255, 255, 255, .15);
-    color: var(--text-light-color);
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:#fff;
+  text-decoration:none;
+  font-size:23px;
+  font-weight:700;
+  letter-spacing:-.6px;
+  white-space:nowrap
 }
-
-.home-link {}
-
-.home-link img {
-    position: relative;
-    top: -5px;
+.brand-light {
+  font-weight:400
 }
-
-.logo-container:focus-visible {
-    outline: none;
+.brand small {
+  display:block;
+  color:#b5cbd3;
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:2px;
+  margin-top:4px
 }
-
-.logo-title {
-    margin: 0;
+.brand-mark {
+  display:grid;
+  place-items:center;
+  width:40px;
+  height:40px;
+  border:1px solid #50727f;
+  border-radius:10px;
+  color:#89d7cc
 }
-
-.nav-link {
-    text-transform: capitalize;
-    padding: 0.625rem;
-    padding-left: 1rem;
+.brand-mark svg {
+  width:27px;
+  height:27px
 }
-
-nav ul.navbar-nav li a {
-    border-radius: 4px;
-    font-size: 1rem;
-    font-size: clamp(16px, 1rem, 16px);
-    padding: 8px 16px;
-    padding: 8px clamp(5px, .7vw, 16px);
+nav {
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px
 }
-
-.sticky-home-header {
-    box-shadow: 0 0 8px 2px rgb(0 0 0 / 20%);
+nav a {
+  padding:11px 14px;
+  border-radius:7px;
+  color:#c7d9e0;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:550;
+  transition:background .15s,color .15s
 }
-
-.home-header {
-    background: var(--theme-color);
-    color: var(--text-light-color);
+nav a:hover {
+  background:#244650;
+  color:white
 }
-
-ul li a:focus {
-    color: var(--text-light-color);
+nav a.active {
+  background:#e3f2ef;
+  color:#123d3a
 }
-
-/* .home-header nav>ul>li>a {
-    color: var(--text-light-color);
+.header-context {
+  margin-left:auto;
+  color:#bed1d8;
+  font-size:11px;
+  letter-spacing:1.4px;
+  white-space:nowrap
 }
-
-.home-header nav>ul ul>li:first-child {
-    border-radius: 10px 10px 0 0;
+.header-context span {
+  margin:0 7px;
+  color:#7e9aa5
 }
-
-.home-header nav>ul ul>li:last-child {
-    border-radius: 0 0 10px 10px;
-} */
-
-.home-header nav>ul.sf-js-enabled ul:after {
-    bottom: 100%;
-    left: 50px;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(255, 255, 255, 0);
-    border-bottom-color: var(--text-light-color);
-    border-width: 5px;
-    margin-left: -5px;
-}
-
-.home-header nav>ul>li.menu-item-has-children:hover {
-    box-shadow: 0px 0px 0px 0px var(--text-light-color);
-}
-
-.navbar-nav li {
-    padding-left: 1rem;
-    align-items: center;
-}
-
-.navbar-nav .dropdown-menu {
-    position: absolute;
-}
-
-.dropdown-menu li {
-    padding-right: 1rem;
-}
-
-.dropdown-item:active {
-    border-radius: 5px;
-}
-
-li {
-    list-style-type: none;
-}
-
-a,
-a:visited,
-a:hover,
-a:active,
 a:focus-visible {
-    color: inherit !important;
-    text-decoration: none !important;
-    outline: none !important;
+  outline:3px solid #8ce0d4;
+  outline-offset:3px
+}
+@media(max-width:1050px) {
+  .app-header {
+  gap:20px;
+  flex-wrap:wrap
+}
+.header-context {
+  display:none
 }
 
-::placeholder {
-    margin-left: 3px;
+}
+@media(max-width:640px) {
+  .app-header {
+  padding:18px 16px 10px;
+  gap:20px
+}
+nav {
+  width:100%;
+  gap:3px
+}
+nav a {
+  font-size:12px;
+  padding:12px 9px;
+  min-height:44px
+}
+.brand {
+  font-size:22px
 }
 
-button {
-    font-size: clamp(16px, 1rem, 16px);
-}
-
-@media (max-width: 1199.98px) {
-    .navbar .navbar-brand {
-        transform: translateX(1.8rem);
-    }
-}
-
-@media (min-width: 1200px) {
-    .main-content .nav .navbar-brand {
-        display: none;
-    }
-}
-
-@media (max-width: 426px) {
-    nav.navbar {
-        width: max-content;
-    }
 }

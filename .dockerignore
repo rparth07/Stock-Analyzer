@@ -1,0 +1,8 @@
+**/bin
+**/obj
+**/.vs
+.git
+.stock-local
+.netlify
+FrontEnd
+**/appsettings.Development.json

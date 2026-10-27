@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomainConstants } from '../shared/domain.constants';
@@ -11,7 +12,7 @@ export class BulkDealService {
 
   analyzeBulkDeals(dateToProcess: Date) {
     //2018-06-22T08:00:19Z
-    return this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bulk-deals?date=' + dateToProcess.toISOString(), null);
+    return this.http.post<string>(DomainConstants.StockAnalyzer_URL.replace('StockAnalyzer/', 'market-data/') + 'import-bulk?date=' + moment(dateToProcess).format('YYYY-MM-DD'), null);
   }
 
   fetchBulkDeals() {
@@ -21,8 +22,8 @@ export class BulkDealService {
   fetchBulkDealsBetween(startDate: Date, endDate: Date) {
     const url = DomainConstants.StockAnalyzer_URL + 'bulk-deals-between';
     const params = {
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString()
+      startDate: moment(startDate).format('YYYY-MM-DD'),
+      endDate: moment(endDate).format('YYYY-MM-DD')
     };
     return this.http.get<BulkDeal[]>(url, { params });
   }

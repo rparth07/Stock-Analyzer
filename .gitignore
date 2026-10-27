@@ -424,3 +424,10 @@ baseline.json
 aio/content/examples/.DS_Store
 
 FrontEnd/stock-analyzer/.angular/
+
+# Local production-build verification
+/FrontEnd/stock-analyzer/.validation-dist/
+
+# Private migration backup and local deployment settings
+.stock-local/
+.netlify/

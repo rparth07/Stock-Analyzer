@@ -8,18 +8,18 @@ namespace Stock_Analyzer.Profiles
   {
     public FilterProfile()
     {
-      CreateMap<FilterDto, Filter>()
+      CreateMap<FilterDto, Filter>().MaxDepth(8)
         .ForMember(dest => dest.FilterType, opt => opt.MapFrom(src => ConvertToEnum<FilterType>(src.FilterType)));
-      CreateMap<FilterCriteriaDto, FilterCriteria>()
+      CreateMap<FilterCriteriaDto, FilterCriteria>().MaxDepth(8)
         .ForMember(dest => dest.ChangeType, opt => opt.MapFrom(src => ConvertToEnum<ChangeType>(src.ChangeType)))
         .ForMember(dest => dest.LogicalOperator, opt => opt.MapFrom(src => ConvertToEnum<LogicalOperator>(src.LogicalOperator)))
         .ForMember(dest => dest.PeriodType, opt => opt.MapFrom(src => ConvertToEnum<PeriodType>(src.PeriodType)));
-      CreateMap<FilterResultDto, FilterResult>()
+      CreateMap<FilterResultDto, FilterResult>().MaxDepth(8)
         .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
 
-      CreateMap<Filter, FilterDto>();
-      CreateMap<FilterCriteria, FilterCriteriaDto>();
-      CreateMap<FilterResult, FilterResultDto>()
+      CreateMap<Filter, FilterDto>().MaxDepth(8);
+      CreateMap<FilterCriteria, FilterCriteriaDto>().MaxDepth(8);
+      CreateMap<FilterResult, FilterResultDto>().MaxDepth(8)
         .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
     }
 

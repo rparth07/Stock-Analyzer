@@ -80,7 +80,7 @@ export class FilterService {
   }
 
   deleteFilter(filter: string) {
-    const url = `${DomainConstants.Filter_URL}delete-filter/${filter}`;
+    const url = `${DomainConstants.Filter_URL}delete-filter/${encodeURIComponent(filter)}`;
     return this.http.delete(url);
   }
 }

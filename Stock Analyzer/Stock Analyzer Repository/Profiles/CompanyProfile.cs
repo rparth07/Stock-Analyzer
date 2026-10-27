@@ -8,8 +8,8 @@ namespace Stock_Analyzer_Repository.Profiles
   {
     public CompanyProfile()
     {
-      CreateMap<CompanyDataModel, Company>();
-      CreateMap<Company, CompanyDataModel>();
+      CreateMap<CompanyDataModel, Company>().MaxDepth(8);
+      CreateMap<Company, CompanyDataModel>().MaxDepth(8);
     }
   }
 }

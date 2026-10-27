@@ -14,6 +14,8 @@ export class DeleteFilterFormContainerComponent implements OnInit, AfterViewInit
   @Input() filterOptions: Filter[] = [];
 
   selectedOption: string = '';
+  saving = false;
+  errorMessage = '';
   selectedFilter: Filter | undefined;
 
   constructor(private filterService: FilterService) {
@@ -42,17 +44,15 @@ export class DeleteFilterFormContainerComponent implements OnInit, AfterViewInit
   }
 
   closeModal() {
-    this.closeDeleteModalEvent.emit(true);
+    if (!this.saving) this.closeDeleteModalEvent.emit(false);
   }
 
   submitForm() {
-    this.filterService.deleteFilter(this.selectedOption)
-      .subscribe({
-        next: (value) => {
-          // console.log(value);
-          this.closeModal();
-        },
-        error: (err) => console.log(err),
-      });
+    if (this.saving || !this.selectedOption) return;
+    this.saving = true; this.errorMessage = '';
+    this.filterService.deleteFilter(this.selectedOption).subscribe({
+      next: () => { this.saving = false; this.closeDeleteModalEvent.emit(true); },
+      error: () => { this.saving = false; this.errorMessage = 'The filter could not be deleted. Please try again.'; }
+    });
   }
 }
