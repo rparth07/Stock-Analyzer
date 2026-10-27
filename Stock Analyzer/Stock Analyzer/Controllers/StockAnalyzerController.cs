@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
+//using Newtonsoft.Json;
 using Stock_Analyzer.CSVParserModel;
 using Stock_Analyzer.Dto;
 using Stock_Analyzer.Helper;
@@ -402,6 +403,23 @@ namespace Stock_Analyzer.Controllers
 
             using var reader = new StreamReader(responseStream);
             var responseContent = await reader.ReadToEndAsync();
+            Console.WriteLine($"Decompressed Response: {responseContent}");
+
+            var jr = "{\"data\":[{\"_id\":\"67754b93d3205bf7e5c32e1b\",\"CH_SYMBOL\":\"574GS2026\",\"CH_SERIES\":\"GS\",\"CH_MARKET_TYPE\":\"N\",\"CH_TIMESTAMP\":\"2025-01-01\",\"TIMESTAMP\":\"2024-12-31T18:30:00.000Z\",\"CH_TRADE_HIGH_PRICE\":98.9,\"CH_TRADE_LOW_PRICE\":98.9,\"CH_OPENING_PRICE\":98.9,\"CH_CLOSING_PRICE\":98.9,\"CH_LAST_TRADED_PRICE\":98.9,\"CH_PREVIOUS_CLS_PRICE\":99,\"CH_TOT_TRADED_QTY\":20,\"CH_TOT_TRADED_VAL\":1978,\"CH_52WEEK_HIGH_PRICE\":103.6,\"CH_52WEEK_LOW_PRICE\":95.31,\"CH_TOTAL_TRADES\":1,\"CH_ISIN\":\"IN0020210186\",\"createdAt\":\"2025-01-01T14:05:07.300Z\",\"updatedAt\":\"2025-01-01T14:05:07.300Z\",\"__v\":0,\"COP_DELIV_QTY\":20,\"COP_DELIV_PERC\":100,\"VWAP\":98.9,\"mTIMESTAMP\":\"01-Jan-2025\"},{\"_id\":\"67767fff99c47fa1f17101fe\",\"CH_SYMBOL\":\"574GS2026\",\"CH_SERIES\":\"GS\",\"CH_MARKET_TYPE\":\"N\",\"CH_TIMESTAMP\":\"2025-01-02\",\"TIMESTAMP\":\"2025-01-01T18:30:00.000Z\",\"CH_TRADE_HIGH_PRICE\":99.05,\"CH_TRADE_LOW_PRICE\":98.9,\"CH_OPENING_PRICE\":98.9,\"CH_CLOSING_PRICE\":99.05,\"CH_LAST_TRADED_PRICE\":99.05,\"CH_PREVIOUS_CLS_PRICE\":98.9,\"CH_TOT_TRADED_QTY\":95,\"CH_TOT_TRADED_VAL\":9395.65,\"CH_52WEEK_HIGH_PRICE\":103.6,\"CH_52WEEK_LOW_PRICE\":95.31,\"CH_TOTAL_TRADES\":2,\"CH_ISIN\":\"IN0020210186\",\"createdAt\":\"2025-01-02T12:01:03.451Z\",\"updatedAt\":\"2025-01-02T12:01:03.451Z\",\"__v\":0,\"COP_DELIV_QTY\":95,\"COP_DELIV_PERC\":100,\"VWAP\":98.9,\"mTIMESTAMP\":\"02-Jan-2025\"},{\"_id\":\"677bc60097f58fe88f945465\",\"CH_SYMBOL\":\"574GS2026\",\"CH_SERIES\":\"GS\",\"CH_MARKET_TYPE\":\"N\",\"CH_TIMESTAMP\":\"2025-01-06\",\"TIMESTAMP\":\"2025-01-05T18:30:00.000Z\",\"CH_TRADE_HIGH_PRICE\":99,\"CH_TRADE_LOW_PRICE\":97.91,\"CH_OPENING_PRICE\":97.93,\"CH_CLOSING_PRICE\":97.91,\"CH_LAST_TRADED_PRICE\":97.91,\"CH_PREVIOUS_CLS_PRICE\":99.05,\"CH_TOT_TRADED_QTY\":200,\"CH_TOT_TRADED_VAL\":19589.45,\"CH_52WEEK_HIGH_PRICE\":103.6,\"CH_52WEEK_LOW_PRICE\":95.31,\"CH_TOTAL_TRADES\":4,\"CH_ISIN\":\"IN0020210186\",\"createdAt\":\"2025-01-06T12:01:04.448Z\",\"updatedAt\":\"2025-01-06T12:01:04.448Z\",\"__v\":0,\"COP_DELIV_QTY\":100,\"COP_DELIV_PERC\":50,\"VWAP\":97.95,\"mTIMESTAMP\":\"06-Jan-2025\"},{\"_id\":\"677e690014c969f7186432ca\",\"CH_SYMBOL\":\"574GS2026\",\"CH_SERIES\":\"GS\",\"CH_MARKET_TYPE\":\"N\",\"CH_TIMESTAMP\":\"2025-01-08\",\"TIMESTAMP\":\"2025-01-07T18:30:00.000Z\",\"CH_TRADE_HIGH_PRICE\":98.25,\"CH_TRADE_LOW_PRICE\":98.25,\"CH_OPENING_PRICE\":98.25,\"CH_CLOSING_PRICE\":98.25,\"CH_LAST_TRADED_PRICE\":98.25,\"CH_PREVIOUS_CLS_PRICE\":97.91,\"CH_TOT_TRADED_QTY\":2,\"CH_TOT_TRADED_VAL\":196.5,\"CH_52WEEK_HIGH_PRICE\":103.6,\"CH_52WEEK_LOW_PRICE\":95.31,\"CH_TOTAL_TRADES\":1,\"CH_ISIN\":\"IN0020210186\",\"createdAt\":\"2025-01-08T12:01:04.325Z\",\"updatedAt\":\"2025-01-08T12:01:04.325Z\",\"__v\":0,\"COP_DELIV_QTY\":2,\"COP_DELIV_PERC\":100,\"VWAP\":98.25,\"mTIMESTAMP\":\"08-Jan-2025\"}],\"meta\":{\"series\":\"ALL\",\"fromDate\":\"01-01-2025\",\"toDate\":\"08-01-2025\",\"symbols\":[\"574GS2026\",\"574GS2026\"]}}";
+
+            // Deserialize the JSON response to the WrapperBhavInfo object
+            var result = JsonConvert.DeserializeObject<WrapperBhavInfo>(jr);
+
+            if (result != null)
+            {
+              Console.WriteLine("Deserialization Successful!");
+              Console.WriteLine($"Number of records: {result.Data.Count}");
+            }
+            else
+            {
+              Console.WriteLine("Deserialization failed!");
+            }
+            var jsonResponse = JsonConvert.DeserializeObject<WrapperBhavInfo>(responseContent);
             var apiResponse = JsonConvert.DeserializeObject<WrapperBhavInfo>(responseContent);
             return apiResponse;
           }
