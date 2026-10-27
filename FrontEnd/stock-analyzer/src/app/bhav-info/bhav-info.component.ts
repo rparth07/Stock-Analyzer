@@ -25,9 +25,9 @@ export class BhavInfoComponent implements OnInit {
 
   analyzeBhavInfosOfDate() {
     this.bhavInfoService.analyzeBhavInfos(this.analyzeBhavInfodate)
-      .subscribe(res => {
+      .subscribe({ next: res => {
         this.reloadPage();
-      });
+      }, error: () => {} });
   }
 
   reloadPage() {
