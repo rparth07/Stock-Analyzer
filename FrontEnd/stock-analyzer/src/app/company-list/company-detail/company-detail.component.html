@@ -16,7 +16,7 @@
                         <div class="card">
                             <p-table #dt [value]="bhavInfos" [(selection)]="selectedBhavInfos" dataKey="id"
                                 [rowHover]="true" [rows]="10" sortField="date" [sortOrder]="-1"
-                                [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50, 100]"
+                                [showCurrentPageReport]="true" paginatorDropdownAppendTo="body" [rowsPerPageOptions]="[10, 25, 50, 100]"
                                 [paginator]="true"
                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                 [filterDelay]="0"
@@ -251,7 +251,7 @@
                         <div class="card">
                             <p-table #dt [value]="bulkDeals" [(selection)]="selectedBulkDeals" dataKey="id"
                                 [rowHover]="true" [rows]="5" sortField="dealDate" [sortOrder]="-1"
-                                [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+                                [showCurrentPageReport]="true" paginatorDropdownAppendTo="body" [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
                                 [paginator]="true"
                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                 [filterDelay]="0"

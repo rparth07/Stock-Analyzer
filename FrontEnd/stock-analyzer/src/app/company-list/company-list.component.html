@@ -19,7 +19,7 @@
                                                 <p-table #dt [loading]="loading" [value]="companies" [(selection)]="selectedCompanies"
                                                     [customSort]="true" (sortFunction)="customSort($event)" dataKey="id"
                                                     [rowHover]="true" [rows]="10" sortField="symbol" [sortOrder]="1"
-                                                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+                                                    [showCurrentPageReport]="true" paginatorDropdownAppendTo="body" [rowsPerPageOptions]="[10, 25, 50]"
                                                     [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                                     [filterDelay]="0"

@@ -27,3 +27,10 @@ Removed placeholder contact information and the decorative stock-photo banners. 
 Source stays on codex/stock-analyzer-recovery. The original uncommitted StockAnalyzerController.cs matches its private baseline byte-for-byte and is excluded from UI commits.
 The refreshed deploy archive is .netlify/stock-analyzer-frontend-ready.zip. It contains only the built frontend and SPA redirect. The existing Netlify project is rparth07-stock-explorer; no duplicate site or paid resource was created.
 Publication still requires an authenticated upload to https://app.netlify.com/projects/rparth07-stock-explorer/deploys . Available Netlify MCP operations cannot upload, and CLI/dashboard access was unavailable in this session. Public frontend behavior must be verified after publication.
+
+
+## 2026-10-28 table and footer corrections
+
+Removed scrolling from the outer table card; only the data wrapper scrolls horizontally. All eight paginated tables append their page-size overlay outside the card. The workspace uses a full-height flex column so the footer reaches the viewport bottom on short pages and follows long content.
+
+Verified locally at 726 x 1532 with genuine API data: Clear/search fully visible, 10/25/50 options uncut, selecting 25 renders 25 rows, no page-wide horizontal overflow, footer at viewport bottom for 10 rows and after the table for 25. Production build and all 12 focused regression tests pass. Refreshed Netlify ZIP awaits upload to the existing site.

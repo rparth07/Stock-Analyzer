@@ -20,7 +20,7 @@
                                                     [customSort]="true" (sortFunction)="customSort($event)" dataKey="id"
                                                     [rowHover]="true" [rows]="10" sortField="deals.dealDate"
                                                     [sortOrder]="-1" [showCurrentPageReport]="true"
-                                                    [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+                                                    paginatorDropdownAppendTo="body" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                                     [filterDelay]="0"
                                                     [globalFilterFields]="['name', 'deals.0.companySymbol', 'deals.0.companyFullName', 'deals.0.dealDate', 'deals.0.quantity', 'deals.0.tradePrice']">
