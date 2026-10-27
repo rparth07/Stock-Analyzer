@@ -52,7 +52,7 @@
                                                 <p-table #dt [loading]="loading" [value]="bulkDeals" [(selection)]="selectedBulkDeals"
                                                     dataKey="id" [rowHover]="true" [rows]="5" sortField="dealDate"
                                                     [sortOrder]="-1" [showCurrentPageReport]="true"
-                                                    [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [paginator]="true"
+                                                    paginatorDropdownAppendTo="body" [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                                     [filterDelay]="0"
                                                     [globalFilterFields]="['clientName', 'dealDate', 'companySymbol', 'companyFullName', 'stockAction', 'quantity', 'tradePrice', 'remarks']">

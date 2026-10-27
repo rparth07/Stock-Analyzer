@@ -15,8 +15,9 @@
 .tableScroll {
   max-width:100%
 }
+/* Only the data wrapper scrolls; caption and pagination stay outside it. */
 .table-wrap {
-  overflow:auto
+  overflow:visible
 }
 .borderSet {
   border:1px solid #d9e3e7
