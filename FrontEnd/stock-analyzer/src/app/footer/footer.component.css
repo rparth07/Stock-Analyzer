@@ -1,3 +1,28 @@
-.bg-footer {
-    background-color: var(--footer-color);
+.workspace-footer {
+  max-width:1440px;
+  margin:20px auto 0;
+  padding:24px 32px 38px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  border-top:1px solid #dce4e8;
+  color:#5b6b75;
+  font-size:12px
+}
+.workspace-footer strong {
+  display:block;
+  color:#1c3440;
+  margin-bottom:5px
+}
+.workspace-footer a {
+  color:#14675e;
+  text-decoration:none;
+  white-space:nowrap
+}
+@media(max-width:640px) {
+  .workspace-footer {
+  padding:24px 18px 90px;
+  flex-direction:column
+}
+
 }

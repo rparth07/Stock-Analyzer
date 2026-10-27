@@ -1,9 +1,12 @@
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TimeoutError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiStatusService {
+  refreshMarketStatus$ = new Subject<void>();
+  marketDate$ = new BehaviorSubject<string>('');
   message = '';
   pending = 0;
   report(error: unknown, method: string): void {

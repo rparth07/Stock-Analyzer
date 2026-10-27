@@ -25,7 +25,7 @@ A persistent ledger records source, trading date, fetch timestamp and row count.
 Manual bhavcopy imports accept published dates within the past year. Arbitrary historical bulk snapshots are unsupported and return 422; previously imported days remain queryable.
 Old notebooks, saved filters and older history require access to the old SQL Server database for recovery. The new database contains genuine recent reports only.
 Render Free sleeps while idle; background refresh is not an always-on scheduler. UI requests allow 90 seconds for cold starts and leave navigation visible.
-The original application has shared filters/notebooks and no account system. News, forecasts, trading, portfolios, alerts, exports and chart widgets are not implemented in active templates; no such data was fabricated or added.
+The original application has shared filters/notebooks and no account system. News, forecasts, trading, portfolios, alerts and exports are not implemented in active templates; no such data was fabricated or added.
 
 ## Verified fixes and checks
 - Production Angular build and six focused Chrome Headless tests passed: real data passthrough, request timeout, rate limit, safe write failure, timezone date boundaries, rendered symbol search. The old scaffold test suite was not claimed healthy.
@@ -42,3 +42,6 @@ The original application has shared filters/notebooks and no account system. New
 ## Remaining warnings and credential cleanup
 Existing nullable/CommonJS warnings remain. Legacy AutoMapper 12 reports GHSA-rvv3-g6hj-g44x; mapping depth and JSON depth are bounded as mitigation, but the advisory remains. No paid-license dependency upgrade was introduced.
 The embedded legacy SQL password was removed from publishable configuration and retained only in the private original backup. Rotate it because it remains in repository history. No secret values were printed or included in the frontend ZIP.
+
+## Interface refresh - 28 October 2026
+The frontend now includes a genuine closing-price chart and a coordinated research-workspace interface. Twelve focused tests and responsive browser checks passed. See UI_AUDIT.md for scope, evidence and publication status. The upload ZIP is refreshed with this UI; backend code and hosting resources were not changed during the UI refresh.

@@ -2,23 +2,8 @@
   <button type="button" class="btn btn-outline-dark btn-sm" (click)="getBhavInfosBetween(startDate, endDate)">Try again</button>
 </div>
 <p *ngIf="dateError" role="alert" class="alert alert-warning">{{ dateError }}</p>
-<section class="breadcrumb_head trade_info_head">
-    <div class="container">
-        <!-- <ul vocab="https://schema.org/" typeof="BreadcrumbList">
-            <li property="itemListElement" typeof="ListItem">
-                <a property="item" typeof="WebPage" href="/">Home</a>
-                <meta property="position" content="1">
-            </li>
-            <li property="itemListElement" typeof="ListItem">
-                Report Detail
-                <meta property="position" content="2">
-            </li>
-        </ul> -->
-        <h1 class="page-title text-uppercase">
-            Security-wise Price volume &amp; Deliverable position data
-        </h1>
-    </div>
-</section>
+<header class="page-heading"><p class="eyebrow">Price & delivery history</p><h1>A closer look at each trading session.</h1><p>Browse end-of-day prices, traded volume and deliverable quantities. Use the date range to narrow your research.</p></header>
+<p *ngIf="importMessage" role="status" class="action-feedback">{{importMessage}}</p>
 
 <div class="mid_body getquote_contianer">
     <section class="common-tabs">
@@ -28,23 +13,22 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" role="tabpanel">
                             <div class="container py-3">
-                                <div class="border p-3">
+                                <details class="report-import"><summary>Import an additional NSE report</summary><div class="border p-3">
                                     <form class="row align-items-center" (ngSubmit)="analyzeBhavInfosOfDate()"
                                         #form="ngForm">
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <h2 class="m-0">Analyze Security-wise Price volume
-                                                        & Deliverable position data</h2>
+                                                    <h2 class="m-0">Import a published price report</h2>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
                                                 <mat-form-field class="mat-form-field-wrapper">
-                                                    <mat-label>Choose a date</mat-label>
+                                                    <mat-label>Report date</mat-label>
                                                     <input matInput [matDatepicker]="picker" name="analyzeBhavInfodate"
-                                                        [(ngModel)]="analyzeBhavInfodate" disabled>
+                                                        [(ngModel)]="analyzeBhavInfodate">
                                                     <mat-datepicker-toggle matIconSuffix
                                                         [for]="picker"></mat-datepicker-toggle>
                                                     <mat-datepicker #picker disabled="false"></mat-datepicker>
@@ -53,18 +37,18 @@
                                         </div>
                                         <div class="col-md-1">
                                             <div class="input-group">
-                                                <button type="submit" class="btn button-width-85 go-button">
-                                                    <span>Go</span>
+                                                <button type="submit" class="btn button-width-85 go-button" [disabled]="importing">
+                                                    <span>{{importing ? 'Importing...' : 'Import report'}}</span>
                                                 </button>
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-                                <div class="row mt-5">
+                                </div></details>
+                                <div class="row mt-4">
                                     <div class="table-wrap borderSet customTable-widthCorp tableScroll scrollWrap p-0">
                                         <div class="customTable-widthCorp tableScroll">
                                             <div class="card">
-                                                <p-table #dt [value]="bhavInfos" [(selection)]="selectedBhavInfos"
+                                                <p-table #dt [loading]="loading" [value]="bhavInfos" [(selection)]="selectedBhavInfos"
                                                     dataKey="id" [rowHover]="true" [rows]="10" sortField="date"
                                                     [sortOrder]="-1" [showCurrentPageReport]="true"
                                                     [rowsPerPageOptions]="[10, 25, 50, 100]" [paginator]="true"
@@ -83,18 +67,18 @@
                                                                     <input class="border-radius-left" pInputText
                                                                         type="text" id="search-value" value=""
                                                                         (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                                                        placeholder="Search keyword" aria-label="Search table" />
+                                                                        placeholder="Search these records..." aria-label="Search price records" />
                                                                 </span>
                                                             </div>
                                                             <div class="date-range d-flex ms-5">
                                                                 <div class="start-date">
                                                                     <div class="input-group">
                                                                         <mat-form-field class="mat-form-field-wrapper">
-                                                                            <mat-label>Choose a start date</mat-label>
+                                                                            <mat-label>Start date</mat-label>
                                                                             <input matInput [matDatepicker]="sDate"
                                                                                 name="startDate" [(ngModel)]="startDate"
                                                                                 (ngModelChange)="getBhavInfosBetween(startDate, endDate)"
-                                                                                disabled>
+                                                                               >
                                                                             <mat-datepicker-toggle matIconSuffix
                                                                                 [for]="sDate"></mat-datepicker-toggle>
                                                                             <mat-datepicker #sDate
@@ -105,11 +89,11 @@
                                                                 <div class="end-date">
                                                                     <div class="input-group">
                                                                         <mat-form-field class="mat-form-field-wrapper">
-                                                                            <mat-label>Choose a end date</mat-label>
+                                                                            <mat-label>End date</mat-label>
                                                                             <input matInput [matDatepicker]="eDate"
                                                                                 name="endDate" [(ngModel)]="endDate"
                                                                                 (ngModelChange)="getBhavInfosBetween(startDate, endDate)"
-                                                                                disabled>
+                                                                               >
                                                                             <mat-datepicker-toggle matIconSuffix
                                                                                 [for]="eDate"></mat-datepicker-toggle>
                                                                             <mat-datepicker #eDate
@@ -151,7 +135,7 @@
                                                                 pSortableColumn="previousClose">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Prev Close
+                                                                    Previous close
                                                                     <p-sortIcon field="previousClose"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -199,7 +183,7 @@
                                                                 pSortableColumn="avgPrice">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Avg Price
+                                                                    Average price
                                                                     <p-sortIcon field="avgPrice"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -207,7 +191,7 @@
                                                                 pSortableColumn="ttlTrdQnty">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Total Traded Quantity
+                                                                    Volume
                                                                     <p-sortIcon field="ttlTrdQnty"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -215,7 +199,7 @@
                                                                 pSortableColumn="turnOverLacs">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Turnover (Lacs)
+                                                                    Turnover (lakh INR)
                                                                     <p-sortIcon field="turnOverLacs"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -223,7 +207,7 @@
                                                                 pSortableColumn="noOfTrades">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    No of Trades
+                                                                    Trades
                                                                     <p-sortIcon field="noOfTrades"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -231,7 +215,7 @@
                                                                 pSortableColumn="deliveryQty">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Deliverable Qty
+                                                                    Deliverable quantity
                                                                     <p-sortIcon field="deliveryQty"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -239,70 +223,12 @@
                                                                 pSortableColumn="deliveryPercentage">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    % Dly Qt to Traded Qty
+                                                                    Delivery %
                                                                     <p-sortIcon field="deliveryPercentage"></p-sortIcon>
                                                                 </div>
                                                             </th>
                                                         </tr>
-                                                        <!-- <tr>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="companySymbol" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text" field="series"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="date" field="date"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="numeric"
-                                                                    field="previousClose" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="numeric"
-                                                                    field="openPrice" display="menu" currency="USD"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="numeric"
-                                                                    field="highPrice" display="menu" currency="USD"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="numeric"
-                                                                    field="lowPrice" display="menu" currency="USD"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="lastPrice" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="closePrice" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text" field="avgPrice"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="ttlTrdQnty" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="turnOverLacs" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="noOfTrades" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="deliveryQty" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                            <th class="p-0"><p-columnFilter type="text"
-                                                                    field="deliveryPercentage" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </th>
-                                                        </tr> -->
+
                                                     </ng-template>
                                                     <ng-template pTemplate="body" let-bhavInfo>
                                                         <tr class="p-selectable-row border border-1">
@@ -319,7 +245,7 @@
                                                                 {{ bhavInfo.date | date: 'dd/MM/yyyy' }}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Prev Close</span>
+                                                                <span class="p-column-title">Previous close</span>
                                                                 {{ bhavInfo.previousClose | currency: 'INR':'symbol' }}
                                                             </td>
                                                             <td style="min-width:5rem">
@@ -343,7 +269,7 @@
                                                                 {{ bhavInfo.closePrice | currency: 'INR':'symbol' }}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Avg Price</span>
+                                                                <span class="p-column-title">Average price</span>
                                                                 {{ bhavInfo.avgPrice | currency: 'INR':'symbol' }}
                                                             </td>
                                                             <td style="min-width:5rem">
@@ -356,11 +282,11 @@
                                                                 {{ bhavInfo.turnOverLacs | currency: 'INR':'symbol' }}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">No of Trades</span>
+                                                                <span class="p-column-title">Trades</span>
                                                                 {{ bhavInfo.noOfTrades | number }}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Deliverable Qty</span>
+                                                                <span class="p-column-title">Deliverable quantity</span>
                                                                 {{ bhavInfo.deliveryQty | number}}
                                                             </td>
                                                             <td style="min-width:5rem">
