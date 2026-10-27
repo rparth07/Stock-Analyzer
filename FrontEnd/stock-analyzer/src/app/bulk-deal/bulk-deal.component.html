@@ -2,23 +2,8 @@
   <button type="button" class="btn btn-outline-dark btn-sm" (click)="getBulkDealsBetween(startDate, endDate)">Try again</button>
 </div>
 <p *ngIf="dateError" role="alert" class="alert alert-warning">{{ dateError }}</p>
-<section class="breadcrumb_head trade_info_head">
-    <div class="container">
-        <!-- <ul vocab="https://schema.org/" typeof="BreadcrumbList">
-            <li property="itemListElement" typeof="ListItem">
-                <a property="item" typeof="WebPage" href="/">Home</a>
-                <meta property="position" content="1">
-            </li>
-            <li property="itemListElement" typeof="ListItem">
-                Report Detail
-                <meta property="position" content="2">
-            </li>
-        </ul> -->
-        <h1 class="page-title text-uppercase">
-            Bulk Deals
-        </h1>
-    </div>
-</section>
+<header class="page-heading"><p class="eyebrow">Bulk deals</p><h1>See the larger trades behind the market.</h1><p>Explore reported buy and sell transactions by company, participant and trading date.</p></header>
+<p *ngIf="importMessage" role="status" class="action-feedback">{{importMessage}}</p>
 
 <div class="mid_body getquote_contianer">
     <section class="common-tabs">
@@ -28,23 +13,23 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" role="tabpanel">
                             <div class="container py-3">
-                                <div class="border p-3">
-                                    <!-- <div class="col-md-1 pl-3">Filter By :</div> -->
+                                <details class="report-import"><summary>Import an additional NSE report</summary><div class="border p-3">
+
                                     <form class="row align-items-center" (ngSubmit)="analyzeBulkDealsOfDate()"
                                         #form="ngForm">
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <h2 class="m-0">Analyze Bulk Deals</h2>
+                                                    <h2 class="m-0">Import the latest bulk-deal report</h2>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
                                                 <mat-form-field class="mat-form-field-wrapper">
-                                                    <mat-label>Choose a date</mat-label>
+                                                    <mat-label>Report date</mat-label>
                                                     <input matInput [matDatepicker]="picker" name="date"
-                                                        [(ngModel)]="date" disabled>
+                                                        [(ngModel)]="date">
                                                     <mat-datepicker-toggle matIconSuffix
                                                         [for]="picker"></mat-datepicker-toggle>
                                                     <mat-datepicker #picker disabled="false"></mat-datepicker>
@@ -53,18 +38,18 @@
                                         </div>
                                         <div class="col-md-1">
                                             <div class="input-group">
-                                                <button type="submit" class="btn button-width-85 go-button">
-                                                    <span>Go</span>
+                                                <button type="submit" class="btn button-width-85 go-button" [disabled]="importing">
+                                                    <span>{{importing ? 'Importing...' : 'Import report'}}</span>
                                                 </button>
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-                                <div class="row mt-5">
+                                </div></details>
+                                <div class="row mt-4">
                                     <div class="table-wrap borderSet customTable-widthCorp tableScroll scrollWrap p-0">
                                         <div class="customTable-widthCorp tableScroll">
                                             <div class="card">
-                                                <p-table #dt [value]="bulkDeals" [(selection)]="selectedBulkDeals"
+                                                <p-table #dt [loading]="loading" [value]="bulkDeals" [(selection)]="selectedBulkDeals"
                                                     dataKey="id" [rowHover]="true" [rows]="5" sortField="dealDate"
                                                     [sortOrder]="-1" [showCurrentPageReport]="true"
                                                     [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [paginator]="true"
@@ -83,18 +68,18 @@
                                                                     <input class="border-radius-left" pInputText
                                                                         type="text" id="search-value" value=""
                                                                         (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                                                        placeholder="Search keyword" aria-label="Search table" />
+                                                                        placeholder="Search these records..." aria-label="Search bulk-deal records" />
                                                                 </span>
                                                             </div>
                                                             <div class="date-range d-flex ms-5">
                                                                 <div class="start-date">
                                                                     <div class="input-group">
                                                                         <mat-form-field class="mat-form-field-wrapper">
-                                                                            <mat-label>Choose a start date</mat-label>
+                                                                            <mat-label>Start date</mat-label>
                                                                             <input matInput [matDatepicker]="sDate"
                                                                                 name="startDate" [(ngModel)]="startDate"
                                                                                 (ngModelChange)="getBulkDealsBetween(startDate, endDate)"
-                                                                                disabled>
+                                                                               >
                                                                             <mat-datepicker-toggle matIconSuffix
                                                                                 [for]="sDate"></mat-datepicker-toggle>
                                                                             <mat-datepicker #sDate
@@ -105,11 +90,11 @@
                                                                 <div class="end-date">
                                                                     <div class="input-group">
                                                                         <mat-form-field class="mat-form-field-wrapper">
-                                                                            <mat-label>Choose a end date</mat-label>
+                                                                            <mat-label>End date</mat-label>
                                                                             <input matInput [matDatepicker]="eDate"
                                                                                 name="endDate" [(ngModel)]="endDate"
                                                                                 (ngModelChange)="getBulkDealsBetween(startDate, endDate)"
-                                                                                disabled>
+                                                                               >
                                                                             <mat-datepicker-toggle matIconSuffix
                                                                                 [for]="eDate"></mat-datepicker-toggle>
                                                                             <mat-datepicker #eDate
@@ -127,7 +112,7 @@
                                                                 pSortableColumn="companySymbol">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Company Symbol
+                                                                    Company symbol
                                                                     <p-sortIcon field="companySymbol"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -135,7 +120,7 @@
                                                                 pSortableColumn="companyFullName">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Company FullName
+                                                                    Company name
                                                                     <p-sortIcon field="companyFullName"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -151,7 +136,7 @@
                                                                 pSortableColumn="clientName">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Client Name
+                                                                    Participant
                                                                     <p-sortIcon field="clientName"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -159,7 +144,7 @@
                                                                 pSortableColumn="stockAction">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Stock Action
+                                                                    Side
                                                                     <p-sortIcon field="stockAction"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -175,7 +160,7 @@
                                                                 pSortableColumn="tradePrice">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Trade Price
+                                                                    Trade price
                                                                     <p-sortIcon field="tradePrice"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -188,52 +173,16 @@
                                                                 </div>
                                                             </th>
                                                         </tr>
-                                                        <!-- <tr>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="numeric" field="companySymbol"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="numeric" field="companyFullName"
-                                                                    display="menu" currency="USD"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="date" field="dealDate"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="text" field="clientName"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="numeric" field="stockAction"
-                                                                    display="menu" currency="USD"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="numeric" field="quantity"
-                                                                    display="menu" currency="USD"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="text" field="tradePrice"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0">
-                                                                <p-columnFilter type="text" field="remarks"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                        </tr> -->
+
                                                     </ng-template>
                                                     <ng-template pTemplate="body" let-bulkDeal>
                                                         <tr class="p-selectable-row border border-1">
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Company Symbol</span>
+                                                                <span class="p-column-title">Company symbol</span>
                                                                 {{ bulkDeal.companySymbol}}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Company FullName</span>
+                                                                <span class="p-column-title">Company name</span>
                                                                 {{ bulkDeal.companyFullName }}
                                                             </td>
                                                             <td style="min-width:5rem">
@@ -245,7 +194,7 @@
                                                                 {{ bulkDeal.clientName }}
                                                             </td>
                                                             <td style="min-width:5rem">
-                                                                <span class="p-column-title">Stock Action</span>
+                                                                <span class="p-column-title">Side</span>
                                                                 {{ getStockAction(bulkDeal.stockAction) }}
                                                             </td>
                                                             <td style="min-width:5rem">
@@ -264,7 +213,7 @@
                                                     </ng-template>
                                                     <ng-template pTemplate="emptymessage">
                                                         <tr>
-                                                            <td colspan="8">No BulkDeals found.</td>
+                                                            <td colspan="8">No bulk deals match this date range and search.</td>
                                                         </tr>
                                                     </ng-template>
                                                 </p-table>

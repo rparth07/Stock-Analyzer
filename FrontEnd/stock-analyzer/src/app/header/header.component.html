@@ -1,39 +1,14 @@
-<nav class="home-header nav navbar d-flex sticky-top" [ngClass]="enableHeader ? 'sticky-home-header' : ''">
-    <div class="d-flex align-items-center ms-3">
-        <div class="logo-container">
-            <a class="home-link navbar-brand d-flex align-items-center text-decoration-none" routerLink="dashboard">
-                <img width="38px" src="../../assets/images/stock-analyzer-icon.png" alt="stock-analyzer-logo" />
-                <h1 class="logo-title">
-                    Stock Analyzer</h1>
-            </a>
-        </div>
-        <div class="menu-container">
-            <ul class="navbar-nav flex-row">
-                <li class="nav-item">
-                    <a class="nav-link pb-1" routerLink="bhavinfo" routerLinkActive="active">
-                        <span>
-                            Bhav-Info</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link pb-1" routerLink="bulkdeal" routerLinkActive="active">
-                        <span>
-                            Bulk Deal</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link pb-1" routerLink="company-list" routerLinkActive="active">
-                        <span>
-                            Company</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link pb-1" routerLink="client" routerLinkActive="active">
-                        <span>
-                            Client</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<header class="app-header">
+  <a class="brand" routerLink="/dashboard" aria-label="Stock Analyzer home">
+    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M4 21V7M4 21h20M8 17l5-6 4 3 7-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span>Stock<span class="brand-light">Analyzer</span><small>NSE RESEARCH WORKSPACE</small></span>
+  </a>
+  <nav aria-label="Main navigation">
+    <a routerLink="/dashboard" routerLinkActive="active" ariaCurrentWhenActive="page">Screener</a>
+    <a routerLink="/company-list" routerLinkActive="active" ariaCurrentWhenActive="page">Companies</a>
+    <a routerLink="/bhavinfo" routerLinkActive="active" ariaCurrentWhenActive="page">Price history</a>
+    <a routerLink="/bulkdeal" routerLinkActive="active" ariaCurrentWhenActive="page">Bulk deals</a>
+    <a routerLink="/client" routerLinkActive="active" ariaCurrentWhenActive="page">Participants</a>
+  </nav>
+  <span class="header-context">INDIA <span aria-hidden="true">/</span> INR</span>
+</header>

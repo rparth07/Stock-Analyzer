@@ -4,41 +4,9 @@
   <a routerLink="/company-list" class="ms-2">Company list</a>
 </div>
 <div class="main" *ngIf="company">
-    <div class="container p-0">
-        <div class="tab_header">
-            <div class="row">
-                <div class="col-md-6 m-0">
-                    <h2 id="quoteName" class="m-0">
-                        <span data-nse-translate="symbol">
-                            {{company.symbol}}
-                        </span>
-                    </h2>
-                </div>
-            </div>
-        </div>
-        <nav class="subtabs subtabs-spacing">
-            <div class="container">
-                <div class="row align-items-cen`ter">
-                    <div class="col-md-8">
-                        <div class="nav nav-tabs">
-                            <div class="nav" role="tablist">
-                                <a role="tab" aria-selected="false" class="nav-item nav-link" role="button"
-                                    [ngClass]="showBhavInfo ? 'active' : ''" routerLinkActive="active"
-                                    (click)="showBhavInfos()"><span>Bhav-Info
-                                    </span></a>
-
-                                <a role="tab" aria-selected="true" class="nav-item nav-link" role="button"
-                                    [ngClass]="!showBhavInfo ? 'active' : ''" routerLinkActive="active"
-                                    (click)="showBulkDeals()"><span>Bulk
-                                        Deals</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-
+    <header class="company-heading"><a routerLink="/company-list" class="back-link">&larr; Company directory</a><div class="company-overview"><div><p class="eyebrow">NSE &middot; {{chartSeries}} SERIES</p><h1>{{company.symbol}}</h1><p class="helper-text">Historical price and reported bulk-deal activity.</p></div><div class="quote-summary"><span class="quote-label">LAST AVAILABLE CLOSE</span><strong>{{closingPrice === null ? 'Unavailable' : (closingPrice | currency:'INR':'symbol':'1.2-2')}}</strong><span *ngIf="changePercent !== null" [class.negative-change]="changePercent < 0" class="quote-change">{{changePercent >= 0 ? '+' : ''}}{{changePercent | number:'1.2-2'}}% vs previous close</span><small *ngIf="latestReport">Trading date {{latestReport.date | date:'dd MMM yyyy'}}</small></div></div></header>
+    <section *ngIf="bhavInfos.length" class="panel price-chart"><header class="panel-heading"><div><h2 class="panel-title">Closing-price history</h2><p>Unadjusted NSE report prices. Missing observations stay unavailable.</p></div><div class="chart-controls"><label>Series<select aria-label="Chart series" class="ui-select" [(ngModel)]="chartSeries" (change)="updateChart()"><option *ngFor="let series of availableSeries" [value]="series">{{series}}</option></select></label><label>Show<select aria-label="Chart history range" class="ui-select" [(ngModel)]="chartSessions" (change)="updateChart()"><option [ngValue]="5">Last 5 sessions</option><option [ngValue]="10">Last 10 sessions</option><option [ngValue]="0">Available history</option></select></label></div></header><div class="chart-frame" role="img" [attr.aria-label]="company.symbol + ' closing-price chart for ' + chartRows.length + ' available reports. Exact values are in the table below.'"><p-chart type="line" [data]="chartData" [options]="chartOptions" height="240px"></p-chart></div><p class="helper-text">{{chartRows.length}} available reports &middot; INR &middot; Exact values are in the table below.</p></section>
+    <nav class="detail-switch" aria-label="Company data"><button type="button" [class.active]="showBhavInfo" [attr.aria-pressed]="showBhavInfo" (click)="showBhavInfos()">Price &amp; delivery history <span>{{bhavInfos.length}}</span></button><button type="button" [class.active]="!showBhavInfo" [attr.aria-pressed]="!showBhavInfo" (click)="showBulkDeals()">Bulk deals <span>{{bulkDeals.length}}</span></button></nav>
     <div class="container">
         <div class="row mt-4 mb-4">
             <div class="table-wrap borderSet customTable-widthCorp tableScroll scrollWrap p-0">
@@ -88,7 +56,7 @@
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="previousClose">
                                             <div class="flex justify-content-between align-items-center">
-                                                Prev Close
+                                                Previous close
                                                 <p-sortIcon field="previousClose"></p-sortIcon>
                                             </div>
                                         </th>
@@ -125,38 +93,38 @@
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="avgPrice">
                                             <div class="flex justify-content-between align-items-center">
-                                                Avg Price
+                                                Average price
                                                 <p-sortIcon field="avgPrice"></p-sortIcon>
                                             </div>
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="ttlTrdQnty">
                                             <div class="flex justify-content-between align-items-center">
-                                                Total Traded Quantity
+                                                Volume
                                                 <p-sortIcon field="ttlTrdQnty"></p-sortIcon>
                                             </div>
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="turnOverLacs">
                                             <div class="flex justify-content-between align-items-center">
-                                                Turnover (Lacs)
+                                                Turnover (lakh INR)
                                                 <p-sortIcon field="turnOverLacs"></p-sortIcon>
                                             </div>
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="noOfTrades">
                                             <div class="flex justify-content-between align-items-center">
-                                                No of Trades
+                                                Trades
                                                 <p-sortIcon field="noOfTrades"></p-sortIcon>
                                             </div>
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="deliveryQty">
                                             <div class="flex justify-content-between align-items-center">
-                                                Deliverable Qty
+                                                Deliverable quantity
                                                 <p-sortIcon field="deliveryQty"></p-sortIcon>
                                             </div>
                                         </th>
                                         <th style="min-width:5rem" class="table-col"
                                             pSortableColumn="deliveryPercentage">
                                             <div class="flex justify-content-between align-items-center">
-                                                % Dly Qt to Traded Qty
+                                                Delivery %
                                                 <p-sortIcon field="deliveryPercentage"></p-sortIcon>
                                             </div>
                                         </th>
@@ -221,7 +189,7 @@
                                             {{ bhavInfo.date | date: 'dd/MM/yyyy' }}
                                         </td>
                                         <td style="min-width:5rem">
-                                            <span class="p-column-title">Prev Close</span>
+                                            <span class="p-column-title">Previous close</span>
                                             {{ bhavInfo.previousClose | currency: 'INR':'symbol' }}
                                         </td>
                                         <td style="min-width:5rem">
@@ -245,7 +213,7 @@
                                             {{ bhavInfo.closePrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td style="min-width:5rem">
-                                            <span class="p-column-title">Avg Price</span>
+                                            <span class="p-column-title">Average price</span>
                                             {{ bhavInfo.avgPrice | currency: 'INR':'symbol' }}
                                         </td>
                                         <td style="min-width:5rem">
@@ -258,11 +226,11 @@
                                             {{ bhavInfo.turnOverLacs | currency: 'INR':'symbol' }}
                                         </td>
                                         <td style="min-width:5rem">
-                                            <span class="p-column-title">No of Trades</span>
+                                            <span class="p-column-title">Trades</span>
                                             {{ bhavInfo.noOfTrades | number }}
                                         </td>
                                         <td style="min-width:5rem">
-                                            <span class="p-column-title">Deliverable Qty</span>
+                                            <span class="p-column-title">Deliverable quantity</span>
                                             {{ bhavInfo.deliveryQty | number }}
                                         </td>
                                         <td style="min-width:5rem">
@@ -305,7 +273,7 @@
                                     <tr>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="clientName">
                                             <div class="flex justify-content-between align-items-center">
-                                                Client Name
+                                                Participant
                                                 <p-sortIcon field="clientName"></p-sortIcon>
                                             </div>
                                         </th>
@@ -317,20 +285,20 @@
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="companySymbol">
                                             <div class="flex justify-content-between align-items-center">
-                                                Company Symbol
+                                                Company symbol
                                                 <p-sortIcon field="companySymbol"></p-sortIcon>
                                             </div>
                                         </th>
 
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="companyFullName">
                                             <div class="flex justify-content-between align-items-center">
-                                                Company FullName
+                                                Company name
                                                 <p-sortIcon field="companyFullName"></p-sortIcon>
                                             </div>
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="stockAction">
                                             <div class="flex justify-content-between align-items-center">
-                                                Stock Action
+                                                Side
                                                 <p-sortIcon field="stockAction"></p-sortIcon>
                                             </div>
                                         </th>
@@ -342,7 +310,7 @@
                                         </th>
                                         <th style="min-width:5rem" class="table-col" pSortableColumn="tradePrice">
                                             <div class="flex justify-content-between align-items-center">
-                                                Trade Price
+                                                Trade price
                                                 <p-sortIcon field="tradePrice"></p-sortIcon>
                                             </div>
                                         </th>
@@ -388,15 +356,15 @@
                                             {{ bulkDeal.dealDate | date: 'dd/MM/yyyy' }}
                                         </td>
                                         <td style="min-width:5rem">
-                                            <span class="p-column-title">Company Symbol</span>
+                                            <span class="p-column-title">Company symbol</span>
                                             {{ bulkDeal.companySymbol}}
                                         </td>
                                         <td style="min-width:5rem">
-                                            <span class="p-column-title">Company FullName</span>
+                                            <span class="p-column-title">Company name</span>
                                             {{ bulkDeal.companyFullName }}
                                         </td>
                                         <td style="min-width:5rem">
-                                            <span class="p-column-title">Stock Action</span>
+                                            <span class="p-column-title">Side</span>
                                             {{ getStockAction(bulkDeal.stockAction) }}
                                         </td>
                                         <td style="min-width:5rem">
@@ -415,7 +383,7 @@
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
                                     <tr>
-                                        <td colspan="8">No BulkDeals found.</td>
+                                        <td colspan="8">No reported bulk deals for this selection.</td>
                                     </tr>
                                 </ng-template>
                             </p-table>

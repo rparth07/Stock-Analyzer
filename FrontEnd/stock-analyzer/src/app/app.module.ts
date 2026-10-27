@@ -1,3 +1,4 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -140,6 +141,7 @@ import { DomainConstants } from './shared/domain.constants';
     NotebookComponent,
   ],
   imports: [
+    A11yModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

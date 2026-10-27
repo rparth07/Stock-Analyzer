@@ -10,9 +10,16 @@ import { ApiStatusService } from './shared/api-status.service';
 })
 export class AppComponent {
   title = 'stock-analyzer';
+  get latestPriceDate(): string {
+    return this.marketStatus?.sources.find(source => source.source.toLowerCase().includes('bhav'))?.tradingDate.slice(0,10) ?? 'Unavailable';
+  }
   marketStatus: { sources: { source: string; tradingDate: string; importedAt: string }[] } | null = null;
-  constructor(public apiStatus: ApiStatusService, http: HttpClient) {
+  constructor(public apiStatus: ApiStatusService, private http: HttpClient) {
+    this.loadMarketStatus();
+    this.apiStatus.refreshMarketStatus$.subscribe(() => this.loadMarketStatus());
+  }
+  loadMarketStatus() {
     const url = DomainConstants.StockAnalyzer_URL.replace('StockAnalyzer/', 'market-data/status');
-    http.get<NonNullable<AppComponent['marketStatus']>>(url).subscribe({ next: status => this.marketStatus = status, error: () => {} });
+    this.http.get<NonNullable<AppComponent['marketStatus']>>(url).subscribe({ next: status => { this.marketStatus = status; const date = this.latestPriceDate; if (date !== 'Unavailable') this.apiStatus.marketDate$.next(date); }, error: () => {} });
   }
 }

@@ -1,23 +1,7 @@
 <div *ngIf="loadError" role="alert" class="alert alert-warning m-3">Data could not be loaded. An empty table does not confirm there are no matching records.
   <button type="button" class="btn btn-outline-dark btn-sm" (click)="ngOnInit()">Try again</button>
 </div>
-<section class="breadcrumb_head trade_info_head">
-    <div class="container">
-        <!-- <ul vocab="https://schema.org/" typeof="BreadcrumbList">
-            <li property="itemListElement" typeof="ListItem">
-                <a property="item" typeof="WebPage" href="/">Home</a>
-                <meta property="position" content="1">
-            </li>
-            <li property="itemListElement" typeof="ListItem">
-                Report Detail
-                <meta property="position" content="2">
-            </li>
-        </ul> -->
-        <h1 class="page-title text-uppercase">
-            Clients
-        </h1>
-    </div>
-</section>
+<header class="page-heading"><p class="eyebrow">Market participants</p><h1>Follow reported bulk-deal activity.</h1><p>Search participant names and review their reported transactions. These are exchange disclosures, not personal portfolios.</p></header>
 
 <div class="mid_body getquote_contianer">
     <section class="common-tabs">
@@ -27,43 +11,12 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" role="tabpanel">
                             <div class="container py-3">
-                                <!-- <div class="border p-3">
-                                    <div class="col-md-1 pl-3">Filter By :</div>
-                                    <form class="row align-items-center" (ngSubmit)="analyzeClientsOfDate(form)"
-                                        #form="ngForm">
-                                        <div class="col-md-7">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <h2 class="m-0">Analyze Clients</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="input-group">
-                                                <mat-form-field class="mat-form-field-wrapper">
-                                                    <mat-label>Choose a date</mat-label>
-                                                    <input matInput [matDatepicker]="picker" disabled>
-                                                    <mat-datepicker-toggle matIconSuffix
-                                                        [for]="picker"></mat-datepicker-toggle>
-                                                    <mat-datepicker #picker disabled="false"></mat-datepicker>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <div class="input-group">
-                                                <button type="submit" class="btn button-width-85 go-button"
-                                                    [disabled]="!form.valid">
-                                                    <span>Go</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div> -->
-                                <div class="row mt-5">
+
+                                <div class="row mt-4">
                                     <div class="table-wrap borderSet customTable-widthCorp tableScroll scrollWrap p-0">
                                         <div class="customTable-widthCorp tableScroll">
                                             <div class="card">
-                                                <p-table #dt [value]="clients" [(selection)]="selectedClients"
+                                                <p-table #dt [loading]="loading" [value]="clients" [(selection)]="selectedClients"
                                                     [customSort]="true" (sortFunction)="customSort($event)" dataKey="id"
                                                     [rowHover]="true" [rows]="10" sortField="deals.dealDate"
                                                     [sortOrder]="-1" [showCurrentPageReport]="true"
@@ -79,7 +32,7 @@
                                                                 <i class="pi pi-search"></i>
                                                                 <input pInputText type="text" id="search-value" value=""
                                                                     (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                                                    placeholder="Search keyword" aria-label="Search table" />
+                                                                    placeholder="Search these records..." aria-label="Search participant names" />
                                                             </span>
                                                         </div>
                                                     </ng-template>
@@ -103,7 +56,7 @@
                                                             <th class="table-col" pSortableColumn="deals.companySymbol">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Company Symbol
+                                                                    Company symbol
                                                                     <p-sortIcon
                                                                         field="deals.companySymbol"></p-sortIcon>
                                                                 </div>
@@ -112,7 +65,7 @@
                                                                 pSortableColumn="deals.companyFullName">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Company FullName
+                                                                    Company name
                                                                     <p-sortIcon
                                                                         field="deals.companyFullName"></p-sortIcon>
                                                                 </div>
@@ -120,7 +73,7 @@
                                                             <th class="table-col" pSortableColumn="deals.stockAction">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Stock Action
+                                                                    Side
                                                                     <p-sortIcon field="deals.stockAction"></p-sortIcon>
                                                                 </div>
                                                             </th>
@@ -134,43 +87,17 @@
                                                             <th class="table-col" pSortableColumn="deals.tradePrice">
                                                                 <div
                                                                     class="flex justify-content-between align-items-center">
-                                                                    Trade Price
+                                                                    Trade price
                                                                     <p-sortIcon field="deals.tradePrice"></p-sortIcon>
                                                                 </div>
                                                             </th>
                                                         </tr>
-                                                        <!-- <tr>
-                                                            <td class="p-0"><p-columnFilter type="text" field="name"
-                                                                    display="menu" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="date"
-                                                                    field="deals.dealDate" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="deals.companySymbol" display="menu"
-                                                                    class="ml-auto"></p-columnFilter></td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="deals.companyFullName" display="menu"
-                                                                    currency="USD" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="deals.stockAction" display="menu"
-                                                                    currency="USD" class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                            <td class="p-0"><p-columnFilter type="numeric"
-                                                                    field="quantity" display="menu" currency="USD"
-                                                                    class="ml-auto"></p-columnFilter></td>
-                                                            <td class="p-0"><p-columnFilter type="text"
-                                                                    field="deals.tradePrice" display="menu"
-                                                                    class="ml-auto"></p-columnFilter>
-                                                            </td>
-                                                        </tr> -->
+
                                                     </ng-template>
                                                     <ng-template pTemplate="body" let-client>
                                                         <tr class="p-selectable-row border border-1">
                                                             <td>
-                                                                <span class="p-column-title">Client Name</span>
+                                                                <span class="p-column-title">Participant</span>
                                                                 {{ client.name }}
                                                             </td>
                                                             <td>
@@ -179,15 +106,15 @@
                                                                 }}
                                                             </td>
                                                             <td>
-                                                                <span class="p-column-title">Company Symbol</span>
+                                                                <span class="p-column-title">Company symbol</span>
                                                                 {{ client.deals[0]?.companySymbol}}
                                                             </td>
                                                             <td>
-                                                                <span class="p-column-title">Company FullName</span>
+                                                                <span class="p-column-title">Company name</span>
                                                                 {{ client.deals[0]?.companyFullName }}
                                                             </td>
                                                             <td>
-                                                                <span class="p-column-title">Stock Action</span>
+                                                                <span class="p-column-title">Side</span>
                                                                 {{ getStockAction(client.deals[0]?.stockAction) }}
                                                             </td>
                                                             <td>
@@ -203,7 +130,7 @@
                                                     </ng-template>
                                                     <ng-template pTemplate="emptymessage">
                                                         <tr>
-                                                            <td colspan="8">No Clients found.</td>
+                                                            <td colspan="8">No matching participants. Try a different name or clear your search.</td>
                                                         </tr>
                                                     </ng-template>
                                                 </p-table>

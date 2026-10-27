@@ -1,34 +1,28 @@
 <div class="filter-container">
-    <div class="filter-info d-flex justify-content-around border p-3">
-        <div class="dropdown-container">
-            <select aria-label="Saved filter" [(ngModel)]="selectedOption" (change)="onFilterFormChange()">
-                <option *ngFor="let filter of filterOptions" (value)="filter.filterName">{{filter.filterName}}</option>
-            </select>
-            <input aria-label="Trading date" [(ngModel)]="filterDate" type="date" (change)="onFilterFormChange()"
-                class="filter-date me-3 ms-3 p-1 w-50">
-            <button class="new-filter-button" (click)="openModal()">New</button>
-            <button class="new-filter-button bg-danger ms-3" (click)="openDeleteModal()">Delete</button>
-        </div>
-        <div class="filter-criteria-details">
-            <h4>filterDetail:</h4>
-            <p>
-                {{displayFilterCriteria(selectedFilter?.criterias)}}
-            </p>
-        </div>
-        <app-filter-form-container *ngIf="modalOpen"
-            (closeModalEvent)="closeModal();reloadPage()"></app-filter-form-container>
-
-        <app-delete-filter-form-container *ngIf="deleteModalOpen" [filterOptions]="filterOptions"
-            (closeDeleteModalEvent)="closeDeleteModal();reloadPage()"></app-delete-filter-form-container>
+  <header class="page-heading"><p class="eyebrow">Market screener</p><h1>Less noise. More focused research.</h1><p>Apply your saved criteria to a trading session, then explore the matching companies and reported bulk deals.</p></header>
+  <section class="panel screener-controls" aria-label="Screener controls">
+    <div class="control-grid">
+      <div class="filter-picker"><label class="ui-label" for="saved-filter">Saved filter</label><select id="saved-filter" class="ui-select" aria-label="Saved filter" [(ngModel)]="selectedOption" (change)="onFilterFormChange()" [disabled]="filtersLoading || !filterOptions.length"><option *ngIf="!filterOptions.length" value="">No saved filters yet</option><option *ngFor="let filter of filterOptions" [value]="filter.filterName">{{filter.filterName}}</option></select></div>
+      <div><label class="ui-label" for="filter-date">Trading date</label><input id="filter-date" class="ui-input" aria-label="Trading date" [(ngModel)]="filterDate" type="date" (change)="onDateChanged()" [max]="getDateOfToday()"></div>
+      <button type="button" class="ui-button" (click)="openModal()">Create filter</button>
+      <button type="button" class="ui-button ui-button-quiet" (click)="openDeleteModal()" [disabled]="!filterOptions.length">Manage filters</button>
     </div>
-
-    <div class="container py-3">
+    <div *ngIf="selectedFilter" class="criteria-summary"><span class="criteria-label">YOUR CRITERIA</span><p>{{displayFilterCriteria(selectedFilter.criterias)}}</p></div>
+    <p *ngIf="filtersLoading" role="status" class="helper-text">Loading saved filters...</p>
+    <p *ngIf="filtersError" role="alert" class="field-error">Saved filters could not be loaded. <button type="button" class="ui-button ui-button-link" (click)="getAllFilterNames()">Try again</button></p>
+  </section>
+  <section *ngIf="!filtersLoading && !filtersError && !filterOptions.length" class="empty-state first-filter"><span class="empty-mark" aria-hidden="true">01</span><h2>Start with a question about the market.</h2><p>Create a filter for a price, volume or delivery trend. Choose a short period first; matches depend on the historical reports available.</p><button type="button" class="ui-button" (click)="openModal()">Create your first filter</button><a routerLink="/company-list" class="ui-button ui-button-link">Browse companies instead &rarr;</a></section>
+  <app-filter-form-container *ngIf="modalOpen" (closeModalEvent)="onFilterDialogClosed($event)"></app-filter-form-container>
+  <app-delete-filter-form-container *ngIf="deleteModalOpen" [filterOptions]="filterOptions" (closeDeleteModalEvent)="onDeleteDialogClosed($event)"></app-delete-filter-form-container>
+  <div *ngIf="filterOptions.length" class="table-section-title"><h2>Matching companies <span class="result-count">{{filterResults.length | number}}</span></h2><span>{{loadingFilterResults ? 'Applying your criteria...' : 'Select a symbol to open its trading history.'}}</span></div>
+  <p *ngIf="resultError" role="alert" class="form-error">The filter could not run. <button type="button" class="ui-button ui-button-link" (click)="onFilterFormChange()">Run again</button></p>
+    <div class="container py-3" [hidden]="!filterOptions.length">
         <div class="row">
             <div class="borderSet tableScroll p-0">
                 <div class="tableScroll">
                     <div class="card">
                         <p-table #filterTable [value]="filterResults" dataKey="id" [rowHover]="true" [rows]="5"
-                            [customSort]="true" (sortFunction)="customSort($event)" [scrollable]="true"
+                            [customSort]="true" (sortFunction)="customSort($event)" [scrollable]="true" [loading]="loadingFilterResults"
                             [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
                             sortField="company.symbol" [sortOrder]="1" [paginator]="true"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -76,7 +70,7 @@
                                     <th style="min-width:5rem" class="table-col"
                                         pSortableColumn="company.bhavCopyInfos.previousClose">
                                         <div class="flex justify-content-between align-items-center">
-                                            Prev Close
+                                            Previous close
                                             <p-sortIcon field="company.bhavCopyInfos.previousClose"></p-sortIcon>
                                         </div>
                                     </th>
@@ -118,42 +112,42 @@
                                     <th style="min-width:5rem" class="table-col"
                                         pSortableColumn="company.bhavCopyInfos.avgPrice">
                                         <div class="flex justify-content-between align-items-center">
-                                            Avg Price
+                                            Average price
                                             <p-sortIcon field="company.bhavCopyInfos.avgPrice"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:5rem" class="table-col"
                                         pSortableColumn="company.bhavCopyInfos.ttlTrdQnty">
                                         <div class="flex justify-content-between align-items-center">
-                                            Total Traded Quantity
+                                            Volume
                                             <p-sortIcon field="company.bhavCopyInfos.ttlTrdQnty"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:5rem" class="table-col"
                                         pSortableColumn="company.bhavCopyInfos.turnOverLacs">
                                         <div class="flex justify-content-between align-items-center">
-                                            Turnover (Lacs)
+                                            Turnover (lakh INR)
                                             <p-sortIcon field="company.bhavCopyInfos.turnOverLacs"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:5rem" class="table-col"
                                         pSortableColumn="company.bhavCopyInfos.noOfTrades">
                                         <div class="flex justify-content-between align-items-center">
-                                            No of Trades
+                                            Trades
                                             <p-sortIcon field="company.bhavCopyInfos.noOfTrades"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:5rem" class="table-col"
                                         pSortableColumn="company.bhavCopyInfos.deliveryQty">
                                         <div class="flex justify-content-between align-items-center">
-                                            Deliverable Qty
+                                            Deliverable quantity
                                             <p-sortIcon field="company.bhavCopyInfos.deliveryQty"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:5rem" class="table-col"
                                         pSortableColumn="company.bhavCopyInfos.deliveryPercentage">
                                         <div class="flex justify-content-between align-items-center">
-                                            % Dly Qt to Traded Qty
+                                            Delivery %
                                             <p-sortIcon field="company.bhavCopyInfos.deliveryPercentage"></p-sortIcon>
                                         </div>
                                     </th>
@@ -186,7 +180,7 @@
                                         }}
                                     </td>
                                     <td style="min-width:5rem">
-                                        <span class="p-column-title">Prev Close</span>
+                                        <span class="p-column-title">Previous close</span>
                                         {{ filterResult.company.bhavCopyInfos[0].previousClose | currency:
                                         'INR':'symbol' }}
                                     </td>
@@ -212,7 +206,7 @@
                                         }}
                                     </td>
                                     <td style="min-width:5rem">
-                                        <span class="p-column-title">Avg Price</span>
+                                        <span class="p-column-title">Average price</span>
                                         {{ filterResult.company.bhavCopyInfos[0].avgPrice | currency: 'INR':'symbol' }}
                                     </td>
                                     <td style="min-width:5rem">
@@ -226,11 +220,11 @@
                                         }}
                                     </td>
                                     <td style="min-width:5rem">
-                                        <span class="p-column-title">No of Trades</span>
+                                        <span class="p-column-title">Trades</span>
                                         {{ filterResult.company.bhavCopyInfos[0].noOfTrades | number }}
                                     </td>
                                     <td style="min-width:5rem">
-                                        <span class="p-column-title">Deliverable Qty</span>
+                                        <span class="p-column-title">Deliverable quantity</span>
                                         {{ filterResult.company.bhavCopyInfos[0].deliveryQty | number}}
                                     </td>
                                     <td style="min-width:5rem">
@@ -242,7 +236,7 @@
                             </ng-template>
                             <ng-template pTemplate="emptymessage">
                                 <tr>
-                                    <td colspan="8">No Filter Results found.</td>
+                                    <td colspan="16">No matches for this filter and trading date. Try another date or a shorter period.</td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -251,11 +245,12 @@
             </div>
         </div>
     </div>
-    <div class="container py-3">
+    <div class="container py-3" [hidden]="!filterOptions.length">
         <div class="row">
             <div class="borderSet tableScroll p-0">
                 <div class="tableScroll">
-                    <div class="card">
+                    <div class="table-section-title"><h2>Bulk deals in this shortlist</h2><span>Reported transactions for matching companies.</span></div>
+<div class="card">
                         <p-table #bulkDealTable [value]="bulkDeals" dataKey="id" [rowHover]="true" [rows]="5"
                             sortField="clientName" [sortOrder]="1" [scrollable]="true" [showCurrentPageReport]="true"
                             [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [paginator]="true"
@@ -279,7 +274,7 @@
                                 <tr>
                                     <th style="min-width:15rem" class="table-col" pSortableColumn="clientName">
                                         <div class="flex justify-content-between align-items-center">
-                                            Client Name
+                                            Participant
                                             <p-sortIcon field="clientName"></p-sortIcon>
                                         </div>
                                     </th>
@@ -291,19 +286,19 @@
                                     </th>
                                     <th style="min-width:5rem" class="table-col" pSortableColumn="companySymbol">
                                         <div class="flex justify-content-between align-items-center">
-                                            Company Symbol
+                                            Company symbol
                                             <p-sortIcon field="companySymbol"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:15rem" class="table-col" pSortableColumn="companyFullName">
                                         <div class="flex justify-content-between align-items-center">
-                                            Company FullName
+                                            Company name
                                             <p-sortIcon field="companyFullName"></p-sortIcon>
                                         </div>
                                     </th>
                                     <th style="min-width:5rem" class="table-col" pSortableColumn="stockAction">
                                         <div class="flex justify-content-between align-items-center">
-                                            Stock Action
+                                            Side
                                             <p-sortIcon field="stockAction"></p-sortIcon>
                                         </div>
                                     </th>
@@ -315,7 +310,7 @@
                                     </th>
                                     <th style="min-width:5rem" class="table-col" pSortableColumn="tradePrice">
                                         <div class="flex justify-content-between align-items-center">
-                                            Trade Price
+                                            Trade price
                                             <p-sortIcon field="tradePrice"></p-sortIcon>
                                         </div>
                                     </th>
@@ -338,15 +333,15 @@
                                         {{ bulkDeal.dealDate | date: 'dd/MM/yyyy' }}
                                     </td>
                                     <td style="min-width:5rem">
-                                        <span class="p-column-title">Company Symbol</span>
+                                        <span class="p-column-title">Company symbol</span>
                                         {{ bulkDeal.companySymbol}}
                                     </td>
                                     <td style="min-width:15rem">
-                                        <span class="p-column-title">Company FullName</span>
+                                        <span class="p-column-title">Company name</span>
                                         {{ bulkDeal.companyFullName }}
                                     </td>
                                     <td style="min-width:5rem">
-                                        <span class="p-column-title">Stock Action</span>
+                                        <span class="p-column-title">Side</span>
                                         {{ getStockAction(bulkDeal.stockAction) }}
                                     </td>
                                     <td style="min-width:5rem">
@@ -365,7 +360,7 @@
                             </ng-template>
                             <ng-template pTemplate="emptymessage">
                                 <tr>
-                                    <td colspan="8">No BulkDeals found.</td>
+                                    <td colspan="8">No reported bulk deals for this selection.</td>
                                 </tr>
                             </ng-template>
                         </p-table>

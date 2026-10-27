@@ -1,3 +1,4 @@
+import { ApiStatusService } from '../shared/api-status.service';
 import { Component, OnInit } from '@angular/core';
 import { Form } from '@angular/forms';
 import { BulkDeal, StockAction } from '../types/BulkDeal';
@@ -31,16 +32,21 @@ export class BulkDealComponent implements OnInit {
   dateError = '';
 
   analyzeBulkDealsOfDate() {
+    if (this.importing) return;
+    this.importing = true; this.importMessage = '';
     this.bulkDealService.analyzeBulkDeals(this.date)
       .subscribe({ next: (res: string) => {
+        this.importing = false; this.importMessage = 'Report checked. The table shows records in your selected date range.';
         this.reloadPage();
-      }, error: () => {} });
+      }, error: () => { this.importing = false; } });
   }
 
+  importing = false;
+  importMessage = '';
+
   reloadPage() {
-    this.endDate = new Date();
-    this.startDate = new Date(this.endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-    window.location.reload();
+    this.getBulkDealsBetween(this.startDate, this.endDate);
+    this.apiStatus.refreshMarketStatus$.next();
   }
 
   getStockAction(value: number) {
@@ -52,7 +58,7 @@ export class BulkDealComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('search-value')).value = '';
   }
 
-  constructor(private bulkDealService: BulkDealService) { }
+  constructor(private bulkDealService: BulkDealService, private apiStatus: ApiStatusService) { }
 
   ngOnInit() {
     this.getBulkDealsBetween(this.startDate, this.endDate);
