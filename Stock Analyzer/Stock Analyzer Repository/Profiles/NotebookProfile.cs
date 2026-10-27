@@ -8,10 +8,10 @@ namespace Stock_Analyzer_Repository.Profiles
   {
     public NotebookProfile()
     {
-      CreateMap<Notebook, NotebookDataModel>()
+      CreateMap<Notebook, NotebookDataModel>().MaxDepth(8)
         .ForMember(dest => dest.ContentDate, opt => opt.MapFrom(src => src.ContentDate.Date));
 
-      CreateMap<NotebookDataModel, Notebook>()
+      CreateMap<NotebookDataModel, Notebook>().MaxDepth(8)
         .ForMember(dest => dest.ContentDate, opt => opt.MapFrom(src => src.ContentDate.Date));
     }
   }

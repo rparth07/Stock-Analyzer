@@ -19,38 +19,28 @@ namespace Stock_Analyzer_Repository.DataModels
     [InverseProperty("BhavCopyInfos")]
     public virtual CompanyDataModel Company { get; set; }
 
-    [Required]
-    public double PreviousClose { get; set; }
+    public double? PreviousClose { get; set; }
 
-    [Required]
-    public double OpenPrice { get; set; }
+    public double? OpenPrice { get; set; }
 
-    [Required]
-    public double HighPrice { get; set; }
+    public double? HighPrice { get; set; }
 
-    [Required]
-    public double LowPrice { get; set; }
+    public double? LowPrice { get; set; }
 
-    [Required]
-    public double LastPrice { get; set; }
+    public double? LastPrice { get; set; }
 
-    [Required]
-    public double ClosePrice { get; set; }
+    public double? ClosePrice { get; set; }
 
-    [Required]
-    public double AvgPrice { get; set; }
+    public double? AvgPrice { get; set; }
 
-    [Required]
-    public double TtlTrdQnty { get; set; }
+    public double? TtlTrdQnty { get; set; }
 
-    [Required]
-    public double TurnOverLacs { get; set; }
+    public double? TurnOverLacs { get; set; }
 
-    [Required]
-    public double NoOfTrades { get; set; }
+    public double? NoOfTrades { get; set; }
 
-    public double DeliveryQty { get; set; }
+    public double? DeliveryQty { get; set; }
 
-    public double DeliveryPercentage { get; set; }
+    public double? DeliveryPercentage { get; set; }
   }
 }

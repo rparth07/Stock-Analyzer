@@ -8,14 +8,14 @@ namespace Stock_Analyzer_Repository.Profiles
   {
     public FilterProfile()
     {
-      CreateMap<Filter, FilterDataModel>();
-      CreateMap<FilterCriteria, FilterCriteriaDataModel>();
-      CreateMap<FilterResult, FilterResultDataModel>()
+      CreateMap<Filter, FilterDataModel>().MaxDepth(8);
+      CreateMap<FilterCriteria, FilterCriteriaDataModel>().MaxDepth(8);
+      CreateMap<FilterResult, FilterResultDataModel>().MaxDepth(8)
         .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
 
-      CreateMap<FilterDataModel, Filter>();
-      CreateMap<FilterCriteriaDataModel, FilterCriteria>();
-      CreateMap<FilterResultDataModel, FilterResult>()
+      CreateMap<FilterDataModel, Filter>().MaxDepth(8);
+      CreateMap<FilterCriteriaDataModel, FilterCriteria>().MaxDepth(8);
+      CreateMap<FilterResultDataModel, FilterResult>().MaxDepth(8)
         .ForMember(dest => dest.CalculationDate, opt => opt.MapFrom(src => src.CalculationDate.Date));
     }
   }

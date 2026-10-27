@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Npgsql;
+using Stock_Analyzer.MarketData;
 using Stock_Analyzer;
 using Stock_Analyzer_Domain.Iterface;
 using Stock_Analyzer_Repository;
@@ -12,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.MaxDepth = 32);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
@@ -29,31 +31,27 @@ builder.Services.AddScoped<IStockInfoService, StockInfoService>();
 builder.Services.AddScoped<IFilterService, FilterService>();
 builder.Services.AddScoped<INotebookService, NotebookService>();
 
-ScrapperJob myJob = new ScrapperJob();
-ScrapperScheduler myScheduler = new ScrapperScheduler(myJob);
-
-// Start the scheduler when the application starts
-myScheduler.Start();
-
+builder.Services.AddHttpClient<NseArchiveImporter>(client => { client.Timeout = TimeSpan.FromSeconds(30); });
+builder.Services.AddHostedService<MarketRefreshService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+// Keep environment variables and command-line overrides above appsettings.json.
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.AddDbContext<StockAnalyzerContext>((services, options) =>
 {
-  var appSettings = services.GetRequiredService<IOptions<AppSettings>>().Value;
-  options.UseSqlServer(appSettings.DatabaseConnection);
+  var raw = builder.Configuration["DATABASE_URL"] ?? builder.Configuration["AppSettings:DatabaseConnection"] ?? "Host=localhost;Database=stock_analyzer";
+  options.UseNpgsql(DatabaseConnection.Parse(raw));
 });
 
 builder.Services.AddCors(options =>
 {
   options.AddPolicy("AllowAngularOrigins", cpb =>
   {
-    var allowedOrigins = builder.Configuration.GetSection("CORS:AllowedOrigins").Get<string[]>();
+    var allowedOrigins = builder.Configuration.GetSection("CORS:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
 
     foreach (var origin in allowedOrigins)
     {
@@ -71,12 +69,24 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// TLS terminates at Render. Do not redirect internal HTTP health checks.
+app.UseExceptionHandler(handler => handler.Run(async context => {
+  context.Response.StatusCode = 503;
+  await context.Response.WriteAsJsonAsync(new { message = "The data service could not complete this request. Try again later." });
+}));
 
 app.UseCors("AllowAngularOrigins");
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/health/ready", async (StockAnalyzerContext db) =>
+  await db.Database.CanConnectAsync() ? Results.Ok(new { status = "ready" }) : Results.StatusCode(503));
+if (builder.Configuration.GetValue<bool>("MigrateOnStartup")) {
+  var direct = builder.Configuration["MIGRATION_DATABASE_URL"] ?? builder.Configuration["DATABASE_URL"] ?? throw new InvalidOperationException("Database configuration is required for migrations.");
+  var options = new DbContextOptionsBuilder<StockAnalyzerContext>().UseNpgsql(DatabaseConnection.Parse(direct)).Options;
+  await using var migrationDb = new StockAnalyzerContext(options);
+  await migrationDb.Database.MigrateAsync();
+}
 
 app.Run();

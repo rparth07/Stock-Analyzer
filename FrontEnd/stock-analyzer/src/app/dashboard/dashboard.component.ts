@@ -43,12 +43,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getDateOfToday(): string {
-    return new Date().toISOString().split('T')[0];
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
   }
 
   onFilterFormChange() {
     this.updateSelectedFilter();
 
+    if (!this.selectedOption || !this.filterDate || !Number.isFinite(Date.parse(this.filterDate))) {
+      this.filterResults = []; this.bulkDeals = []; this.loadingFilterResults = false; return;
+    }
     this.loadingFilterResults = true;
     // Handle the selected option change here
     this.filterService.executeFilter(this.selectedOption, new Date(this.filterDate))
@@ -63,7 +66,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           // console.log('filter values = ' + value);
           // console.dir(value, { depth: null });
         },
-        error: (err) => console.log(err),
+        error: () => { this.loadingFilterResults = false; },
       });
   }
 
@@ -119,7 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.onFilterFormChange();
           }
         },
-        error: (err) => console.log(err),
+        error: () => { this.loadingFilterResults = false; },
       });
   }
 
@@ -163,9 +166,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getChangeTypeSymbol(type: string) {
     if (type == ChangeType.Increase) {
-      return '↑';
+      return 'â†‘';
     }
-    return '↓';
+    return 'â†“';
   }
 
   getStockAction(value: number) {
@@ -186,8 +189,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // console.dir(event, { depth: null });
       if (event.field!.split('.').length > 2) {
         let fields = event.field!.split('.');
-        value1 = data1.company.bhavCopyInfos[0][fields[2]];
-        value2 = data2.company.bhavCopyInfos[0][fields[2]];
+        value1 = data1.company?.bhavCopyInfos?.[0]?.[fields[2]];
+        value2 = data2.company?.bhavCopyInfos?.[0]?.[fields[2]];
       } else if (event.field!.split('.').length > 1) {
         let fields = event.field!.split('.');
         value1 = data1.company[fields[1]];
@@ -221,7 +224,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return criteriaResult;
     }
 
-    criterias = criterias.sort(_ => _.sequence);
+    criterias = [...criterias].sort((a, b) => a.sequence - b.sequence);
 
     criterias.forEach((criteria, index) => {
 

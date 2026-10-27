@@ -8,7 +8,7 @@ namespace Stock_Analyzer.Profiles
   {
     public CompanyProfile()
     {
-      CreateMap<Company, CompanyDto>();
+      CreateMap<Company, CompanyDto>().MaxDepth(8);
     }
   }
 }

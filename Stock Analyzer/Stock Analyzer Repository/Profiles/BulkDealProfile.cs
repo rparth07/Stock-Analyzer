@@ -8,10 +8,10 @@ namespace Stock_Analyzer_Repository.Profiles
   {
     public BulkDealProfile()
     {
-      CreateMap<BulkDeal, BulkDealDataModel>()
+      CreateMap<BulkDeal, BulkDealDataModel>().MaxDepth(8)
         .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => src.DealDate.Date));
 
-      CreateMap<BulkDealDataModel, BulkDeal>()
+      CreateMap<BulkDealDataModel, BulkDeal>().MaxDepth(8)
         .ForMember(dest => dest.DealDate, opt => opt.MapFrom(src => src.DealDate.Date));
     }
   }

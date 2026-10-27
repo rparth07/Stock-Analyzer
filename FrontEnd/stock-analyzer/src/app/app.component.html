@@ -3,6 +3,16 @@
     <app-header></app-header>
     <ngx-ui-loader fgsColor="#3b77dc" pbColor="#3b77dc" fgsType="square-jelly-box" overlayColor="#fff" [fgsSize]="100"
       [pbThickness]="6"></ngx-ui-loader>
+    <p *ngIf="apiStatus.pending" role="status" class="m-3">Connecting to the data service. Free hosting can take up to 90 seconds to wake.</p>
+    <section *ngIf="apiStatus.message" role="alert" class="alert alert-warning m-3">
+      {{ apiStatus.message }} Retry using the page controls. Keep unsaved notes before refreshing.
+      <button type="button" class="btn btn-outline-dark btn-sm ms-2" (click)="apiStatus.message = ''">Dismiss</button>
+    </section>
+    <p class="mx-3 small text-muted">NSE historical end-of-day reports, not real-time quotes. Prices in INR; turnover in lakhs where indicated. Check each record's trading date.</p>
+    <p *ngIf="marketStatus" class="mx-3 small" role="status">
+      <span *ngFor="let source of marketStatus.sources">{{source.source}}: trading date {{source.tradingDate | date:'dd MMM yyyy':'UTC'}}, fetched {{source.importedAt | date:'medium'}}. </span>
+      Raw report prices are unadjusted. Free hosting may take up to 90 seconds to wake.
+    </p>
     <router-outlet></router-outlet>
     <app-footer></app-footer>
     <app-notebook></app-notebook>
