@@ -32,9 +32,9 @@ export class BulkDealComponent implements OnInit {
 
   analyzeBulkDealsOfDate() {
     this.bulkDealService.analyzeBulkDeals(this.date)
-      .subscribe((res: string) => {
+      .subscribe({ next: (res: string) => {
         this.reloadPage();
-      });
+      }, error: () => {} });
   }
 
   reloadPage() {

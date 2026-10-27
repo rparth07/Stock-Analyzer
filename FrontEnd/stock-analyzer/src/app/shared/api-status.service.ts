@@ -13,6 +13,8 @@ export class ApiStatusService {
       : error instanceof HttpErrorResponse && error.status === 429 ? 'The data service request limit was reached. Wait before trying again.'
       : error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403) ? 'The data service denied access.'
       : 'The data service is unavailable. Check your connection and try again later.';
-    this.message = reason + (write ? ' Your change could not be confirmed. Keep your draft and check before submitting again.' : ' Results may be unavailable or from an earlier request.');
+    const validation = error instanceof HttpErrorResponse && [400, 404, 422].includes(error.status) && typeof error.error?.message === 'string'
+      ? error.error.message : reason;
+    this.message = validation + (write ? ' Your change could not be confirmed. Keep your draft and check before submitting again.' : ' Results may be unavailable or from an earlier request.');
   }
 }

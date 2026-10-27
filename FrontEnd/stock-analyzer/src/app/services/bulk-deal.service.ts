@@ -12,7 +12,7 @@ export class BulkDealService {
 
   analyzeBulkDeals(dateToProcess: Date) {
     //2018-06-22T08:00:19Z
-    return this.http.post<string>(DomainConstants.StockAnalyzer_URL + 'analyze-bulk-deals?date=' + moment(dateToProcess).format('YYYY-MM-DD'), null);
+    return this.http.post<string>(DomainConstants.StockAnalyzer_URL.replace('StockAnalyzer/', 'market-data/') + 'import-bulk?date=' + moment(dateToProcess).format('YYYY-MM-DD'), null);
   }
 
   fetchBulkDeals() {
