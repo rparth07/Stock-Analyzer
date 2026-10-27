@@ -59,9 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (value) => {
           this.filterResults = value;
           this.loadingFilterResults = false;
-          this.bulkDeals = this.filterResults
-            .filter(_ => _.company.bulkDeals.length > 0)
-            .map(_ => _.company.bulkDeals[0]);
+          this.bulkDeals = this.filterResults.flatMap(result => result.company?.bulkDeals ?? []);
 
           // console.log('filter values = ' + value);
           // console.dir(value, { depth: null });
@@ -165,10 +163,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getChangeTypeSymbol(type: string) {
-    if (type == ChangeType.Increase) {
-      return 'â†‘';
-    }
-    return 'â†“';
+    return type == ChangeType.Increase ? '\u2191' : '\u2193';
   }
 
   getStockAction(value: number) {
@@ -187,7 +182,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       let value2 = null;
 
       // console.dir(event, { depth: null });
-      if (event.field!.split('.').length > 2) {
+      if (event.field === 'filterCriteria.fieldName') {
+        value1 = data1.filterCriteria?.fieldName; value2 = data2.filterCriteria?.fieldName;
+      } else if (event.field!.split('.').length > 2) {
         let fields = event.field!.split('.');
         value1 = data1.company?.bhavCopyInfos?.[0]?.[fields[2]];
         value2 = data2.company?.bhavCopyInfos?.[0]?.[fields[2]];

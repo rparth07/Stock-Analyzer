@@ -70,7 +70,7 @@
                                                     [paginator]="true"
                                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                                                     [filterDelay]="0"
-                                                    [globalFilterFields]="['clientName', 'series', 'date', 'previousClose', 'openPrice', 'highPrice', 'lowPrice', 'lastPrice', 'closePrice', 'avgPrice', 'ttlTrdQnty', 'turnOverLacs', 'noOfTrades', 'deliveryQty', 'deliveryPercentage']">
+                                                    [globalFilterFields]="['symbol', 'bhavCopyInfos.0.series', 'bhavCopyInfos.0.date', 'bhavCopyInfos.0.previousClose', 'bhavCopyInfos.0.openPrice', 'bhavCopyInfos.0.highPrice', 'bhavCopyInfos.0.lowPrice', 'bhavCopyInfos.0.lastPrice', 'bhavCopyInfos.0.closePrice', 'bhavCopyInfos.0.avgPrice']">
                                                     <ng-template pTemplate="caption">
                                                         <div class="flex">
                                                             <button pButton label="Clear" class="p-button-outlined"
@@ -79,7 +79,7 @@
                                                                 <i class="pi pi-search"></i>
                                                                 <input pInputText type="text" id="search-value" value=""
                                                                     (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                                                    placeholder="Search keyword" />
+                                                                    placeholder="Search keyword" aria-label="Search table" />
                                                             </span>
                                                         </div>
                                                     </ng-template>

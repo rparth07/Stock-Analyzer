@@ -132,3 +132,11 @@ button[disabled] {
         rgba(0, 0, 0, 0.03) 0px 0px 8px 0px,
         rgba(0, 0, 0, 0.1) 0px 20px 30px 0px;
 }
+@media (max-width: 767px) {
+  .filter-container { margin: 1rem; }
+  .filter-info, .dropdown-container { flex-wrap: wrap; gap: .75rem; }
+  .dropdown-container select { width: 100%; min-height: 44px; }
+  .dropdown-container .filter-date { width: 100% !important; margin: 0 !important; }
+  .new-filter-button { min-height: 44px; flex: 1; }
+  .filter-criteria-details { width: 100%; overflow-wrap: anywhere; }
+}
